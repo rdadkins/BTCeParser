@@ -3,25 +3,25 @@ package com.fatsoapps.btceparser.core.currency;
 public interface BaseCurrency<T> {
 
     /**
-     * Add amount to this currency and return the new currency.
-     * @param amount the amount to be added.
+     * Add other to this currency and return the new currency.
+     * @param other the other to be added.
      * @return the new BaseCurrency object.
      */
-    T add(T amount);
+    T add(T other);
 
     /**
-     * Subtract amount from this currency and return the new currency.
-     * @param amount the amount to be subtracted.
+     * Subtract other from this currency and return the new currency.
+     * @param other the other to be subtracted.
      * @return the new BaseCurrency object.
      */
-    T subtract(T amount);
+    T subtract(T other);
 
     /**
-     * Multiple this by amount and return the new currency.
-     * @param amount the amount to be multiplied by.
+     * Multiple this by other and return the new currency.
+     * @param other the other to be multiplied by.
      * @return the new BaseCurrency object.
      */
-    T multiply(T amount);
+    T multiply(T other);
 
     /**
      * Multiple this by amount and return the new currency.
@@ -38,11 +38,11 @@ public interface BaseCurrency<T> {
     <U extends BaseCurrency<U>> U multiply(U other);
 
     /**
-     * Divide this by amount and return the new currency.
-     * @param amount the amount to be divided by.
+     * Divide this by other and return the new currency.
+     * @param other the other to be divided by.
      * @return the new BaseCurrency object.
      */
-    T divide(T amount);
+    T divide(T other);
 
     /**
      * Divide this by amount and return the new currency.
