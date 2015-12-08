@@ -5,15 +5,6 @@ public final class Coin implements BaseCurrency<Coin>, Comparable<Coin> {
 	private final long satoshis;
 	public final static long SATOSHI_PER_COIN = 100000000L;
 
-	public static void main(String[] args) {
-		Coin one = new Coin(100);
-		Coin two = new Coin(200);
-		one.add(two);
-		System.out.println(one.asDouble());
-		one = one.add(two);
-		System.out.println(one.asDouble());
-	}
-
 	private Coin(long satoshis) {
 		this.satoshis = satoshis;
 	}
