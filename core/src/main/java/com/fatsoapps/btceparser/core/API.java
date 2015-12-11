@@ -1,4 +1,4 @@
-package btceparser.core;
+package com.fatsoapps.btceparser.core;
 
 public enum API {
 
