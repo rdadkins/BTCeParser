@@ -1,9 +1,17 @@
 package com.fatsoapps.btceparser.core.currency;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
+/**
+ * Coin is an extension of BaseCurrency that is a placeholder for crypto currencies. The max value of Coin can be
+ * 2^63 - 1 (9,223,372,036,854,775,807 satoshis <->  92,233,720,368.54775807 Coins).
+ */
 public final class Coin implements BaseCurrency<Coin>, Comparable<Coin> {
 
 	private final long satoshis;
-	public final static long SATOSHI_PER_COIN = 100000000L;
+	public final static int SATOSHI_PER_COIN = 100000000;
+    private static final RoundingMode roundingMode = RoundingMode.HALF_DOWN;
 
 	private Coin(long satoshis) {
 		this.satoshis = satoshis;
@@ -34,11 +42,20 @@ public final class Coin implements BaseCurrency<Coin>, Comparable<Coin> {
 	}
 
 	public Coin multiply(double amount) {
-		return new Coin(asDouble() * amount);
+		return new Coin(asBigDecimal().doubleValue() * amount);
 	}
 
-	public <U extends BaseCurrency<U>> U multiply(U other) {
-		return other.multiply(asDouble());
+    public Coin multiply(BigDecimal amount) {
+        return new Coin(asBigDecimal().multiply(amount).doubleValue());
+    }
+
+    /**
+     * Multiply this by the other BaseCurrency.
+     * @param other the opposing BaseCurrency to multiply by.
+     * @return type depends on what other is. If it is Currency you should expect Currency. Otherwise it will be coin.
+     */
+    public BaseCurrency<?> multiply(BaseCurrency<?> other) {
+		return other.multiply(this);
 	}
 
 	public Coin divide(Coin other) {
@@ -46,15 +63,24 @@ public final class Coin implements BaseCurrency<Coin>, Comparable<Coin> {
 	}
 
 	public Coin divide(double amount) {
-		return new Coin(asDouble() / amount);
+        return divide(BigDecimal.valueOf(amount));
 	}
 
-	public <U extends BaseCurrency<U>> U divide(U other) {
-		return other.divide(asDouble());
-	}
+    public Coin divide(BigDecimal amount) {
+        return new Coin(asBigDecimal().divide(amount, roundingMode).doubleValue());
+    }
 
-	public double asDouble(){
-		return (asSmallestDivisor() / (1.0 * SATOSHI_PER_COIN));
+    /**
+     * Divide this by the other BaseCurrency.
+     * @param other the opposing BaseCurrency to divide by.
+     * @return type depends on what other is. If it is Currency you should expect Currency. Otherwise it will be Coin.
+     */
+    public BaseCurrency<?> divide(BaseCurrency<?> other) {
+        return other.divide(this);
+    }
+
+	public BigDecimal asBigDecimal() {
+        return new BigDecimal(1.0 * asSmallestDivisor() / SATOSHI_PER_COIN).setScale(8, roundingMode);
 	}
 
 	public long asSmallestDivisor() {
@@ -62,7 +88,7 @@ public final class Coin implements BaseCurrency<Coin>, Comparable<Coin> {
 	}
 
 	public int compareTo(Coin other) {
-		return Double.compare(this.asDouble(), other.asDouble());
+        return asBigDecimal().compareTo(other.asBigDecimal());
 	}
 
 	public int hashCode() {
