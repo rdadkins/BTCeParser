@@ -12,9 +12,10 @@ import java.util.TreeSet;
 
 public class OrderBook {
 
-    private TradingPair tradingPair;
-    private TreeSet<Order<? extends BaseCurrency<?>, ? extends BaseCurrency<?>>> bidBook;
-    private TreeSet<Order<? extends BaseCurrency<?>, ? extends BaseCurrency<?>>> askBook;
+    private final TradingPair tradingPair;
+    private final TreeSet<Order<? extends BaseCurrency<?>, ? extends BaseCurrency<?>>> bidBook;
+    private final TreeSet<Order<? extends BaseCurrency<?>, ? extends BaseCurrency<?>>> askBook;
+    private double fee;
 
     public OrderBook(TradingPair tradingPair) {
         this.tradingPair = tradingPair;
@@ -34,4 +35,7 @@ public class OrderBook {
         }
     }
 
+    public void setFee(double fee) {
+        this.fee = fee;
+    }
 }
