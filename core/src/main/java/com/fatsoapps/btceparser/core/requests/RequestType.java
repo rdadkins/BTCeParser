@@ -12,6 +12,7 @@ public enum RequestType {
 	SELL,
 	ALL,
 	FEE,
-	DEPTH
+	DEPTH,
+	INFO
 
 }
