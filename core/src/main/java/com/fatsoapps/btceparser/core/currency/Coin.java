@@ -3,100 +3,89 @@ package com.fatsoapps.btceparser.core.currency;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-/**
- * Coin is an extension of BaseCurrency that is a placeholder for crypto currencies. The max value of Coin can be
- * 2^63 - 1 (9,223,372,036,854,775,807 satoshis <->  92,233,720,368.54775807 Coins).
- */
-public final class Coin implements BaseCurrency<Coin>, Comparable<Coin> {
+public final class Coin implements BaseCurrency<Coin> {
 
-	private final long satoshis;
-	public final static int SATOSHI_PER_COIN = 100000000;
-    private static final RoundingMode roundingMode = RoundingMode.HALF_DOWN;
+	private BigDecimal value;
+	private static RoundingMode roundingMode = RoundingMode.HALF_UP;
+	private static final int decimalPlaces = 8;
+	private static final int SATOSHIS_PER_COIN = 100000000;
 
-	private Coin(long satoshis) {
-		this.satoshis = satoshis;
-	}
-
-	private Coin(double coins){
-		this.satoshis = (long) (coins * SATOSHI_PER_COIN);
+	private Coin(BigDecimal value) {
+		this.value = value.setScale(decimalPlaces, roundingMode);
 	}
 
 	public static Coin fromSatoshis(long satoshis) {
-		return new Coin(satoshis);
+		return new Coin(BigDecimal.valueOf(1.0 * satoshis / SATOSHIS_PER_COIN));
 	}
 
-	public static Coin fromDouble(double amountOfCoins) {
-		return new Coin(amountOfCoins);
+	public static Coin fromDouble(double coins) {
+		return new Coin(BigDecimal.valueOf(coins));
 	}
 
 	public Coin add(Coin other) {
-		return new Coin(asSmallestDivisor() + other.asSmallestDivisor());
+		return new Coin(asBigDecimal().add(other.asBigDecimal()));
+	}
+
+	public BaseCurrency<?> add(BaseCurrency<?> other) {
+		if (other instanceof Coin) {
+			return add((Coin) other);
+		}
+		return this;
 	}
 
 	public Coin subtract(Coin other) {
-		return new Coin(asSmallestDivisor() - other.asSmallestDivisor());
+		return new Coin(asBigDecimal().subtract(other.asBigDecimal()));
+	}
+
+	public BaseCurrency<?> subtract(BaseCurrency<?> other) {
+		if (other instanceof Coin) {
+			return subtract((Coin) other);
+		}
+		return this;
 	}
 
 	public Coin multiply(Coin other) {
-		return new Coin(asSmallestDivisor() * other.asSmallestDivisor());
+		return new Coin(asBigDecimal().multiply(other.asBigDecimal()));
 	}
 
-	public Coin multiply(double amount) {
-		return new Coin(asBigDecimal().doubleValue() * amount);
+	/**
+	 * If other is Coin, multiply them together. If other is Currency, return a new Currency object.
+	 */
+	public BaseCurrency<?> multiply(BaseCurrency<?> other) {
+		if (other instanceof Coin) {
+			return multiply((Coin) other);
+		} else if (other instanceof Currency) {
+			return (Currency) other.multiply(asBigDecimal());
+		}
+		return (BaseCurrency<?>) other.multiply(asBigDecimal());
 	}
 
-    public Coin multiply(BigDecimal amount) {
-        return new Coin(asBigDecimal().multiply(amount).doubleValue());
-    }
-
-    /**
-     * Multiply this by the other BaseCurrency.
-     * @param other the opposing BaseCurrency to multiply by.
-     * @return type depends on what other is. If it is Currency you should expect Currency. Otherwise it will be coin.
-     */
-    public BaseCurrency<?> multiply(BaseCurrency<?> other) {
-		return other.multiply(this);
+	public Coin multiply(BigDecimal value) {
+		return new Coin(asBigDecimal().multiply(value));
 	}
 
 	public Coin divide(Coin other) {
-		return new Coin(asSmallestDivisor() / other.asSmallestDivisor());
+		return divide(other.asBigDecimal());
 	}
 
-	public Coin divide(double amount) {
-        return divide(BigDecimal.valueOf(amount));
+	/**
+	 * 1 BTC / 0.005 LTC = 200 BTC / LTC
+	 * 1 BTC / $100.00 = 0.01 Dollar / BTC
+	 */
+	public BaseCurrency<?> divide(BaseCurrency<?> other) {
+		if (other instanceof Coin) {
+			return divide(other.asBigDecimal());
+		} else if (other instanceof Currency) {
+			return new Currency(divide(other.asBigDecimal()).asBigDecimal());
+		}
+		return this;
 	}
 
-    public Coin divide(BigDecimal amount) {
-        return new Coin(asBigDecimal().divide(amount, roundingMode).doubleValue());
-    }
-
-    /**
-     * Divide this by the other BaseCurrency.
-     * @param other the opposing BaseCurrency to divide by.
-     * @return type depends on what other is. If it is Currency you should expect Currency. Otherwise it will be Coin.
-     */
-    public BaseCurrency<?> divide(BaseCurrency<?> other) {
-        return other.divide(this);
-    }
+	public Coin divide(BigDecimal value) {
+		return new Coin(asBigDecimal().divide(value, roundingMode));
+	}
 
 	public BigDecimal asBigDecimal() {
-        return new BigDecimal(1.0 * asSmallestDivisor() / SATOSHI_PER_COIN).setScale(8, roundingMode);
+		return value;
 	}
-
-	public long asSmallestDivisor() {
-		return satoshis;
-	}
-
-	public int compareTo(Coin other) {
-        return asBigDecimal().compareTo(other.asBigDecimal());
-	}
-
-	public int hashCode() {
-		long hash = satoshis;
-		while (hash >= Integer.MAX_VALUE) {
-			hash = satoshis % 17;
-		}
-		return (int) hash;
-	}
-
 }

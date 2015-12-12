@@ -5,68 +5,83 @@ import java.math.RoundingMode;
 
 public final class Currency implements BaseCurrency<Currency> {
 
-	private final long currency;
-	private static long CENTS_PER_CURRENCY = 1000;
+    private BigDecimal value;
+    private static RoundingMode roundingMode = RoundingMode.HALF_EVEN;
+    private int decimalPlaces = 3;
 
-    public Currency(double currency){
-        this((long) Math.floor(currency * CENTS_PER_CURRENCY));
+    public Currency(double value) {
+        this(BigDecimal.valueOf(value));
     }
 
-	public Currency(long smallestDivisor){
-        this.currency = smallestDivisor;
-	}
+    public Currency(BigDecimal decimal) {
+        value = decimal.setScale(decimalPlaces, roundingMode);
+    }
+
+    public Currency setDecimalPlaces(int decimalPlaces) {
+        this.decimalPlaces = decimalPlaces;
+        return new Currency(asBigDecimal());
+    }
 
     public Currency add(Currency other) {
-        return new Currency(asSmallestDivisor() + other.asSmallestDivisor());
+        return new Currency(asBigDecimal().add(other.asBigDecimal()));
+    }
+
+    public BaseCurrency<?> add(BaseCurrency<?> other) {
+        if (other instanceof Currency) {
+            return add((Currency) other);
+        }
+        return new Currency(asBigDecimal().add(other.asBigDecimal()));
     }
 
     public Currency subtract(Currency other) {
-        return new Currency(asSmallestDivisor() - other.asSmallestDivisor());
+        return new Currency(asBigDecimal().subtract(other.asBigDecimal()));
+    }
+
+    public BaseCurrency<?> subtract(BaseCurrency<?> other) {
+        if (other instanceof Currency) {
+            return subtract((Currency) other);
+        }
+        return new Currency(asBigDecimal().subtract(other.asBigDecimal()));
     }
 
     public Currency multiply(Currency other) {
-        return new Currency(asSmallestDivisor() * other.asSmallestDivisor());
-    }
-
-    public Currency multiply(double amount) {
-        return multiply(BigDecimal.valueOf(amount));
-    }
-
-    public Currency multiply(BigDecimal amount) {
-        return new Currency(asBigDecimal().multiply(amount).doubleValue());
+        return new Currency(asBigDecimal().multiply(other.asBigDecimal()));
     }
 
     /**
-     * Any BaseCurrency<?> multiplied by Currency will return a Currency object. Coin * Currency != Coin.
-     * @param other the opposing BaseCurrency to multiply by.
-     * @return a new Currency based off of the product.
+     * Anything multiplied by Currency should return the product in the form of Currency.
      */
     public Currency multiply(BaseCurrency<?> other) {
         return multiply(other.asBigDecimal());
+    }
+
+    /**
+     * Anything multiplied by Currency should return the product in the form of Currency.
+     */
+    public Currency multiply(BigDecimal value) {
+        return new Currency(asBigDecimal().multiply(value));
     }
 
     public Currency divide(Currency other) {
         return divide(other.asBigDecimal());
     }
 
-    public Currency divide(double amount) {
-        return divide(BigDecimal.valueOf(amount));
-    }
-
-    public Currency divide(BigDecimal amount) {
-        return new Currency(asBigDecimal().divide(amount, RoundingMode.HALF_DOWN).doubleValue());
-    }
-
+    /**
+     * Anything that we divide Currency by should return a new Currency object.
+     * $500.00 / $250.00 = $2.00
+     * $500.00 / 1.25 BTC = $400.00 / BTC
+     */
     public Currency divide(BaseCurrency<?> other) {
         return divide(other.asBigDecimal());
     }
 
-    public BigDecimal asBigDecimal() {
-        return new BigDecimal(1.0 * currency / CENTS_PER_CURRENCY).setScale(3, RoundingMode.HALF_DOWN);
+    public Currency divide(BigDecimal value) {
+        return new Currency(asBigDecimal().divide(value, roundingMode));
     }
 
-    public long asSmallestDivisor() {
-        return currency;
+    public BigDecimal asBigDecimal() {
+        return value;
     }
-    
+
+
 }
