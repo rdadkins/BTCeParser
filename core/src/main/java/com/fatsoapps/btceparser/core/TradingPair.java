@@ -6,6 +6,8 @@ import com.fatsoapps.btceparser.core.currency.Currency;
 import com.fatsoapps.btceparser.core.data.Order;
 import com.fatsoapps.btceparser.core.requests.DepthType;
 
+import java.math.BigDecimal;
+
 public enum TradingPair {
 
 	BTC_USD ("btc_usd"),
@@ -33,29 +35,29 @@ public enum TradingPair {
 		this.pair = pair;
 	}
 
-    public Order<? extends BaseCurrency<?>, ? extends BaseCurrency<?>> getOrderTemplate(double askValue, double bidValue, DepthType type) {
-        BaseCurrency<?> askCurrency = (BaseCurrency<?>) getAskCurrency().multiply(askValue);
-        BaseCurrency<?> bidCurrency = (BaseCurrency<?>) getBidCurrency().multiply(bidValue);
-        if (bidCurrency instanceof Currency) {
-            if (askCurrency instanceof Currency) {
-                return new Order<Currency, Currency>((Currency) askCurrency, (Currency) bidCurrency, type);
+    public Order<? extends BaseCurrency<?>, ? extends BaseCurrency<?>> getOrderTemplate(double price, double target, DepthType type) {
+        BaseCurrency<?> priceCurrency = (BaseCurrency<?>) getPriceCurrency().multiply(BigDecimal.valueOf(price));
+        BaseCurrency<?> targetCurrency = (BaseCurrency<?>) getTargetCurrency().multiply(BigDecimal.valueOf(target));
+        if (targetCurrency instanceof Currency) {
+            if (priceCurrency instanceof Currency) {
+                return new Order<Currency, Currency>((Currency) priceCurrency, (Currency) targetCurrency, type);
             } else {
-                return new Order<Coin, Currency>((Coin) askCurrency, (Currency) bidCurrency, type);
+                return new Order<Coin, Currency>((Coin) priceCurrency, (Currency) targetCurrency, type);
             }
         } else {
-            if (askCurrency instanceof Currency) {
-                return new Order<Currency, Coin>((Currency) askCurrency, (Coin) bidCurrency, type);
+            if (priceCurrency instanceof Currency) {
+                return new Order<Currency, Coin>((Currency) priceCurrency, (Coin) targetCurrency, type);
             } else {
-                return new Order<Coin, Coin>((Coin) askCurrency, (Coin) bidCurrency, type);
+                return new Order<Coin, Coin>((Coin) priceCurrency, (Coin) targetCurrency, type);
             }
         }
     }
 
-	public BaseCurrency<?> getBidCurrency() {
+	public BaseCurrency<?> getTargetCurrency() {
 		return getCurrencyType(0);
 	}
 
-	public BaseCurrency<?> getAskCurrency() {
+	public BaseCurrency<?> getPriceCurrency() {
 		return getCurrencyType(1);
 	}
 
