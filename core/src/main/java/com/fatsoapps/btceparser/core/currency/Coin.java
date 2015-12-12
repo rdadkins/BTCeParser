@@ -55,7 +55,7 @@ public final class Coin implements BaseCurrency<Coin> {
 		if (other instanceof Coin) {
 			return multiply((Coin) other);
 		} else if (other instanceof Currency) {
-			return (Currency) other.multiply(asBigDecimal());
+			return ((Currency) other.multiply(asBigDecimal())).setDecimalPlaces(decimalPlaces);
 		}
 		return (BaseCurrency<?>) other.multiply(asBigDecimal());
 	}
@@ -76,7 +76,7 @@ public final class Coin implements BaseCurrency<Coin> {
 		if (other instanceof Coin) {
 			return divide(other.asBigDecimal());
 		} else if (other instanceof Currency) {
-			return new Currency(divide(other.asBigDecimal()).asBigDecimal());
+			return new Currency(divide(other.asBigDecimal()).asBigDecimal()).setDecimalPlaces(decimalPlaces);
 		}
 		return this;
 	}
