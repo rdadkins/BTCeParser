@@ -17,11 +17,6 @@ public final class Currency implements BaseCurrency<Currency> {
         value = decimal.setScale(decimalPlaces, roundingMode);
     }
 
-    public Currency setDecimalPlaces(int decimalPlaces) {
-        this.decimalPlaces = decimalPlaces;
-        return new Currency(asBigDecimal());
-    }
-
     public Currency add(Currency other) {
         return new Currency(asBigDecimal().add(other.asBigDecimal()));
     }
@@ -81,6 +76,11 @@ public final class Currency implements BaseCurrency<Currency> {
 
     public BigDecimal asBigDecimal() {
         return value;
+    }
+
+    public Currency setDecimalPlaces(int decimalPlaces) {
+        this.decimalPlaces = decimalPlaces;
+        return new Currency(asBigDecimal());
     }
 
 

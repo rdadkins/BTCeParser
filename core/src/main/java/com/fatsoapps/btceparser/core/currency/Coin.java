@@ -88,4 +88,8 @@ public final class Coin implements BaseCurrency<Coin> {
 	public BigDecimal asBigDecimal() {
 		return value;
 	}
+
+    public Coin setDecimalPlaces(int decimalPlaces) {
+        return this;
+    }
 }

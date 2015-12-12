@@ -26,4 +26,6 @@ public interface BaseCurrency<T> {
 
     BigDecimal asBigDecimal();
 
+    T setDecimalPlaces(int decimalPlaces);
+
 }
