@@ -15,8 +15,8 @@
     <dependencies>
         <dependency>
             <groupId>com.fatsoapps.btceparser</groupId>
-            <artifactId>btceparser-parent</artifactId>
-            <version>${project.parent.version}</version>
+            <artifactId>core</artifactId>
+            <version>v1.0.0-beta</version>
         </dependency>
     </dependencies>
 
