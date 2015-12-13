@@ -3,6 +3,8 @@ package com.fatsoapps.btceparser.core.data;
 import com.fatsoapps.btceparser.core.currency.BaseCurrency;
 import com.fatsoapps.btceparser.core.requests.DepthType;
 
+import java.math.BigDecimal;
+
 public class Order<T extends BaseCurrency<T>, U extends BaseCurrency<U>> implements Comparable<Order<T, U>> {
 
 	private T priceCurrency;
@@ -24,7 +26,11 @@ public class Order<T extends BaseCurrency<T>, U extends BaseCurrency<U>> impleme
 	}
 
 	public BaseCurrency<?> getOrderTotal() {
-		return priceCurrency.multiply(targetCurrency);
+		return getOrderTotal(0);
+	}
+
+	public BaseCurrency<?> getOrderTotal(double fee) {
+		return (BaseCurrency<?>) priceCurrency.multiply(targetCurrency).multiply(BigDecimal.valueOf(1.0 - fee));
 	}
 
 	public DepthType getOrderType(){
