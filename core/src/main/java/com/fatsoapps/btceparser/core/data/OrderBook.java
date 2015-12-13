@@ -35,7 +35,40 @@ public class OrderBook {
         }
     }
 
+    public BaseCurrency<?> getTotalBidDepth(boolean includeFee) {
+        return getTotalDepthFrom(bidBook, includeFee);
+    }
+
+    public BaseCurrency<?> getTotalAskDepth(boolean includeFee) {
+        return getTotalDepthFrom(askBook, includeFee);
+    }
+
+    private BaseCurrency<?> getTotalDepthFrom(TreeSet<Order<? extends BaseCurrency<?>, ? extends BaseCurrency<?>>> book, boolean includeFee) {
+        BaseCurrency<?> depth = book.first().getPriceCurrency().multiply(BigDecimal.ZERO);
+        for (Order<?, ?> order: book) {
+            depth = depth.add(includeFee ? order.getOrderTotal(fee) : order.getOrderTotal());
+        }
+        return depth;
+    }
+
+    public BaseCurrency<?> getTotalBidVolume() {
+        BaseCurrency<?> value = bidBook.first().getTargetCurrency().multiply(BigDecimal.ZERO);
+        for (Order<?, ?> order: bidBook) {
+            value = value.add(order.getTargetCurrency());
+        }
+        return value;
+    }
+
+    public BaseCurrency<?> getTotalAskVolume() {
+        BaseCurrency<?> value = askBook.first().getTargetCurrency().multiply(BigDecimal.ZERO);
+        for (Order<?, ?> order: askBook) {
+            value = value.add(order.getTargetCurrency());
+        }
+        return value;
+    }
+
     public void setFee(double fee) {
         this.fee = fee;
     }
+
 }
