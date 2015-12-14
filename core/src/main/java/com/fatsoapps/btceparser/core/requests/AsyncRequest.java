@@ -19,7 +19,7 @@ public class AsyncRequest extends Request {
 
     @Override
 	public void processRequest() {
-        task = Unirest.post(url).asJsonAsync(this);
+        task = Unirest.get(url).asJsonAsync(this);
 	}
 
     public void completed(HttpResponse<JsonNode> httpResponse) {
