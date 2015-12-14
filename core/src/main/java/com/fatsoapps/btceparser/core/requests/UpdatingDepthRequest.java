@@ -17,8 +17,11 @@ public class UpdatingDepthRequest extends Request {
     public UpdatingDepthRequest(String url, long timeout, long orderLimit, int secondsInterval, RequestCallback<JsonNode> listener) {
         super(url, timeout);
         this.orderLimit = orderLimit;
-        this.secondsInterval = secondsInterval < 5 ? 5 : secondsInterval;
-        System.out.println(this.secondsInterval);
+        if (secondsInterval == 0) {
+            this.secondsInterval = 0;
+        } else {
+            this.secondsInterval = secondsInterval < 5 ? 5 : secondsInterval;
+        }
         this.listener = listener;
     }
 
@@ -26,6 +29,9 @@ public class UpdatingDepthRequest extends Request {
     public void processRequest() {
         body = getBody(orderLimit);
         task = body.asJsonAsync(this);
+        if (secondsInterval == 0) {
+            return;
+        }
         while (!task.isCancelled()) {
             try {
                 Thread.sleep(secondsInterval * 1000);
