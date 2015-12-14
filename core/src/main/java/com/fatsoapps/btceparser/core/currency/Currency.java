@@ -83,6 +83,10 @@ public final class Currency implements BaseCurrency<Currency> {
         return new Currency(asBigDecimal());
     }
 
+    public boolean isSamePrice(BaseCurrency<?> other) {
+        return other instanceof Currency && asBigDecimal().compareTo(other.asBigDecimal()) == 0;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

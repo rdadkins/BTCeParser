@@ -93,6 +93,10 @@ public final class Coin implements BaseCurrency<Coin> {
         return this;
     }
 
+	public boolean isSamePrice(BaseCurrency<?> other) {
+		return other instanceof Coin && asBigDecimal().compareTo(other.asBigDecimal()) == 0;
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;

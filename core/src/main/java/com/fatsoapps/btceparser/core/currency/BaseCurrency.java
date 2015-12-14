@@ -28,4 +28,6 @@ public interface BaseCurrency<T> {
 
     T setDecimalPlaces(int decimalPlaces);
 
+    boolean isSamePrice(BaseCurrency<?> other);
+
 }
