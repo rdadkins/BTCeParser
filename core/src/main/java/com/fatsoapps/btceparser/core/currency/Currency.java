@@ -83,5 +83,19 @@ public final class Currency implements BaseCurrency<Currency> {
         return new Currency(asBigDecimal());
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Currency currency = (Currency) o;
+        if (decimalPlaces != currency.decimalPlaces) return false;
+        return value != null ? value.equals(currency.value) : currency.value == null;
+    }
 
+    @Override
+    public int hashCode() {
+        int result = value != null ? value.hashCode() : 0;
+        result = 31 * result + decimalPlaces;
+        return result;
+    }
 }
