@@ -49,10 +49,24 @@ public class Order<T extends BaseCurrency<T>, U extends BaseCurrency<U>> impleme
         }
 	}
 
-	public int hashCode() {
-		int hash = (type == DepthType.BID ? 17 : 31);
-		return hash * priceCurrency.hashCode() * targetCurrency.hashCode();
-	}
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Order<?, ?> order = (Order<?, ?>) o;
+        if (priceCurrency != null ? !priceCurrency.equals(order.priceCurrency) : order.priceCurrency != null)
+            return false;
+        if (targetCurrency != null ? !targetCurrency.equals(order.targetCurrency) : order.targetCurrency != null)
+            return false;
+        return type == order.type;
+    }
 
+    @Override
+    public int hashCode() {
+        int result = priceCurrency != null ? priceCurrency.hashCode() : 0;
+        result = 31 * result + (targetCurrency != null ? targetCurrency.hashCode() : 0);
+        result = 31 * result + (type != null ? type.hashCode() : 0);
+        return result;
+    }
 
 }
