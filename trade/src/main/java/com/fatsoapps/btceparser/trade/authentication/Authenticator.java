@@ -1,15 +1,11 @@
 package com.fatsoapps.btceparser.trade.authentication;
 
-import com.mashape.unirest.http.Unirest;
-import com.mashape.unirest.request.HttpRequestWithBody;
 import org.apache.commons.codec.binary.Hex;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class Authenticator {
@@ -52,7 +48,7 @@ public class Authenticator {
             }
             line += value.getKey() + "=" + value.getValue();
         }
-        return line + "&nonce=" + nonce;
+        return line;
     }
 
 }
