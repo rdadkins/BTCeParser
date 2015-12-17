@@ -27,6 +27,26 @@ public class ParameterBuilder {
     }
 
     /**
+     * Set the method for this request. All requests require a method to be placed.
+     * @param method the method to invoke.
+     * @return the current ParameterBuilder.
+     */
+    public ParameterBuilder method(APIMethod method) {
+        parameters.put("method", method.getMethodName());
+        return this;
+    }
+
+    /**
+     * Set the nonce. Required for all calls.
+     * @param nonce the incremented nonce for this request.
+     * @return the current ParameterBuilder.
+     */
+    public ParameterBuilder nonce(int nonce) {
+        parameters.put("nonce", nonce + "");
+        return this;
+    }
+
+    /**
      * Used in TradeHistory, Trade, and ActiveOrders.
      * @param tradingPair the trading pair to focus on.
      * @return the current ParameterBuilder.
