@@ -1,0 +1,59 @@
+package com.fatsoapps.btceparser.trade.authentication;
+
+import org.apache.commons.codec.binary.Hex;
+
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.util.List;
+import java.util.Map;
+
+public class Authenticator {
+
+    private static final String INSTANCE = "HmacSHA512";
+    private String apiKey;
+    private String secret;
+
+    public Authenticator(String apiKey, String secret) {
+        this.apiKey = apiKey;
+        this.secret = secret;
+    }
+
+    public String getKey() {
+        return apiKey;
+    }
+
+    public String sign(Map<String, List<String>> parameters, int nonce) {
+        String parameterData = getData(parameters, nonce);
+        try {
+            Mac mac = Mac.getInstance(INSTANCE);
+            SecretKeySpec secretKeySpec = new SecretKeySpec(secret.getBytes(), INSTANCE);
+            mac.init(secretKeySpec);
+            return Hex.encodeHexString(mac.doFinal(parameterData.getBytes()));
+        } catch (NoSuchAlgorithmException e) {
+            System.err.println(INSTANCE + " instance is not available.");
+            e.printStackTrace();
+        } catch (InvalidKeyException e) {
+            System.err.println(INSTANCE + " provided with wrong type of SecretKeySpec.");
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private String getData(Map<String, List<String>> parameters, int nonce) {
+        String line = "";
+        for (Map.Entry<String, List<String>> value: parameters.entrySet()) {
+            if (line.length() > 0) {
+                line += "&";
+            }
+            line += value.getKey() + "=";
+            for (String multiParameter: value.getValue()) {
+                line += multiParameter + ",";
+            }
+            line = line.substring(0, line.length() - 1);
+        }
+        return line + "&nonce=" + nonce;
+    }
+
+}
