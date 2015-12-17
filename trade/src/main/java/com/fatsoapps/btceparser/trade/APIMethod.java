@@ -1,9 +1,9 @@
 package com.fatsoapps.btceparser.trade;
 
-public enum TradeMethod {
+public enum APIMethod {
 
     GETINFO("getInfo"),
-    TRADE("trade"),
+    TRADE("Trade"),
     ACTIVE_ORDERS("ActiveOrders"),
     ORDER_INFO("OrderInfo"),
     CANCEL_ORDER("CancelOrder"),
@@ -15,7 +15,7 @@ public enum TradeMethod {
 
     private String methodName;
 
-    TradeMethod(String methodName) {
+    APIMethod(String methodName) {
         this.methodName = methodName;
     }
 
