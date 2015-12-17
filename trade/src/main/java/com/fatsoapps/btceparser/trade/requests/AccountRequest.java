@@ -47,7 +47,7 @@ public abstract class AccountRequest extends Request implements Callback<JsonNod
 
     private void processRequest(Map<String, String> parameters) {
         task = Unirest.post(URL).
-                headers(authenticator.getHeaders(parameters, nonce++)).
+                headers(authenticator.getHeaders(parameters, nonce)).
                 fields(asFields(parameters)).
                 asJsonAsync(this);
     }
