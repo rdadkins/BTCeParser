@@ -1,11 +1,14 @@
 package com.fatsoapps.btceparser.trade.authentication;
 
+import com.mashape.unirest.http.Unirest;
+import com.mashape.unirest.request.HttpRequestWithBody;
 import org.apache.commons.codec.binary.Hex;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -24,7 +27,7 @@ public class Authenticator {
         return apiKey;
     }
 
-    public String sign(Map<String, List<String>> parameters, int nonce) {
+    public String sign(Map<String, String> parameters, int nonce) {
         String parameterData = getData(parameters, nonce);
         try {
             Mac mac = Mac.getInstance(INSTANCE);
@@ -41,17 +44,13 @@ public class Authenticator {
         return null;
     }
 
-    private String getData(Map<String, List<String>> parameters, int nonce) {
+    private String getData(Map<String, String> parameters, int nonce) {
         String line = "";
-        for (Map.Entry<String, List<String>> value: parameters.entrySet()) {
+        for (Map.Entry<String, String> value: parameters.entrySet()) {
             if (line.length() > 0) {
                 line += "&";
             }
-            line += value.getKey() + "=";
-            for (String multiParameter: value.getValue()) {
-                line += multiParameter + ",";
-            }
-            line = line.substring(0, line.length() - 1);
+            line += value.getKey() + "=" + value.getValue();
         }
         return line + "&nonce=" + nonce;
     }
