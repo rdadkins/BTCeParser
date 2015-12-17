@@ -3,6 +3,8 @@ package com.fatsoapps.btceparser.trade.requests;
 import com.fatsoapps.btceparser.core.requests.Request;
 import com.fatsoapps.btceparser.trade.ParameterBuilder;
 import com.fatsoapps.btceparser.trade.authentication.Authenticator;
+import com.fatsoapps.btceparser.trade.callbacks.AccountCallback;
+import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.async.Callback;
@@ -15,11 +17,13 @@ public abstract class AccountRequest extends Request implements Callback<JsonNod
     protected static final String URL = "https://btc-e.com/tapi";
     protected Authenticator authenticator;
     protected ParameterBuilder parameterBuilder;
+    protected AccountCallback callback;
     private static int nonce;
 
-    public AccountRequest(Authenticator authenticator, long timeout, int nonce) {
+    public AccountRequest(Authenticator authenticator, long timeout, int nonce, AccountCallback callback) {
         super(URL, timeout);
         this.authenticator = authenticator;
+        this.callback = callback;
         AccountRequest.nonce = nonce;
     }
 
@@ -49,9 +53,21 @@ public abstract class AccountRequest extends Request implements Callback<JsonNod
     }
 
     private Map<String, Object> asFields(Map<String, String> parameters) {
-        Map<String, Object> type = new HashMap<String, Object>();
+        Map<String, Object> type = new HashMap<>();
         type.putAll(parameters);
         return type;
+    }
+
+    @Override
+    public void completed(HttpResponse<JsonNode> response) {
+        if (callback != null) {
+            if (response.getBody().getObject().getInt("success") == 0) {
+                String reason = response.getBody().getObject().getString("error");
+                callback.onError(reason);
+            } else {
+                callback.onSuccess();
+            }
+        }
     }
 
 }
