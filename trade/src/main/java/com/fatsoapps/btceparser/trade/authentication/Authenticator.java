@@ -6,6 +6,7 @@ import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
 import java.util.Map;
 
 public class Authenticator {
@@ -19,12 +20,19 @@ public class Authenticator {
         this.secret = secret;
     }
 
-    public String getKey() {
+    public Map<String,String> getHeaders(Map<String, String> parameters, int nonce) {
+        Map<String, String> headers = new HashMap<String, String>();
+        headers.put("key", apiKey);
+        headers.put("sign", sign(parameters, nonce));
+        return headers;
+    }
+
+    private String getKey() {
         return apiKey;
     }
 
-    public String sign(Map<String, String> parameters, int nonce) {
-        String parameterData = getData(parameters, nonce);
+    private String sign(Map<String, String> parameters, int nonce) {
+        String parameterData = getBodyData(parameters, nonce);
         try {
             Mac mac = Mac.getInstance(INSTANCE);
             SecretKeySpec secretKeySpec = new SecretKeySpec(secret.getBytes(), INSTANCE);
@@ -40,7 +48,7 @@ public class Authenticator {
         return null;
     }
 
-    private String getData(Map<String, String> parameters, int nonce) {
+    private String getBodyData(Map<String, String> parameters, int nonce) {
         String line = "";
         for (Map.Entry<String, String> value: parameters.entrySet()) {
             if (line.length() > 0) {
