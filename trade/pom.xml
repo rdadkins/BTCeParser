@@ -3,7 +3,7 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <groupId>com.fatsoapps.btceparser</groupId>
+        <groupId>co.bitsquared.btceparser</groupId>
         <artifactId>btceparser-parent</artifactId>
         <version>v1.0.0-beta</version>
     </parent>
@@ -11,11 +11,28 @@
 
     <artifactId>trade</artifactId>
     <version>${project.parent.version}</version>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.6</source>
+                    <target>1.6</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
     <dependencies>
         <dependency>
-            <groupId>com.fatsoapps.btceparser</groupId>
+            <groupId>co.bitsquared.btceparser</groupId>
             <artifactId>core</artifactId>
+            <version>v1.0.0-beta</version>
+        </dependency>
+        <dependency>
+            <groupId>co.bitsquared.btceparser</groupId>
+            <artifactId>btceparser-parent</artifactId>
             <version>v1.0.0-beta</version>
         </dependency>
     </dependencies>
