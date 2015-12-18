@@ -1,4 +1,4 @@
-package com.fatsoapps.btceparser.core.callbacks;
+package co.bitsquared.btceparser.core.callbacks;
 
 import com.mashape.unirest.http.exceptions.UnirestException;
 

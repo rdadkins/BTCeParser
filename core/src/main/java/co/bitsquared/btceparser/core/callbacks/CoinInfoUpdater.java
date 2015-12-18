@@ -1,6 +1,6 @@
-package com.fatsoapps.btceparser.core.callbacks;
+package co.bitsquared.btceparser.core.callbacks;
 
-import com.fatsoapps.btceparser.core.TradingPair;
+import co.bitsquared.btceparser.core.TradingPair;
 
 public interface CoinInfoUpdater extends BaseRequestCallback {
 
