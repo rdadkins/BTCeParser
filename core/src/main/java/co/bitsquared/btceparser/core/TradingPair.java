@@ -1,10 +1,18 @@
 package co.bitsquared.btceparser.core;
 
+import co.bitsquared.btceparser.core.callbacks.RequestCallback;
 import co.bitsquared.btceparser.core.currency.BaseCurrency;
 import co.bitsquared.btceparser.core.currency.Coin;
 import co.bitsquared.btceparser.core.currency.Currency;
+import co.bitsquared.btceparser.core.data.CoinInfo;
 import co.bitsquared.btceparser.core.data.Order;
+import co.bitsquared.btceparser.core.requests.AsyncRequest;
 import co.bitsquared.btceparser.core.requests.DepthType;
+import co.bitsquared.btceparser.core.requests.RequestType;
+import com.mashape.unirest.http.HttpResponse;
+import com.mashape.unirest.http.JsonNode;
+import com.mashape.unirest.http.exceptions.UnirestException;
+import org.json.JSONObject;
 
 import java.math.BigDecimal;
 
@@ -29,7 +37,30 @@ public enum TradingPair {
 	EUR_RUR ("eur_rur"),
 	CNC_BTC ("cnh_btc");
 
+	static {
+		new AsyncRequest(API.INFO.getUrl(null), 10000, new RequestCallback<JsonNode>() {
+
+			public void cancelled() {
+				System.err.println("Coin Information request cancelled.");
+			}
+
+			public void completed(HttpResponse<JsonNode> response, RequestType source) {
+                JSONObject pairs = response.getBody().getObject().getJSONObject("pairs");
+                for (TradingPair pair: values()) {
+                    JSONObject pairInfo = pairs.getJSONObject(pair.toString());
+                    pair.coinInfo = new CoinInfo(pair, pairInfo);
+                }
+			}
+
+			public void failed(UnirestException reason) {
+				System.err.println("Coin Information requested failed: " + reason.getLocalizedMessage());
+			}
+
+		}, RequestType.INFO).processRequest();
+	}
+
 	private String pair;
+	private CoinInfo coinInfo;
 	
 	TradingPair(String pair){
 		this.pair = pair;
@@ -56,6 +87,10 @@ public enum TradingPair {
 		}
 		return Coin.fromDouble(1.0);
 	}
+
+    public CoinInfo getCoinInfo() {
+        return coinInfo;
+    }
 	
 	@Override
 	public String toString(){
