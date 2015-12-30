@@ -19,13 +19,30 @@ public class CoinInfo implements RequestCallback<JsonNode> {
     private final TradingPair tradingPair;
     private CoinInfoUpdater updater;
     private AsyncRequest request;
+    private JSONObject rawData;
+
+    private int decimalPlaces;
+    private double minPrice;
+    private double maxPrice;
+    private double minAmount;
+    private boolean hidden;
+    private double fee;
 
     public CoinInfo(TradingPair tradingPair, CoinInfoUpdater updater) {
         this.tradingPair = tradingPair;
         this.updater = updater;
     }
 
+    public CoinInfo(TradingPair tradingPair, JSONObject data) {
+        this.tradingPair = tradingPair;
+        rawData = data;
+        extractData(rawData);
+    }
+
     public void processInfo() {
+        if (rawData != null) {
+            return;
+        }
         if (request == null) {
             request = new AsyncRequest(API.INFO.getUrl(null), 10000, this, RequestType.INFO);
         }
@@ -40,16 +57,59 @@ public class CoinInfo implements RequestCallback<JsonNode> {
 
     public void completed(HttpResponse<JsonNode> response, RequestType source) {
         JSONObject pairs = response.getBody().getObject().getJSONObject("pairs");
-        JSONObject myPair = pairs.getJSONObject(tradingPair.toString());
-        int decimalPlaces = getInt(myPair, "decimal_places");
-        double minPrice = getDouble(myPair, "min_price");
-        double maxPrice = getDouble(myPair, "max_price");
-        double minAmount = getDouble(myPair, "min_amount");
-        boolean hidden = getInt(myPair, "hidden") == 1;
-        double fee = getDouble(myPair, "fee");
+        rawData = pairs.getJSONObject(tradingPair.toString());
+        extractData(rawData);
         if (updater != null) {
             updater.onInfoUpdate(tradingPair, decimalPlaces, minPrice, maxPrice, minAmount, hidden, fee);
         }
+    }
+
+    /**
+     * Returns the amount of decimal places allowed for trading.
+     */
+    public int getDecimalPlaces() {
+        return decimalPlaces;
+    }
+
+    /**
+     * Returns the minimum price allowed for a valid trade.
+     */
+    public double getMinPrice() {
+        return minPrice;
+    }
+
+    /**
+     * Returns the maximum price allowed for a valid trade.
+     */
+    public double getMaxPrice() {
+        return maxPrice;
+    }
+
+    /**
+     * Returns the minimum amount allowed for a valid trade.
+     */
+    public double getMinAmount() {
+        return minAmount;
+    }
+
+    /**
+     * Determines whether this pair is hidden from the public.
+     */
+    public boolean isHidden() {
+        return hidden;
+    }
+
+    public TradingPair getTradingPair() {
+        return tradingPair;
+    }
+
+    private void extractData(JSONObject object) {
+        decimalPlaces = getInt(object, "decimal_places");
+        minPrice = getDouble(object, "min_price");
+        maxPrice = getDouble(object, "max_price");
+        minAmount = getDouble(object, "min_amount");
+        hidden = getInt(object, "hidden") == 1;
+        fee = getDouble(object, "fee");
     }
 
     public void failed(UnirestException reason) {
