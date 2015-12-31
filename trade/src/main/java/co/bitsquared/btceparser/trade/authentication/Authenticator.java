@@ -4,6 +4,7 @@ import org.apache.commons.codec.binary.Hex;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
+import java.io.File;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
@@ -27,8 +28,12 @@ public class Authenticator {
         return headers;
     }
 
-    private String getKey() {
+    protected String getKey() {
         return apiKey;
+    }
+
+    protected String getSecret() {
+        return secret;
     }
 
     private String sign(Map<String, String> parameters, int nonce) {
@@ -57,6 +62,10 @@ public class Authenticator {
             line += value.getKey() + "=" + value.getValue();
         }
         return line;
+    }
+
+    public void writeToDisk(File file, String password) {
+        StoredInfo.write(file, this, password);
     }
 
 }
