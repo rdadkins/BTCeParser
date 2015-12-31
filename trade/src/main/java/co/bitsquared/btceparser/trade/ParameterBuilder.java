@@ -209,4 +209,8 @@ public class ParameterBuilder {
         return this;
     }
 
+    public boolean contains(String key) {
+        return parameters.containsKey(key);
+    }
+
 }
