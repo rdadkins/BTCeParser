@@ -9,6 +9,7 @@ import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.async.Callback;
+import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -64,8 +65,11 @@ public abstract class AccountRequest extends Request implements Callback<JsonNod
                 callback.onError(reason);
             } else {
                 callback.onSuccess();
+                processReturn(response.getBody().getObject().getJSONObject("return"));
             }
         }
     }
+
+    public abstract void processReturn(JSONObject returnObject);
 
 }
