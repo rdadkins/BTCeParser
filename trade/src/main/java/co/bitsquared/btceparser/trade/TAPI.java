@@ -1,6 +1,6 @@
 package co.bitsquared.btceparser.trade;
 
-public enum APIMethod {
+public enum TAPI {
 
     GETINFO("getInfo"),
     TRADE("Trade"),
@@ -13,9 +13,11 @@ public enum APIMethod {
     CREATE_COUPON("CreateCoupon"),
     REDEEM_COUPON("RedeemCoupon");
 
+    public static final String URL = "https://btc-e.com/tapi";
+
     private String methodName;
 
-    APIMethod(String methodName) {
+    TAPI(String methodName) {
         this.methodName = methodName;
     }
 
