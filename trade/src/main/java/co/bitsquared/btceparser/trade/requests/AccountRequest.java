@@ -2,6 +2,7 @@ package co.bitsquared.btceparser.trade.requests;
 
 import co.bitsquared.btceparser.core.requests.Request;
 import co.bitsquared.btceparser.trade.ParameterBuilder;
+import co.bitsquared.btceparser.trade.TAPI;
 import co.bitsquared.btceparser.trade.authentication.Authenticator;
 import co.bitsquared.btceparser.trade.callbacks.AccountCallback;
 import com.mashape.unirest.http.HttpResponse;
@@ -14,21 +15,14 @@ import java.util.Map;
 
 public abstract class AccountRequest extends Request implements Callback<JsonNode> {
 
-    protected static final String URL = "https://btc-e.com/tapi";
     protected Authenticator authenticator;
     protected ParameterBuilder parameterBuilder;
     protected AccountCallback callback;
-    private static int nonce;
 
-    public AccountRequest(Authenticator authenticator, long timeout, int nonce, AccountCallback callback) {
-        super(URL, timeout);
+    public AccountRequest(Authenticator authenticator, long timeout, AccountCallback callback) {
+        super(TAPI.URL, timeout);
         this.authenticator = authenticator;
         this.callback = callback;
-        AccountRequest.nonce = nonce;
-    }
-
-    public void setNonce(int nonce) {
-        AccountRequest.nonce = nonce;
     }
 
     /**
@@ -39,15 +33,19 @@ public abstract class AccountRequest extends Request implements Callback<JsonNod
         processRequest(parameterBuilder);
     }
 
+    /**
+     * Should be called whenever a request needs to be made. This handles the nonce from the authenticator. All implemenations
+     * should be overridden and assign the method to the ParametereBuilder before calling super().
+     */
     public void processRequest(ParameterBuilder parameters) {
         this.parameterBuilder = parameters;
-        parameters.nonce(nonce++);
+        parameters.nonce(authenticator);
         processRequest(parameters.build());
     }
 
     private void processRequest(Map<String, String> parameters) {
-        task = Unirest.post(URL).
-                headers(authenticator.getHeaders(parameters, nonce)).
+        task = Unirest.post(TAPI.URL).
+                headers(authenticator.getHeaders(parameters)).
                 fields(asFields(parameters)).
                 asJsonAsync(this);
     }
