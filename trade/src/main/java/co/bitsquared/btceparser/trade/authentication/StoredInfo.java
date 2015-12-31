@@ -26,8 +26,9 @@ public class StoredInfo {
         try {
             String decryptedKey = AES256.decrypt(readLine(reader), password);
             String decryptedSecret = AES256.decrypt(readLine(reader), password);
+            String nonce = readLine(reader);
             reader.close();
-            return new Authenticator(decryptedKey, decryptedSecret);
+            return new Authenticator(decryptedKey, decryptedSecret, Integer.valueOf(nonce));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -61,10 +62,15 @@ public class StoredInfo {
         try {
             writeLine(writer, encryptedKey);
             writeLine(writer, encryptedSecret);
+            writeLine(writer, authenticator.getNonce(false));
             writer.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private static void writeLine(BufferedWriter writer, int value) throws IOException {
+        writeLine(writer, value + "");
     }
 
     private static void writeLine(BufferedWriter writer, String line) throws IOException {
