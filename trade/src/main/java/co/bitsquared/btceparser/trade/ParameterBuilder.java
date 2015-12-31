@@ -3,6 +3,7 @@ package co.bitsquared.btceparser.trade;
 import co.bitsquared.btceparser.core.TradingPair;
 import co.bitsquared.btceparser.core.currency.BaseCurrency;
 import co.bitsquared.btceparser.core.requests.DepthType;
+import co.bitsquared.btceparser.trade.authentication.Authenticator;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -34,7 +35,7 @@ public class ParameterBuilder {
      * @param method the method to invoke.
      * @return the current ParameterBuilder.
      */
-    public ParameterBuilder method(APIMethod method) {
+    public ParameterBuilder method(TAPI method) {
         parameters.put("method", method.getMethodName());
         return this;
     }
@@ -47,6 +48,15 @@ public class ParameterBuilder {
     public ParameterBuilder nonce(int nonce) {
         parameters.put("nonce", nonce + "");
         return this;
+    }
+
+    /**
+     * Set the nonce. Required for all calls.
+     * @param authenticator the authenticator being used for these parameters.
+     * @return the current ParameterBuilder.
+     */
+    public ParameterBuilder nonce(Authenticator authenticator) {
+        return nonce(authenticator.getNonce(true));
     }
 
     /**
