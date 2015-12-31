@@ -1,6 +1,6 @@
 package co.bitsquared.btceparser.trade.requests;
 
-import co.bitsquared.btceparser.trade.APIMethod;
+import co.bitsquared.btceparser.trade.TAPI;
 import co.bitsquared.btceparser.trade.ParameterBuilder;
 import co.bitsquared.btceparser.trade.authentication.Authenticator;
 import co.bitsquared.btceparser.trade.callbacks.AccountCallback;
@@ -10,14 +10,14 @@ import com.mashape.unirest.http.exceptions.UnirestException;
 
 public class InfoRequest extends AccountRequest {
 
-    public InfoRequest(Authenticator authenticator, int timeout, int nonce, AccountCallback callback) {
-        super(authenticator, timeout, nonce, callback);
+    public InfoRequest(Authenticator authenticator, int timeout, AccountCallback callback) {
+        super(authenticator, timeout, callback);
         this.callback = callback;
     }
 
     @Override
     public void processRequest(ParameterBuilder parameters) {
-        parameters.method(APIMethod.GETINFO);
+        parameters.method(TAPI.GETINFO);
         super.processRequest(parameters);
     }
 
