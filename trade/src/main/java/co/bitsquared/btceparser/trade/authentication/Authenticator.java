@@ -15,16 +15,19 @@ public class Authenticator {
     private static final String INSTANCE = "HmacSHA512";
     private String apiKey;
     private String secret;
+    private int nonce;
 
-    public Authenticator(String apiKey, String secret) {
+    public Authenticator(String apiKey, String secret, int nonce) {
         this.apiKey = apiKey;
         this.secret = secret;
+        this.nonce = nonce;
+        System.out.println("Nonce: " + nonce);
     }
 
-    public Map<String,String> getHeaders(Map<String, String> parameters, int nonce) {
+    public Map<String,String> getHeaders(Map<String, String> parameters) {
         Map<String, String> headers = new HashMap<String, String>();
         headers.put("key", apiKey);
-        headers.put("sign", sign(parameters, nonce));
+        headers.put("sign", sign(parameters));
         return headers;
     }
 
@@ -36,8 +39,20 @@ public class Authenticator {
         return secret;
     }
 
-    private String sign(Map<String, String> parameters, int nonce) {
-        String parameterData = getBodyData(parameters, nonce);
+    /**
+     * Get the current nonce.
+     * @param increment determines whether to increment on return or not (post increment).
+     * @return the new nonce.
+     */
+    public int getNonce(boolean increment) {
+        if (increment) {
+            return nonce++;
+        }
+        return nonce;
+    }
+
+    private String sign(Map<String, String> parameters) {
+        String parameterData = getBodyData(parameters);
         try {
             Mac mac = Mac.getInstance(INSTANCE);
             SecretKeySpec secretKeySpec = new SecretKeySpec(secret.getBytes(), INSTANCE);
@@ -53,7 +68,7 @@ public class Authenticator {
         return null;
     }
 
-    private String getBodyData(Map<String, String> parameters, int nonce) {
+    private String getBodyData(Map<String, String> parameters) {
         String line = "";
         for (Map.Entry<String, String> value: parameters.entrySet()) {
             if (line.length() > 0) {
@@ -64,7 +79,7 @@ public class Authenticator {
         return line;
     }
 
-    public void writeToDisk(File file, String password) {
+    public void writeToFile(File file, String password) {
         StoredInfo.write(file, this, password);
     }
 
