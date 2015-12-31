@@ -64,7 +64,7 @@ public class AES256 {
      * @return the decrypted text. Returns null if there is an error.
      */
     @Nullable
-    public String decrypt(String data, String password) {
+    public static String decrypt(String data, String password) {
         String[] fields = data.split(SPLIT);
         byte[] salt = Base64.decodeBase64(fields[0]);
         byte[] iv = Base64.decodeBase64(fields[1]);
