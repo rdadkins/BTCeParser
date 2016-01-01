@@ -1,8 +1,6 @@
 package co.bitsquared.btceparser.trade.callbacks;
 
-import co.bitsquared.btceparser.trade.Currency;
-
-import java.util.Map;
+import co.bitsquared.btceparser.trade.Funds;
 
 public interface TradeRequestCallback extends AccountCallback {
 
@@ -13,6 +11,6 @@ public interface TradeRequestCallback extends AccountCallback {
      * @param orderID 0 if the request was filled right away, otherwise an actual ID is returned.
      * @param funds balance of each currency after request.
      */
-    void onReturn(double received, double remains, int orderID, Map<Currency, Double> funds);
+    void onSuccess(double received, double remains, int orderID, Funds[] funds);
 
 }
