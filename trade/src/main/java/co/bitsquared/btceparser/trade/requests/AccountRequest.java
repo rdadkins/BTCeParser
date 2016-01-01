@@ -1,6 +1,8 @@
 package co.bitsquared.btceparser.trade.requests;
 
 import co.bitsquared.btceparser.core.requests.Request;
+import co.bitsquared.btceparser.trade.Currency;
+import co.bitsquared.btceparser.trade.Funds;
 import co.bitsquared.btceparser.trade.ParameterBuilder;
 import co.bitsquared.btceparser.trade.TAPI;
 import co.bitsquared.btceparser.trade.authentication.Authenticator;
@@ -16,8 +18,8 @@ import java.util.Map;
 
 public abstract class AccountRequest extends Request implements Callback<JsonNode> {
 
-    protected Authenticator authenticator;
-    protected ParameterBuilder parameterBuilder;
+    private Authenticator authenticator;
+    private ParameterBuilder parameterBuilder;
     protected AccountCallback callback;
 
     public AccountRequest(Authenticator authenticator, long timeout, AccountCallback callback) {
@@ -58,16 +60,25 @@ public abstract class AccountRequest extends Request implements Callback<JsonNod
     }
 
     @Override
-    public void completed(HttpResponse<JsonNode> response) {
+    public final void completed(HttpResponse<JsonNode> response) {
         if (callback != null) {
             if (response.getBody().getObject().getInt("success") == 0) {
-                String reason = response.getBody().getObject().getString("error");
-                callback.onError(reason);
+                callback.onError(response.getBody().getObject().getString("error"));
             } else {
                 callback.onSuccess();
                 processReturn(response.getBody().getObject().getJSONObject("return"));
             }
         }
+    }
+
+    public final Funds[] extractFunds(JSONObject funds) {
+        Funds[] accountFunds = new Funds[Currency.values().length];
+        Currency currentCurrency;
+        for (int i = 0; i < accountFunds.length; i++) {
+            currentCurrency = Currency.values()[i];
+            accountFunds[i] = new Funds(currentCurrency, funds.getDouble(currentCurrency.name().toLowerCase()));
+        }
+        return accountFunds;
     }
 
     public abstract void processReturn(JSONObject returnObject);

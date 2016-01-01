@@ -18,6 +18,7 @@ public class InfoRequest extends AccountRequest {
     private static final String WITHDRAW = "withdraw";
     private static final String OPEN_ORDERS = "open_orders";
     private static final String SERVER_TIME = "server_time";
+    private static final int TRANSACTION_COUNT = 0;
 
     private InfoCallback callback;
 
@@ -42,17 +43,7 @@ public class InfoRequest extends AccountRequest {
         boolean canWithdraw = rights.getInt(WITHDRAW) == 1;
         int openOrders = returnObject.getInt(OPEN_ORDERS);
         long serverTime = returnObject.getLong(SERVER_TIME);
-        callback.onSuccess(accountFunds, accessInfo, canTrade, canWithdraw, 0, openOrders, serverTime);
-    }
-
-    private Funds[] extractFunds(JSONObject funds) {
-        Funds[] accountFunds = new Funds[Currency.values().length];
-        Currency currentCurrency;
-        for (int i = 0; i < accountFunds.length; i++) {
-            currentCurrency = Currency.values()[i];
-            accountFunds[i] = new Funds(currentCurrency, funds.getDouble(currentCurrency.name().toLowerCase()));
-        }
-        return accountFunds;
+        callback.onSuccess(accountFunds, accessInfo, canTrade, canWithdraw, TRANSACTION_COUNT, openOrders, serverTime);
     }
 
     public void failed(UnirestException e) {
