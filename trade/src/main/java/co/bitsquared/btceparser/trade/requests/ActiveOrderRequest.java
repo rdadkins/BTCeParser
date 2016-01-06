@@ -1,6 +1,6 @@
 package co.bitsquared.btceparser.trade.requests;
 
-import co.bitsquared.btceparser.trade.OpenOrder;
+import co.bitsquared.btceparser.trade.ActiveOrder;
 import co.bitsquared.btceparser.trade.ParameterBuilder;
 import co.bitsquared.btceparser.trade.TAPI;
 import co.bitsquared.btceparser.trade.authentication.Authenticator;
@@ -25,11 +25,11 @@ public class ActiveOrderRequest extends AccountRequest {
 
     @Override
     public void processReturn(JSONObject returnObject) {
-        OpenOrder[] openOrders = new OpenOrder[returnObject.keySet().size()];
+        ActiveOrder[] openOrders = new ActiveOrder[returnObject.keySet().size()];
         int position = 0;
         for (Object object: returnObject.keySet()) {
             int orderID = Integer.valueOf(object.toString());
-            openOrders[position++] = new OpenOrder(orderID, returnObject.getJSONObject(orderID + ""));
+            openOrders[position++] = new ActiveOrder(orderID, returnObject.getJSONObject(orderID + ""));
         }
         callback.onSuccess(openOrders);
     }

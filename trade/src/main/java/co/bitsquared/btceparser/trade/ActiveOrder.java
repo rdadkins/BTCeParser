@@ -7,7 +7,7 @@ import org.json.JSONObject;
 
 import java.math.BigDecimal;
 
-public class OpenOrder {
+public class ActiveOrder {
 
     private static final String PAIR = "pair";
     private static final String TYPE = "type";
@@ -24,7 +24,7 @@ public class OpenOrder {
     private long timestampCreated;
     private static final int status = 0;
 
-    public OpenOrder(int orderID, JSONObject orderAsJSON) {
+    public ActiveOrder(int orderID, JSONObject orderAsJSON) {
         this.orderID = orderID;
         extractJSON(orderAsJSON);
     }
