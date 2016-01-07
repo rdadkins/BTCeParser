@@ -61,4 +61,5 @@ public class Trade {
     public long getTimeStamp() {
         return timeStamp;
     }
+
 }
