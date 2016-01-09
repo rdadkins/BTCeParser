@@ -14,17 +14,13 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 
-/**
- * AES256 requires that you install the JCE Unlimited Strength files to accept key sizes above 128 bits.
- */
-public class AES256 {
+public abstract class AES {
 
     public static final String ENCRYPTION_METHOD = "AES";
     public static final String CIPHER_METHOD = "AES/CBC/PKCS5Padding";
     public static final String KEY_FACTORY_METHOD = "PBKDF2WithHmacSHA1";
     public static final String CHAR_SET = "UTF-8";
     public static final int ITERATION_COUNT = 2048;
-    public static final int KEY_LENGTH = 256;
     public static final int SALT_LENGTH = 32;
     public static final String SPLIT = "!";
 
@@ -35,12 +31,12 @@ public class AES256 {
      * @return a multi-level formatted string that holds pieces together of encrypted text. Returns null if there is an error.
      */
     @Nullable
-    public static String encrypt(String data, String password) {
+    public static String encrypt(String data, String password, AESKeySize keySize) {
         try {
             SecretKeyFactory keyFactory = SecretKeyFactory.getInstance(KEY_FACTORY_METHOD);
             SecureRandom random = new SecureRandom();
             byte[] salt = getSalt(random);
-            PBEKeySpec keySpec = new PBEKeySpec(password.toCharArray(), salt, ITERATION_COUNT, KEY_LENGTH);
+            PBEKeySpec keySpec = new PBEKeySpec(password.toCharArray(), salt, ITERATION_COUNT, keySize.getKeySize());
             byte[] keyBytes = keyFactory.generateSecret(keySpec).getEncoded();
             SecretKeySpec secretKeySpec = new SecretKeySpec(keyBytes, ENCRYPTION_METHOD);
             Cipher cipher = Cipher.getInstance(CIPHER_METHOD);
@@ -64,13 +60,13 @@ public class AES256 {
      * @return the decrypted text. Returns null if there is an error.
      */
     @Nullable
-    public static String decrypt(String data, String password) {
+    public static String decrypt(String data, String password, AESKeySize keySize) {
         String[] fields = data.split(SPLIT);
         byte[] salt = Base64.decodeBase64(fields[0]);
         byte[] iv = Base64.decodeBase64(fields[1]);
         byte[] message = Base64.decodeBase64(fields[2]);
         try {
-            SecretKeySpec secretKey = deriveKey(salt, password);
+            SecretKeySpec secretKey = deriveKey(salt, password, keySize.getKeySize());
             Cipher cipher = Cipher.getInstance(CIPHER_METHOD);
             IvParameterSpec ivSpec = new IvParameterSpec(iv);
             cipher.init(Cipher.DECRYPT_MODE, secretKey, ivSpec);
@@ -88,11 +84,15 @@ public class AES256 {
         return saltBytes;
     }
 
-    private static SecretKeySpec deriveKey(byte[] salt, String password) throws NoSuchAlgorithmException, InvalidKeySpecException {
-        PBEKeySpec keySpec = new PBEKeySpec(password.toCharArray(), salt, ITERATION_COUNT, KEY_LENGTH);
+    private static SecretKeySpec deriveKey(byte[] salt, String password, int keyLength) throws NoSuchAlgorithmException, InvalidKeySpecException {
+        PBEKeySpec keySpec = new PBEKeySpec(password.toCharArray(), salt, ITERATION_COUNT, keyLength);
         SecretKeyFactory keyFactory = SecretKeyFactory.getInstance(KEY_FACTORY_METHOD);
         byte[] keyBytes = keyFactory.generateSecret(keySpec).getEncoded();
         return new SecretKeySpec(keyBytes, ENCRYPTION_METHOD);
     }
+
+    public abstract String encrypt(String data, String password);
+
+    public abstract String decrypt(String data, String password);
 
 }
