@@ -7,6 +7,7 @@ import co.bitsquared.btceparser.trade.ParameterBuilder;
 import co.bitsquared.btceparser.trade.TAPI;
 import co.bitsquared.btceparser.trade.authentication.Authenticator;
 import co.bitsquared.btceparser.trade.callbacks.AccountCallback;
+import co.bitsquared.btceparser.trade.exceptions.MissingParametersException;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
@@ -81,6 +82,14 @@ public abstract class AccountRequest extends Request implements Callback<JsonNod
         return accountFunds;
     }
 
+    protected void checkValidParams(ParameterBuilder parameters, AccountRequest request) {
+        if (!parameters.contains(request.getRequiredParams())) {
+            throw new MissingParametersException(request.getRequiredParams());
+        }
+    }
+
     public abstract void processReturn(JSONObject returnObject);
+
+    protected abstract String[] getRequiredParams();
 
 }

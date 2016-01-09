@@ -6,7 +6,6 @@ import co.bitsquared.btceparser.trade.ParameterBuilder;
 import co.bitsquared.btceparser.trade.TAPI;
 import co.bitsquared.btceparser.trade.authentication.Authenticator;
 import co.bitsquared.btceparser.trade.callbacks.RedeemCouponCallback;
-import co.bitsquared.btceparser.trade.exceptions.MissingParametersException;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import org.json.JSONObject;
 
@@ -21,9 +20,7 @@ public class RedeemCouponRequest extends AccountRequest {
 
     @Override
     public void processRequest(ParameterBuilder parameters) {
-        if (!parameters.contains("coupon")) {
-            throw new MissingParametersException("coupon");
-        }
+        checkValidParams(parameters, this);
         parameters.method(TAPI.REDEEM_COUPON);
         super.processRequest(parameters);
     }
@@ -35,6 +32,11 @@ public class RedeemCouponRequest extends AccountRequest {
         long transactionID = returnObject.getLong("transID");
         Funds[] funds = extractFunds(returnObject.getJSONObject("funds"));
         callback.onSuccess(couponAmount, couponCurrency, transactionID, funds);
+    }
+
+    @Override
+    protected String[] getRequiredParams() {
+        return new String[]{"coupon"};
     }
 
     @Override

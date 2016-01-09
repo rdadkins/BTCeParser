@@ -19,9 +19,7 @@ public class CancelOrderRequest extends AccountRequest {
     }
 
     public void processRequest(ParameterBuilder parameters) {
-        if (!parameters.contains("order_id")) {
-            throw new MissingParametersException("order_id");
-        }
+        checkValidParams(parameters, this);
         parameters.method(TAPI.CANCEL_ORDER);
         super.processRequest(parameters);
     }
@@ -31,6 +29,11 @@ public class CancelOrderRequest extends AccountRequest {
         int orderId = returnObject.getInt("order_id");
         Funds[] funds = extractFunds(returnObject.getJSONObject("funds"));
         callback.onSuccess(orderId, funds);
+    }
+
+    @Override
+    protected String[] getRequiredParams() {
+        return new String[]{"order_id"};
     }
 
     @Override

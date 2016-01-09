@@ -22,6 +22,7 @@ public class OrderInfoRequest extends AccountRequest {
 
     @Override
     public void processRequest(ParameterBuilder parameters) {
+        checkValidParams(parameters, this);
         parameters.method(TAPI.ORDER_INFO);
         super.processRequest(parameters);
     }
@@ -42,6 +43,11 @@ public class OrderInfoRequest extends AccountRequest {
         long timeStamp = orderObject.getLong("timestamp_created");
         int status = orderObject.getInt("status");
         callback.onSuccess(orderID, tradingPair, type, startAmount, amount, rate, timeStamp, status);
+    }
+
+    @Override
+    protected String[] getRequiredParams() {
+        return new String[]{"order_id"};
     }
 
     @Override

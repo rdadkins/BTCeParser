@@ -1,7 +1,8 @@
 package co.bitsquared.btceparser.trade.requests;
 
+import co.bitsquared.btceparser.trade.ParameterBuilder;
+import co.bitsquared.btceparser.trade.TAPI;
 import co.bitsquared.btceparser.trade.Trade;
-import co.bitsquared.btceparser.trade.Transaction;
 import co.bitsquared.btceparser.trade.authentication.Authenticator;
 import co.bitsquared.btceparser.trade.callbacks.TradeHistoryCallback;
 import com.mashape.unirest.http.exceptions.UnirestException;
@@ -17,6 +18,13 @@ public class TradeHistoryRequest extends AccountRequest {
     }
 
     @Override
+    public void processRequest(ParameterBuilder parameters) {
+        checkValidParams(parameters, this);
+        parameters.method(TAPI.TRADE_HISTORY);
+        super.processRequest(parameters);
+    }
+
+    @Override
     public void processReturn(JSONObject returnObject) {
         Trade[] trades = new Trade[returnObject.keySet().size()];
         int position = 0;
@@ -25,6 +33,11 @@ public class TradeHistoryRequest extends AccountRequest {
             trades[position++] = new Trade(transactionID, returnObject.getJSONObject(transactionID + ""));
         }
         callback.onSuccess(trades);
+    }
+
+    @Override
+    protected String[] getRequiredParams() {
+        return new String[0];
     }
 
     @Override

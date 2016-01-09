@@ -19,6 +19,7 @@ public class ActiveOrderRequest extends AccountRequest {
 
     @Override
     public void processRequest(ParameterBuilder parameters) {
+        checkValidParams(parameters, this);
         parameters.method(TAPI.ACTIVE_ORDERS);
         super.processRequest(parameters);
     }
@@ -32,6 +33,11 @@ public class ActiveOrderRequest extends AccountRequest {
             openOrders[position++] = new ActiveOrder(orderID, returnObject.getJSONObject(orderID + ""));
         }
         callback.onSuccess(openOrders);
+    }
+
+    @Override
+    protected String[] getRequiredParams() {
+        return new String[0];
     }
 
     @Override

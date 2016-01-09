@@ -23,9 +23,10 @@ public class TradeRequest extends AccountRequest {
     }
 
     @Override
-    public void processRequest(ParameterBuilder builder) {
-        builder.method(TAPI.TRADE);
-        super.processRequest(builder);
+    public void processRequest(ParameterBuilder parameters) {
+        checkValidParams(parameters, this);
+        parameters.method(TAPI.TRADE);
+        super.processRequest(parameters);
     }
 
     @Override
@@ -35,6 +36,11 @@ public class TradeRequest extends AccountRequest {
         int orderID = returnObject.getInt(ORDER_ID);
         Funds[] funds = extractFunds(returnObject.getJSONObject(FUNDS));
         callback.onSuccess(received, remains, orderID, funds);
+    }
+
+    @Override
+    protected String[] getRequiredParams() {
+        return new String[]{"pair", "type", "rate", "amount"};
     }
 
     public void failed(UnirestException e) {

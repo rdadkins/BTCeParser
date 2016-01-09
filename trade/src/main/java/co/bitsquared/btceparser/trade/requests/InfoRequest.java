@@ -46,6 +46,11 @@ public class InfoRequest extends AccountRequest {
         callback.onSuccess(accountFunds, accessInfo, canTrade, canWithdraw, TRANSACTION_COUNT, openOrders, serverTime);
     }
 
+    @Override
+    protected String[] getRequiredParams() {
+        return new String[0];
+    }
+
     public void failed(UnirestException e) {
 
     }

@@ -1,5 +1,7 @@
 package co.bitsquared.btceparser.trade.requests;
 
+import co.bitsquared.btceparser.trade.ParameterBuilder;
+import co.bitsquared.btceparser.trade.TAPI;
 import co.bitsquared.btceparser.trade.Transaction;
 import co.bitsquared.btceparser.trade.authentication.Authenticator;
 import co.bitsquared.btceparser.trade.callbacks.TransactionHistoryCallback;
@@ -16,6 +18,13 @@ public class TransHistoryRequest extends AccountRequest {
     }
 
     @Override
+    public void processRequest(ParameterBuilder parameters) {
+        checkValidParams(parameters, this);
+        parameters.method(TAPI.TRANS_HISTORY);
+        super.processRequest(parameters);
+    }
+
+    @Override
     public void processReturn(JSONObject returnObject) {
         Transaction[] transactions = new Transaction[returnObject.keySet().size()];
         int position = 0;
@@ -24,6 +33,11 @@ public class TransHistoryRequest extends AccountRequest {
             transactions[position++] = new Transaction(transactionID, returnObject.getJSONObject(transactionID + ""));
         }
         callback.onSuccess(transactions);
+    }
+
+    @Override
+    protected String[] getRequiredParams() {
+        return new String[0];
     }
 
     @Override
