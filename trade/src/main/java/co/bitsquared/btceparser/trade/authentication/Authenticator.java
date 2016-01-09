@@ -21,7 +21,6 @@ public class Authenticator {
         this.apiKey = apiKey;
         this.secret = secret;
         this.nonce = nonce;
-        System.out.println("Nonce: " + nonce);
     }
 
     public Map<String,String> getHeaders(Map<String, String> parameters) {
@@ -45,10 +44,7 @@ public class Authenticator {
      * @return the new nonce.
      */
     public int getNonce(boolean increment) {
-        if (increment) {
-            return nonce++;
-        }
-        return nonce;
+        return increment ? nonce++ : nonce;
     }
 
     private String sign(Map<String, String> parameters) {

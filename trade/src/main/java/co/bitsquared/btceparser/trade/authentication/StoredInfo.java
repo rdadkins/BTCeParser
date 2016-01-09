@@ -1,10 +1,13 @@
 package co.bitsquared.btceparser.trade.authentication;
 
-import co.bitsquared.btceparser.trade.security.AES256;
+import co.bitsquared.btceparser.trade.security.AES;
+import co.bitsquared.btceparser.trade.security.AESKeySize;
 
 import java.io.*;
 
 public class StoredInfo {
+
+    public static AESKeySize KEY_SIZE = AESKeySize.SIZE_128;
 
     /**
      * Reads an Authenticator from a file and a password.
@@ -24,8 +27,8 @@ public class StoredInfo {
         }
         BufferedReader reader = new BufferedReader(new InputStreamReader(input));
         try {
-            String decryptedKey = AES256.decrypt(readLine(reader), password);
-            String decryptedSecret = AES256.decrypt(readLine(reader), password);
+            String decryptedKey = AES.decrypt(readLine(reader), password, KEY_SIZE);
+            String decryptedSecret = AES.decrypt(readLine(reader), password, KEY_SIZE);
             String nonce = readLine(reader);
             reader.close();
             return new Authenticator(decryptedKey, decryptedSecret, Integer.valueOf(nonce));
@@ -56,8 +59,8 @@ public class StoredInfo {
         if (!file.canWrite() || output == null) {
             return;
         }
-        String encryptedKey = AES256.encrypt(authenticator.getKey(), password);
-        String encryptedSecret = AES256.encrypt(authenticator.getSecret(), password);
+        String encryptedKey = AES.encrypt(authenticator.getKey(), password, KEY_SIZE);
+        String encryptedSecret = AES.encrypt(authenticator.getSecret(), password, KEY_SIZE);
         BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(output));
         try {
             writeLine(writer, encryptedKey);
