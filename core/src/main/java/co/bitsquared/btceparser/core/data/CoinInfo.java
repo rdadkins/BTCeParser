@@ -13,6 +13,7 @@ import org.json.JSONObject;
 
 /**
  * CoinInfo gathers the general coin information via GETINFO method that returns information of how to trade a coin / TradingPair.
+ * @see co.bitsquared.btceparser.core.TradingPair for auto get requests on static initilization.
  */
 public class CoinInfo implements RequestCallback<JsonNode> {
 

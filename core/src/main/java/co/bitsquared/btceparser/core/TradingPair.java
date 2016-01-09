@@ -92,6 +92,15 @@ public enum TradingPair {
         return coinInfo;
     }
 
+    public static TradingPair extract(String string) {
+        for (TradingPair value: values()) {
+            if (value.name().equals(string) || value.pair.equals(string)) {
+                return value;
+            }
+        }
+        return null;
+    }
+
     @Override
     public String toString() {
         return pair;
