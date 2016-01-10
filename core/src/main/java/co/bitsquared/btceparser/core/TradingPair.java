@@ -7,7 +7,6 @@ import co.bitsquared.btceparser.core.currency.Currency;
 import co.bitsquared.btceparser.core.data.CoinInfo;
 import co.bitsquared.btceparser.core.data.Order;
 import co.bitsquared.btceparser.core.requests.AsyncRequest;
-import co.bitsquared.btceparser.core.requests.RequestType;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.exceptions.UnirestException;

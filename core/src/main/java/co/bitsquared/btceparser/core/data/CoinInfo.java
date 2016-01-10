@@ -5,7 +5,7 @@ import co.bitsquared.btceparser.core.TradingPair;
 import co.bitsquared.btceparser.core.callbacks.CoinInfoUpdater;
 import co.bitsquared.btceparser.core.callbacks.RequestCallback;
 import co.bitsquared.btceparser.core.requests.AsyncRequest;
-import co.bitsquared.btceparser.core.requests.RequestType;
+import co.bitsquared.btceparser.core.RequestType;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.exceptions.UnirestException;

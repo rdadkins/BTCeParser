@@ -1,4 +1,4 @@
-package co.bitsquared.btceparser.core.requests;
+package co.bitsquared.btceparser.core;
 
 public enum RequestType {
 

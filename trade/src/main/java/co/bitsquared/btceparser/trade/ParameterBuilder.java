@@ -2,7 +2,7 @@ package co.bitsquared.btceparser.trade;
 
 import co.bitsquared.btceparser.core.TradingPair;
 import co.bitsquared.btceparser.core.currency.BaseCurrency;
-import co.bitsquared.btceparser.core.requests.DepthType;
+import co.bitsquared.btceparser.core.DepthType;
 import co.bitsquared.btceparser.trade.authentication.Authenticator;
 
 import java.util.HashMap;
