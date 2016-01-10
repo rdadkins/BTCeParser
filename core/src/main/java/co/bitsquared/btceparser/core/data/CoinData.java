@@ -6,7 +6,7 @@ import co.bitsquared.btceparser.core.callbacks.CoinDataUpdater;
 import co.bitsquared.btceparser.core.callbacks.RequestCallback;
 import co.bitsquared.btceparser.core.currency.BaseCurrency;
 import co.bitsquared.btceparser.core.requests.AsyncRequest;
-import co.bitsquared.btceparser.core.requests.DepthType;
+import co.bitsquared.btceparser.core.DepthType;
 import co.bitsquared.btceparser.core.requests.UpdatingDepthRequest;
 import co.bitsquared.btceparser.core.currency.Currency;
 import co.bitsquared.btceparser.core.requests.RequestType;

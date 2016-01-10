@@ -1,7 +1,7 @@
 package co.bitsquared.btceparser.core.data;
 
 import co.bitsquared.btceparser.core.currency.BaseCurrency;
-import co.bitsquared.btceparser.core.requests.DepthType;
+import co.bitsquared.btceparser.core.DepthType;
 
 import java.math.BigDecimal;
 
