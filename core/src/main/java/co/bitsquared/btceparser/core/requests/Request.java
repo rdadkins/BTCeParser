@@ -5,6 +5,7 @@ import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.async.Callback;
 
+import java.io.IOException;
 import java.util.concurrent.Future;
 
 public abstract class Request implements Callback<JsonNode> {
@@ -27,6 +28,14 @@ public abstract class Request implements Callback<JsonNode> {
     public final boolean cancelRequest() {
         checkNotNull();
         return task.cancel(true);
+    }
+
+    public final void shutdown() {
+        try {
+            Unirest.shutdown();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void checkNotNull() {
