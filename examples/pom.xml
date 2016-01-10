@@ -11,12 +11,18 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>examples</artifactId>
-    <version>${project.parent.version}</version>
+
+    <description>Examples of how to use BTCeParser.</description>
 
     <dependencies>
         <dependency>
             <groupId>co.bitsquared.btceparser</groupId>
             <artifactId>core</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>co.bitsquared.btceparser</groupId>
+            <artifactId>trade</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
     </dependencies>

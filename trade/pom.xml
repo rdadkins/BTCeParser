@@ -10,7 +10,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>trade</artifactId>
-    <version>${project.parent.version}</version>
+
+    <description>A Java implementation of trading on BTC-e via TAPI.</description>
+
     <build>
         <plugins>
             <plugin>
@@ -28,11 +30,6 @@
         <dependency>
             <groupId>co.bitsquared.btceparser</groupId>
             <artifactId>core</artifactId>
-            <version>v1.0.0-beta</version>
-        </dependency>
-        <dependency>
-            <groupId>co.bitsquared.btceparser</groupId>
-            <artifactId>btceparser-parent</artifactId>
             <version>v1.0.0-beta</version>
         </dependency>
     </dependencies>
