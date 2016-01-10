@@ -27,6 +27,7 @@ public class CoinInfoExample implements BaseExample, CoinInfoUpdater {
         System.out.println("Minimum Amount: " + minAmount);
         System.out.println("Hidden: " + hidden);
         System.out.println("Fee: " + feePercent);
+        System.out.println("Max price via get: " + coinInfo.getMaxPrice());
     }
 
     public void cancelled() {
