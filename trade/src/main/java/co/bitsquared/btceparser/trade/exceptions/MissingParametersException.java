@@ -5,7 +5,7 @@ import java.util.Arrays;
 public class MissingParametersException extends RuntimeException {
 
     public MissingParametersException(String... parameters) {
-        super("Parameters missing: " + Arrays.toString(parameters));
+        super("One or more parameters missing: " + Arrays.toString(parameters));
     }
 
 }
