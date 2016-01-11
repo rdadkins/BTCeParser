@@ -6,6 +6,15 @@ import org.json.JSONObject;
 
 public class Trade {
 
+    public static final String PAIR = "pair";
+    public static final String SELL = "sell";
+    public static final String AMOUNT = "amount";
+    public static final String RATE = "rate";
+    public static final String ORDER_ID = "order_id";
+    public static final String IS_YOUR_ORDER = "is_your_order";
+    public static final String TIMESTAMP = "timestamp";
+    public static final String TYPE = "type";
+
     private int tradeID;
     private TradingPair tradingPair;
     private DepthType depthType;
@@ -21,13 +30,13 @@ public class Trade {
     }
 
     private void extractJSON(JSONObject object) {
-        tradingPair = TradingPair.extract(object.getString("pair"));
-        depthType = object.getString("type").equals("sell") ? DepthType.ASK : DepthType.BID;
-        amount = object.getDouble("amount");
-        rate = object.getDouble("rate");
-        orderID = object.getLong("order_id");
-        isUserOrder = object.getInt("is_your_order") == 1;
-        timeStamp = object.getLong("timestamp");
+        tradingPair = TradingPair.extract(object.getString(PAIR));
+        depthType = object.getString(TYPE).equals(SELL) ? DepthType.ASK : DepthType.BID;
+        amount = object.getDouble(AMOUNT);
+        rate = object.getDouble(RATE);
+        orderID = object.getLong(ORDER_ID);
+        isUserOrder = object.getInt(IS_YOUR_ORDER) == 1;
+        timeStamp = object.getLong(TIMESTAMP);
     }
 
     public int getTradeID() {

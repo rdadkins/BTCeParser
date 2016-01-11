@@ -4,6 +4,13 @@ import org.json.JSONObject;
 
 public class Transaction {
 
+    public static final String TYPE = "type";
+    public static final String AMOUNT = "amount";
+    public static final String CURRENCY = "currency";
+    public static final String DESC = "desc";
+    public static final String STATUS = "status";
+    public static final String TIMESTAMP = "timestamp";
+
     private int transactionID;
     private TransactionType transactionType;
     private double amount;
@@ -18,12 +25,12 @@ public class Transaction {
     }
 
     private void extractJSON(JSONObject object) {
-        transactionType = TransactionType.extract(object.getInt("type"));
-        amount = object.getDouble("amount");
-        currency = Currency.toCurrency(object.getString("currency"));
-        description = object.getString("desc");
-        status = object.getInt("status");
-        timeStamp = object.getLong("timestamp");
+        transactionType = TransactionType.extract(object.getInt(TYPE));
+        amount = object.getDouble(AMOUNT);
+        currency = Currency.toCurrency(object.getString(CURRENCY));
+        description = object.getString(DESC);
+        status = object.getInt(STATUS);
+        timeStamp = object.getLong(TIMESTAMP);
     }
 
     public int getTransactionID() {
