@@ -4,7 +4,7 @@ import co.bitsquared.btceparser.core.API;
 import co.bitsquared.btceparser.core.TradingPair;
 import co.bitsquared.btceparser.core.callbacks.CoinInfoUpdater;
 import co.bitsquared.btceparser.core.callbacks.RequestCallback;
-import co.bitsquared.btceparser.core.requests.AsyncRequest;
+import co.bitsquared.btceparser.core.requests.PublicRequest;
 import co.bitsquared.btceparser.core.RequestType;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
@@ -19,7 +19,7 @@ public class CoinInfo implements RequestCallback<JsonNode> {
 
     private final TradingPair tradingPair;
     private CoinInfoUpdater updater;
-    private AsyncRequest request;
+    private PublicRequest request;
     private JSONObject rawData;
 
     private int decimalPlaces;
@@ -45,7 +45,7 @@ public class CoinInfo implements RequestCallback<JsonNode> {
             return;
         }
         if (request == null) {
-            request = new AsyncRequest(API.INFO.getUrl(null), 10000, this, RequestType.INFO);
+            request = new PublicRequest(API.INFO.getUrl(null), 10000, this, RequestType.INFO);
         }
         request.processRequest();
     }

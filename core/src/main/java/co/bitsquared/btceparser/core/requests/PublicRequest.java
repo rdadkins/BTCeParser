@@ -7,16 +7,21 @@ import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 
-public class AsyncRequest extends Request {
+public class PublicRequest extends Request {
 
 	private RequestCallback<JsonNode> listener;
 	private RequestType source;
+    private static final int DEFAULT_TIMEOUT = 10000;
 
-	public AsyncRequest(String url, long timeout, RequestCallback<JsonNode> listener, RequestType source) {
+	public PublicRequest(String url, long timeout, RequestCallback<JsonNode> listener, RequestType source) {
 		super(url, timeout);
 		this.listener = listener;
 		this.source = source;
 	}
+
+    public PublicRequest(String url, RequestCallback<JsonNode> listener, RequestType source) {
+        this(url, DEFAULT_TIMEOUT, listener, source);
+    }
 
     @Override
 	public void processRequest() {
