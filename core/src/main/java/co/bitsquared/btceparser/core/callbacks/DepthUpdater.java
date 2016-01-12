@@ -4,7 +4,7 @@ import co.bitsquared.btceparser.core.data.Order;
 
 import java.util.ArrayList;
 
-public interface DepthUpdater extends CoinDataUpdater {
+public interface DepthUpdater {
 
 	void onDepthUpdate(ArrayList<Order> bids, ArrayList<Order> asks);
 
