@@ -5,6 +5,7 @@ import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.async.Callback;
 import com.mashape.unirest.http.exceptions.UnirestException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.concurrent.Future;
@@ -51,6 +52,8 @@ public abstract class Request implements Callback<JsonNode> {
     public abstract void failed(UnirestException exception);
 
     public abstract void cancelled();
+
+    protected abstract void processResponseBody(JSONObject body);
 
     private void checkNotNull() {
         if (task == null) {

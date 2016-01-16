@@ -29,7 +29,7 @@ public abstract class PublicRequest extends Request {
         if (listener != null) {
             if (httpResponse.getStatus() == 200) {
                 listener.onSuccess();
-                processResponse(httpResponse);
+                processResponseBody(httpResponse.getBody().getObject());
             } else {
                 listener.error("Return status: " + httpResponse.getStatus());
             }
@@ -49,7 +49,5 @@ public abstract class PublicRequest extends Request {
             listener.cancelled();
         }
     }
-
-    protected abstract void processResponse(HttpResponse<JsonNode> response);
 
 }

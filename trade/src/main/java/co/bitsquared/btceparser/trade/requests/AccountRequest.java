@@ -20,7 +20,7 @@ import java.util.Map;
 public abstract class AccountRequest extends Request {
 
     /**
-     * A list of all strings that are keys in successful returns. Usage can be found in subclasses processReturn()
+     * A list of all strings that are keys in successful returns. Usage can be found in subclasses processResponseBody()
      */
     public static final String T_ID = "tId";
     public static final String AMOUNT_SENT = "amountSent";
@@ -86,15 +86,21 @@ public abstract class AccountRequest extends Request {
     @Override
     public final void completed(HttpResponse<JsonNode> response) {
         if (callback != null) {
-            JSONObject bodyObject = response.getBody().getObject();
-            if (bodyObject.getInt("success") == 0) {
-                callback.error(bodyObject.getString("error"));
-            } else {
-                callback.onSuccess();
-                processReturn(bodyObject.getJSONObject("return"));
-            }
+            processResponseBody(response.getBody().getObject());
         }
     }
+
+    @Override
+    protected final void processResponseBody(JSONObject body) {
+        if (body.getInt("success") == 0) {
+            callback.error(body.getString("error"));
+        } else {
+            callback.onSuccess();
+            processReturn(body.getJSONObject("return"));
+        }
+    }
+
+    protected abstract void processReturn(JSONObject returnObject);
 
     @Override
     public final void cancelled() {
@@ -123,8 +129,6 @@ public abstract class AccountRequest extends Request {
         }
         return accountFunds;
     }
-
-    public abstract void processReturn(JSONObject returnObject);
 
     protected abstract String[] getRequiredParams();
 
