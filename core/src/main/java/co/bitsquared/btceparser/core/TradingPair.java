@@ -1,18 +1,12 @@
 package co.bitsquared.btceparser.core;
 
 import co.bitsquared.btceparser.core.callbacks.CoinInfoCallback;
-import co.bitsquared.btceparser.core.callbacks.RequestCallback;
 import co.bitsquared.btceparser.core.currency.BaseCurrency;
 import co.bitsquared.btceparser.core.currency.Coin;
 import co.bitsquared.btceparser.core.currency.Currency;
 import co.bitsquared.btceparser.core.data.CoinInfo;
 import co.bitsquared.btceparser.core.data.Order;
 import co.bitsquared.btceparser.core.requests.CoinInfoRequest;
-import co.bitsquared.btceparser.core.requests.PublicRequest;
-import com.mashape.unirest.http.HttpResponse;
-import com.mashape.unirest.http.JsonNode;
-import com.mashape.unirest.http.exceptions.UnirestException;
-import org.json.JSONObject;
 
 import java.math.BigDecimal;
 
