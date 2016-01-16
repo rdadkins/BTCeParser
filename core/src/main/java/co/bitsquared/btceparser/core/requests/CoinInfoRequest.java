@@ -38,7 +38,7 @@ public class CoinInfoRequest extends PublicRequest {
             JSONObject pairs = response.getBody().getObject().getJSONObject("pairs");
             for (TradingPair tradingPair: tradingPairs) {
                 JSONObject pairInfo = pairs.getJSONObject(tradingPair.toString());
-                listener.onSuccess(tradingPair, new CoinInfo(tradingPair, pairInfo));
+                listener.onSuccess(new CoinInfo(tradingPair, pairInfo));
             }
         }
     }
