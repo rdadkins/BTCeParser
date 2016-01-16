@@ -71,12 +71,12 @@ public class CoinInfo {
     @Override
     public String toString() {
         return "[" + tradingPair.name() + "]\n" +
-                "[Decimal Places: " + decimalPlaces + "]\n" +
-                "[Minimum Price: " + minPrice + "]\n" +
-                "[Maximum Price: " + maxPrice + "]\n" +
-                "[Minimum Amount: " + minAmount + "]\n" +
-                "[Fee: " + fee + "]\n" +
-                "[Hidden: " + hidden + "]";
+                "|-[Decimal Places: " + decimalPlaces + "]\n" +
+                "|-[Minimum Price: " + minPrice + "]\n" +
+                "|-[Maximum Price: " + maxPrice + "]\n" +
+                "|-[Minimum Amount: " + minAmount + "]\n" +
+                "|-[Fee: " + fee + "]\n" +
+                "|-[Hidden: " + hidden + "]";
     }
 
     private void extractData(JSONObject object) {

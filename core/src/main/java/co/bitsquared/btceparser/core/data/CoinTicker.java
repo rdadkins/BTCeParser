@@ -59,14 +59,14 @@ public class CoinTicker {
     @Override
     public String toString() {
         return "[" + tradingPair.name() +"]\n" +
-                "[High: " + highPrice +"]\n" +
-                "[Low: " + lowPrice + "]\n" +
-                "[Average: " + averagePrice + "]\n" +
-                "[Last: " + lastPrice + "]\n" +
-                "[Volume: " + volume + "]\n" +
-                "[Buy: " + buyPrice + "]\n" +
-                "[Sell: " + sellPrice + "]\n" +
-                "[Last Updated: " + lastUpdated + "]\n";
+                "|-[High: " + highPrice +"]\n" +
+                "|-[Low: " + lowPrice + "]\n" +
+                "|-[Average: " + averagePrice + "]\n" +
+                "|-[Last: " + lastPrice + "]\n" +
+                "|-[Volume: " + volume + "]\n" +
+                "|-[Buy: " + buyPrice + "]\n" +
+                "|-[Sell: " + sellPrice + "]\n" +
+                "|-[Last Updated: " + lastUpdated + "]\n";
     }
 
     private void extractData(JSONObject object) {
