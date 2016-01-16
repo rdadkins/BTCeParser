@@ -44,15 +44,14 @@ public enum TradingPair {
                 System.out.println("Successful request");
             }
 
-            public void cancelled() {
-            }
+            public void cancelled() {}
 
             public void error(String reason) {
                 System.err.println("Error collection coin information: " + reason);
             }
 
-            public void onSuccess(TradingPair tradingPair, CoinInfo coinInfo) {
-                tradingPair.coinInfo = coinInfo;
+            public void onSuccess(CoinInfo coinInfo) {
+                coinInfo.getTradingPair().coinInfo = coinInfo;
             }
 
         }, values()).processRequest();
