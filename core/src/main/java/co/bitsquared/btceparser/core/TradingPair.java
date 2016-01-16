@@ -1,12 +1,14 @@
 package co.bitsquared.btceparser.core;
 
+import co.bitsquared.btceparser.core.callbacks.CoinInfoCallback;
 import co.bitsquared.btceparser.core.callbacks.RequestCallback;
 import co.bitsquared.btceparser.core.currency.BaseCurrency;
 import co.bitsquared.btceparser.core.currency.Coin;
 import co.bitsquared.btceparser.core.currency.Currency;
 import co.bitsquared.btceparser.core.data.CoinInfo;
 import co.bitsquared.btceparser.core.data.Order;
-import co.bitsquared.btceparser.core.requests.AsyncRequest;
+import co.bitsquared.btceparser.core.requests.CoinInfoRequest;
+import co.bitsquared.btceparser.core.requests.PublicRequest;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.exceptions.UnirestException;
@@ -36,25 +38,24 @@ public enum TradingPair {
     CNC_BTC("cnh_btc");
 
     static {
-        new AsyncRequest(API.INFO.getUrl(null), 10000, new RequestCallback<JsonNode>() {
+        new CoinInfoRequest(new CoinInfoCallback() {
+
+            public void onSuccess() {
+                System.out.println("Successful request");
+            }
 
             public void cancelled() {
-                System.err.println("Coin Information request cancelled.");
             }
 
-            public void completed(HttpResponse<JsonNode> response, RequestType source) {
-                JSONObject pairs = response.getBody().getObject().getJSONObject("pairs");
-                for (TradingPair pair : values()) {
-                    JSONObject pairInfo = pairs.getJSONObject(pair.toString());
-                    pair.coinInfo = new CoinInfo(pair, pairInfo);
-                }
+            public void error(String reason) {
+                System.err.println("Error collection coin information: " + reason);
             }
 
-            public void failed(UnirestException reason) {
-                System.err.println("Coin Information requested failed: " + reason.getLocalizedMessage());
+            public void onSuccess(TradingPair tradingPair, CoinInfo coinInfo) {
+                tradingPair.coinInfo = coinInfo;
             }
 
-        }, RequestType.INFO).processRequest();
+        }, values()).processRequest();
     }
 
     private String pair;
