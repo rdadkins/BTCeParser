@@ -1,43 +1,55 @@
 package co.bitsquared.btceparser.core.requests;
 
-import co.bitsquared.btceparser.core.RequestType;
-import co.bitsquared.btceparser.core.callbacks.RequestCallback;
+import co.bitsquared.btceparser.core.callbacks.BaseRequestCallback;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 
-public class PublicRequest extends Request {
+public abstract class PublicRequest extends Request {
 
-	private RequestCallback<JsonNode> listener;
-	private RequestType source;
-    private static final int DEFAULT_TIMEOUT = 10000;
+	private BaseRequestCallback listener;
 
-	public PublicRequest(String url, long timeout, RequestCallback<JsonNode> listener, RequestType source) {
-		super(url, timeout);
-		this.listener = listener;
-		this.source = source;
-	}
-
-    public PublicRequest(String url, RequestCallback<JsonNode> listener, RequestType source) {
-        this(url, DEFAULT_TIMEOUT, listener, source);
+    public PublicRequest(String url, BaseRequestCallback listener) {
+        this(url, listener, DEFAULT_TIMEOUT);
     }
 
+	public PublicRequest(String url, BaseRequestCallback listener, long timeout) {
+		super(url, timeout);
+		this.listener = listener;
+	}
+
     @Override
-	public void processRequest() {
+	public final void processRequest() {
         task = Unirest.get(url).asJsonAsync(this);
 	}
 
-    public void completed(HttpResponse<JsonNode> httpResponse) {
-        listener.completed(httpResponse, source);
+    @Override
+    public final void completed(HttpResponse<JsonNode> httpResponse) {
+        if (listener != null) {
+            if (httpResponse.getStatus() == 200) {
+                listener.onSuccess();
+                processResponse(httpResponse);
+            } else {
+                listener.error("Return status: " + httpResponse.getStatus());
+            }
+        }
     }
 
-    public void failed(UnirestException e) {
-        listener.failed(e);
+    @Override
+    public final void failed(UnirestException e) {
+        if (listener != null) {
+            listener.error(e.getMessage());
+        }
     }
 
-    public void cancelled() {
-        listener.cancelled();
+    @Override
+    public final void cancelled() {
+        if (listener != null) {
+            listener.cancelled();
+        }
     }
+
+    protected abstract void processResponse(HttpResponse<JsonNode> response);
 
 }
