@@ -33,7 +33,7 @@ public class OrderInfoRequest extends AccountRequest {
     }
 
     @Override
-    public void processReturn(JSONObject returnObject) {
+    protected void processReturn(JSONObject returnObject) {
         Set set = returnObject.keySet();
         if (set.size() == 0) {
             return;

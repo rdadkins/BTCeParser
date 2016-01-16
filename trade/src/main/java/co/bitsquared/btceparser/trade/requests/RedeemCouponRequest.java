@@ -31,7 +31,7 @@ public class RedeemCouponRequest extends AccountRequest {
     }
 
     @Override
-    public void processReturn(JSONObject returnObject) {
+    protected void processReturn(JSONObject returnObject) {
         double couponAmount = returnObject.getDouble(COUPON_AMOUNT);
         Currency couponCurrency = Currency.toCurrency(returnObject.getString(COUPON_CURRENCY).toLowerCase());
         long transactionID = returnObject.getLong(TRANS_ID);

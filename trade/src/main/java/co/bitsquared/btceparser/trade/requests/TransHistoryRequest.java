@@ -28,7 +28,7 @@ public class TransHistoryRequest extends AccountRequest {
     }
 
     @Override
-    public void processReturn(JSONObject returnObject) {
+    protected void processReturn(JSONObject returnObject) {
         Transaction[] transactions = new Transaction[returnObject.keySet().size()];
         int position = 0;
         for (Object object: returnObject.keySet()) {

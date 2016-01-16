@@ -30,7 +30,7 @@ public class WithdrawCoinRequest extends AccountRequest {
     }
 
     @Override
-    public void processReturn(JSONObject returnObject) {
+    protected void processReturn(JSONObject returnObject) {
         int transactionID = returnObject.getInt(T_ID);
         double amountSent = returnObject.getDouble(AMOUNT_SENT);
         Funds[] funds = extractFunds(returnObject.getJSONObject(FUNDS));

@@ -30,7 +30,7 @@ public class InfoRequest extends AccountRequest {
     }
 
     @Override
-    public void processReturn(JSONObject returnObject) {
+    protected void processReturn(JSONObject returnObject) {
         JSONObject funds = returnObject.getJSONObject(FUNDS);
         Funds[] accountFunds = extractFunds(funds);
         JSONObject rights = returnObject.getJSONObject(RIGHTS);

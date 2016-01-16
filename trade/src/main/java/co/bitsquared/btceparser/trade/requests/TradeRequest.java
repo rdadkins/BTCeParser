@@ -30,7 +30,7 @@ public class TradeRequest extends AccountRequest {
     }
 
     @Override
-    public void processReturn(JSONObject returnObject) {
+    protected void processReturn(JSONObject returnObject) {
         double received = returnObject.getDouble(RECEIVED);
         double remains = returnObject.getDouble(REMAINS);
         int orderID = returnObject.getInt(ORDER_ID);

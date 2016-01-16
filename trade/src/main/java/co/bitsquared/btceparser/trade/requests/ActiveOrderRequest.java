@@ -28,7 +28,7 @@ public class ActiveOrderRequest extends AccountRequest {
     }
 
     @Override
-    public void processReturn(JSONObject returnObject) {
+    protected void processReturn(JSONObject returnObject) {
         ActiveOrder[] openOrders = new ActiveOrder[returnObject.keySet().size()];
         int position = 0;
         for (Object object: returnObject.keySet()) {

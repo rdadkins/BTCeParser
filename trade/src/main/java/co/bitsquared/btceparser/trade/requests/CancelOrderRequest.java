@@ -29,7 +29,7 @@ public class CancelOrderRequest extends AccountRequest {
     }
 
     @Override
-    public void processReturn(JSONObject returnObject) {
+    protected void processReturn(JSONObject returnObject) {
         int orderId = returnObject.getInt(ORDER_ID);
         Funds[] funds = extractFunds(returnObject.getJSONObject(FUNDS));
         callback.onSuccess(orderId, funds);

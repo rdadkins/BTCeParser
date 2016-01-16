@@ -30,7 +30,7 @@ public class CreateCouponRequest extends AccountRequest {
     }
 
     @Override
-    public void processReturn(JSONObject returnObject) {
+    protected void processReturn(JSONObject returnObject) {
         String coupon = returnObject.getString(COUPON);
         long transactionID = returnObject.getLong(TRANS_ID);
         Funds[] funds = extractFunds(returnObject.getJSONObject(FUNDS));
