@@ -11,20 +11,27 @@ import co.bitsquared.btceparser.trade.exceptions.MissingParametersException;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
-import com.mashape.unirest.http.async.Callback;
+import com.mashape.unirest.http.exceptions.UnirestException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class AccountRequest extends Request implements Callback<JsonNode> {
+public abstract class AccountRequest extends Request {
+
+    private static final String URL = TAPI.URL;
+    protected static final String[] NO_PARAMS = new String[0];
 
     private Authenticator authenticator;
     private ParameterBuilder parameterBuilder;
     protected AccountCallback callback;
 
-    public AccountRequest(Authenticator authenticator, long timeout, AccountCallback callback) {
-        super(TAPI.URL, timeout);
+    public AccountRequest(Authenticator authenticator, AccountCallback callback) {
+        this(authenticator, callback, DEFAULT_TIMEOUT);
+    }
+
+    public AccountRequest(Authenticator authenticator, AccountCallback callback, long timeout) {
+        super(URL, timeout);
         this.authenticator = authenticator;
         this.callback = callback;
     }
@@ -47,32 +54,38 @@ public abstract class AccountRequest extends Request implements Callback<JsonNod
         processRequest(parameters.build());
     }
 
-    private void processRequest(Map<String, String> parameters) {
-        task = Unirest.post(TAPI.URL).
-                headers(authenticator.getHeaders(parameters)).
-                fields(asFields(parameters)).
-                asJsonAsync(this);
-    }
-
-    private Map<String, Object> asFields(Map<String, String> parameters) {
-        Map<String, Object> type = new HashMap<>();
-        type.putAll(parameters);
-        return type;
-    }
-
     @Override
     public final void completed(HttpResponse<JsonNode> response) {
         if (callback != null) {
-            if (response.getBody().getObject().getInt("success") == 0) {
-                callback.onError(response.getBody().getObject().getString("error"));
+            JSONObject bodyObject = response.getBody().getObject();
+            if (bodyObject.getInt("success") == 0) {
+                callback.error(bodyObject.getString("error"));
             } else {
                 callback.onSuccess();
-                processReturn(response.getBody().getObject().getJSONObject("return"));
+                processReturn(bodyObject.getJSONObject("return"));
             }
         }
     }
 
-    public final Funds[] extractFunds(JSONObject funds) {
+    @Override
+    public final void cancelled() {
+        if (callback != null) {
+            callback.cancelled();
+        }
+    }
+
+    @Override
+    public final void failed(UnirestException exception) {
+        if (callback != null) {
+            callback.error(exception.getMessage());
+        }
+    }
+
+    /**
+     * Extracts all information from a JSONObject and turns it into a Funds array.
+     * @param funds the JSONObject which should be 'funds'.
+     */
+    protected final Funds[] extractFunds(JSONObject funds) {
         Funds[] accountFunds = new Funds[Currency.values().length];
         Currency currentCurrency;
         for (int i = 0; i < accountFunds.length; i++) {
@@ -82,14 +95,37 @@ public abstract class AccountRequest extends Request implements Callback<JsonNod
         return accountFunds;
     }
 
+    public abstract void processReturn(JSONObject returnObject);
+
+    protected abstract String[] getRequiredParams();
+
+    /**
+     * Checks to see if all of the required parameters are present before making a request. If not, MissingParametersException
+     * will be thrown. This should be called before calling AccountRequest.processRequest(ParameterBuilder)
+     */
     protected void checkValidParams(ParameterBuilder parameters, AccountRequest request) {
         if (!parameters.contains(request.getRequiredParams())) {
             throw new MissingParametersException(request.getRequiredParams());
         }
     }
 
-    public abstract void processReturn(JSONObject returnObject);
+    /**
+     * Processes a request on a valid (all required parameters are present for this request) set of parameters.
+     */
+    private void processRequest(Map<String, String> parameters) {
+        task = Unirest.post(TAPI.URL).
+                headers(authenticator.getHeaders(parameters)).
+                fields(asFields(parameters)).
+                asJsonAsync(this);
+    }
 
-    protected abstract String[] getRequiredParams();
+    /**
+     * Simply converts a Map<String, String> to a Map<String, Object>
+     */
+    private Map<String, Object> asFields(Map<String, String> parameters) {
+        Map<String, Object> type = new HashMap<>();
+        type.putAll(parameters);
+        return type;
+    }
 
 }
