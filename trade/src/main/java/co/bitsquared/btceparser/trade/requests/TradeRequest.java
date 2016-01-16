@@ -5,20 +5,20 @@ import co.bitsquared.btceparser.trade.TAPI;
 import co.bitsquared.btceparser.trade.ParameterBuilder;
 import co.bitsquared.btceparser.trade.authentication.Authenticator;
 import co.bitsquared.btceparser.trade.callbacks.TradeRequestCallback;
-import com.mashape.unirest.http.exceptions.UnirestException;
 import org.json.JSONObject;
 
 public class TradeRequest extends AccountRequest {
 
-    private static final String RECEIVED = "received";
-    private static final String REMAINS = "remains";
-    private static final String ORDER_ID = "order_id";
-    private static final String FUNDS = "funds";
+    private static final String[] PARAMS = new String[]{"pair", "type", "rate", "amount"};
 
     private TradeRequestCallback callback;
 
-    public TradeRequest(Authenticator authenticator, int timeout, TradeRequestCallback callback) {
-        super(authenticator, timeout, callback);
+    public TradeRequest(Authenticator authenticator, TradeRequestCallback callback) {
+        this(authenticator, callback, DEFAULT_TIMEOUT);
+    }
+
+    public TradeRequest(Authenticator authenticator, TradeRequestCallback callback, long timeout) {
+        super(authenticator, callback, timeout);
         this.callback = callback;
     }
 
@@ -40,15 +40,7 @@ public class TradeRequest extends AccountRequest {
 
     @Override
     protected String[] getRequiredParams() {
-        return new String[]{"pair", "type", "rate", "amount"};
-    }
-
-    public void failed(UnirestException e) {
-
-    }
-
-    public void cancelled() {
-
+        return PARAMS;
     }
 
 }

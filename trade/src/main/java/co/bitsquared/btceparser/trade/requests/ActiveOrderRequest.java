@@ -5,15 +5,18 @@ import co.bitsquared.btceparser.trade.ParameterBuilder;
 import co.bitsquared.btceparser.trade.TAPI;
 import co.bitsquared.btceparser.trade.authentication.Authenticator;
 import co.bitsquared.btceparser.trade.callbacks.ActiveOrderCallback;
-import com.mashape.unirest.http.exceptions.UnirestException;
 import org.json.JSONObject;
 
 public class ActiveOrderRequest extends AccountRequest {
 
     private ActiveOrderCallback callback;
 
-    public ActiveOrderRequest(Authenticator authenticator, long timeout, ActiveOrderCallback callback) {
-        super(authenticator, timeout, callback);
+    public ActiveOrderRequest(Authenticator authenticator, ActiveOrderCallback callback) {
+        this(authenticator, callback, DEFAULT_TIMEOUT);
+    }
+
+    public ActiveOrderRequest(Authenticator authenticator, ActiveOrderCallback callback, long timeout) {
+        super(authenticator, callback, timeout);
         this.callback = callback;
     }
 
@@ -37,17 +40,7 @@ public class ActiveOrderRequest extends AccountRequest {
 
     @Override
     protected String[] getRequiredParams() {
-        return new String[0];
-    }
-
-    @Override
-    public void failed(UnirestException e) {
-
-    }
-
-    @Override
-    public void cancelled() {
-
+        return NO_PARAMS;
     }
 
 }

@@ -6,17 +6,22 @@ import co.bitsquared.btceparser.trade.ParameterBuilder;
 import co.bitsquared.btceparser.trade.TAPI;
 import co.bitsquared.btceparser.trade.authentication.Authenticator;
 import co.bitsquared.btceparser.trade.callbacks.OrderInfoCallback;
-import com.mashape.unirest.http.exceptions.UnirestException;
 import org.json.JSONObject;
 
 import java.util.Set;
 
 public class OrderInfoRequest extends AccountRequest {
 
+    public static final String[] PARAMS = new String[]{"order_id"};
+
     private OrderInfoCallback callback;
 
-    public OrderInfoRequest(Authenticator authenticator, long timeout, OrderInfoCallback callback) {
-        super(authenticator, timeout, callback);
+    public OrderInfoRequest(Authenticator authenticator, OrderInfoCallback callback) {
+        this(authenticator, callback, DEFAULT_TIMEOUT);
+    }
+
+    public OrderInfoRequest(Authenticator authenticator, OrderInfoCallback callback, long timeout) {
+        super(authenticator, callback, timeout);
         this.callback = callback;
     }
 
@@ -35,29 +40,19 @@ public class OrderInfoRequest extends AccountRequest {
         }
         int orderID = Integer.parseInt(set.iterator().next().toString());
         JSONObject orderObject = returnObject.getJSONObject(orderID + "");
-        TradingPair tradingPair = TradingPair.extract(orderObject.getString("pair"));
-        DepthType type = orderObject.getString("type").equals("sell") ? DepthType.ASK : DepthType.BID;
-        double startAmount = orderObject.getDouble("start_amount");
-        double amount = orderObject.getDouble("amount");
-        double rate = orderObject.getDouble("rate");
-        long timeStamp = orderObject.getLong("timestamp_created");
-        int status = orderObject.getInt("status");
+        TradingPair tradingPair = TradingPair.extract(orderObject.getString(PAIR));
+        DepthType type = orderObject.getString(TYPE).equals(SELL) ? DepthType.ASK : DepthType.BID;
+        double startAmount = orderObject.getDouble(START_AMOUNT);
+        double amount = orderObject.getDouble(AMOUNT);
+        double rate = orderObject.getDouble(RATE);
+        long timeStamp = orderObject.getLong(TIMESTAMP_CREATED);
+        int status = orderObject.getInt(STATUS);
         callback.onSuccess(orderID, tradingPair, type, startAmount, amount, rate, timeStamp, status);
     }
 
     @Override
     protected String[] getRequiredParams() {
-        return new String[]{"order_id"};
-    }
-
-    @Override
-    public void failed(UnirestException e) {
-
-    }
-
-    @Override
-    public void cancelled() {
-
+        return PARAMS;
     }
 
 }

@@ -19,7 +19,36 @@ import java.util.Map;
 
 public abstract class AccountRequest extends Request {
 
+    /**
+     * A list of all strings that are keys in successful returns. Usage can be found in subclasses processReturn()
+     */
+    public static final String T_ID = "tId";
+    public static final String AMOUNT_SENT = "amountSent";
+    public static final String FUNDS = "funds";
+    public static final String RECEIVED = "received";
+    public static final String REMAINS = "remains";
+    public static final String ORDER_ID = "order_id";
+    public static final String COUPON_AMOUNT = "couponAmount";
+    public static final String COUPON_CURRENCY = "couponCurrency";
+    public static final String TRANS_ID = "transID";
+    public static final String PAIR = "pair";
+    public static final String TYPE = "type";
+    public static final String SELL = "sell";
+    public static final String START_AMOUNT = "start_amount";
+    public static final String AMOUNT = "amount";
+    public static final String RATE = "rate";
+    public static final String TIMESTAMP_CREATED = "timestamp_created";
+    public static final String STATUS = "status";
+    public static final String RIGHTS = "rights";
+    public static final String INFO = "info";
+    public static final String TRADE = "trade";
+    public static final String WITHDRAW = "withdraw";
+    public static final String OPEN_ORDERS = "open_orders";
+    public static final String SERVER_TIME = "server_time";
+    public static final String COUPON = "coupon";
+
     private static final String URL = TAPI.URL;
+
     protected static final String[] NO_PARAMS = new String[0];
 
     private Authenticator authenticator;

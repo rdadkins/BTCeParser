@@ -1,6 +1,5 @@
 package co.bitsquared.btceparser.trade.requests;
 
-import co.bitsquared.btceparser.trade.Currency;
 import co.bitsquared.btceparser.trade.Funds;
 import co.bitsquared.btceparser.trade.TAPI;
 import co.bitsquared.btceparser.trade.ParameterBuilder;
@@ -11,19 +10,16 @@ import org.json.JSONObject;
 
 public class InfoRequest extends AccountRequest {
 
-    private static final String FUNDS = "funds";
-    private static final String RIGHTS = "rights";
-    private static final String INFO = "info";
-    private static final String TRADE = "trade";
-    private static final String WITHDRAW = "withdraw";
-    private static final String OPEN_ORDERS = "open_orders";
-    private static final String SERVER_TIME = "server_time";
-    private static final int TRANSACTION_COUNT = 0;
+    public static final int TRANSACTION_COUNT = 0;
 
     private InfoCallback callback;
 
-    public InfoRequest(Authenticator authenticator, int timeout, InfoCallback callback) {
-        super(authenticator, timeout, callback);
+    public InfoRequest(Authenticator authenticator, InfoCallback callback) {
+        this(authenticator, callback, DEFAULT_TIMEOUT);
+    }
+
+    public InfoRequest(Authenticator authenticator, InfoCallback callback, long timeout) {
+        super(authenticator, callback, timeout);
         this.callback = callback;
     }
 
@@ -48,15 +44,7 @@ public class InfoRequest extends AccountRequest {
 
     @Override
     protected String[] getRequiredParams() {
-        return new String[0];
-    }
-
-    public void failed(UnirestException e) {
-
-    }
-
-    public void cancelled() {
-
+        return NO_PARAMS;
     }
 
 }

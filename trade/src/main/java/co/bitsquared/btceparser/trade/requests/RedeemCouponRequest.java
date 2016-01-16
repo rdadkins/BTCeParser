@@ -6,15 +6,20 @@ import co.bitsquared.btceparser.trade.ParameterBuilder;
 import co.bitsquared.btceparser.trade.TAPI;
 import co.bitsquared.btceparser.trade.authentication.Authenticator;
 import co.bitsquared.btceparser.trade.callbacks.RedeemCouponCallback;
-import com.mashape.unirest.http.exceptions.UnirestException;
 import org.json.JSONObject;
 
 public class RedeemCouponRequest extends AccountRequest {
 
+    private static final String[] PARAMS = new String[]{"coupon"};
+
     private RedeemCouponCallback callback;
 
-    public RedeemCouponRequest(Authenticator authenticator, long timeout, RedeemCouponCallback callback) {
-        super(authenticator, timeout, callback);
+    public RedeemCouponRequest(Authenticator authenticator, RedeemCouponCallback callback) {
+        this(authenticator, callback, DEFAULT_TIMEOUT);
+    }
+
+    public RedeemCouponRequest(Authenticator authenticator, RedeemCouponCallback callback, long timeout) {
+        super(authenticator, callback, timeout);
         this.callback = callback;
     }
 
@@ -27,26 +32,16 @@ public class RedeemCouponRequest extends AccountRequest {
 
     @Override
     public void processReturn(JSONObject returnObject) {
-        double couponAmount = returnObject.getDouble("couponAmount");
-        Currency couponCurrency = Currency.toCurrency(returnObject.getString("couponCurrency").toLowerCase());
-        long transactionID = returnObject.getLong("transID");
-        Funds[] funds = extractFunds(returnObject.getJSONObject("funds"));
+        double couponAmount = returnObject.getDouble(COUPON_AMOUNT);
+        Currency couponCurrency = Currency.toCurrency(returnObject.getString(COUPON_CURRENCY).toLowerCase());
+        long transactionID = returnObject.getLong(TRANS_ID);
+        Funds[] funds = extractFunds(returnObject.getJSONObject(FUNDS));
         callback.onSuccess(couponAmount, couponCurrency, transactionID, funds);
     }
 
     @Override
     protected String[] getRequiredParams() {
-        return new String[]{"coupon"};
-    }
-
-    @Override
-    public void failed(UnirestException e) {
-
-    }
-
-    @Override
-    public void cancelled() {
-
+        return PARAMS;
     }
 
 }

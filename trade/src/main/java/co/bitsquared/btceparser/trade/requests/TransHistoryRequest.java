@@ -5,15 +5,18 @@ import co.bitsquared.btceparser.trade.TAPI;
 import co.bitsquared.btceparser.trade.Transaction;
 import co.bitsquared.btceparser.trade.authentication.Authenticator;
 import co.bitsquared.btceparser.trade.callbacks.TransactionHistoryCallback;
-import com.mashape.unirest.http.exceptions.UnirestException;
 import org.json.JSONObject;
 
 public class TransHistoryRequest extends AccountRequest {
 
     private TransactionHistoryCallback callback;
 
-    public TransHistoryRequest(Authenticator authenticator, long timeout, TransactionHistoryCallback callback) {
-        super(authenticator, timeout, callback);
+    public TransHistoryRequest(Authenticator authenticator, TransactionHistoryCallback callback) {
+        this(authenticator, callback, DEFAULT_TIMEOUT);
+    }
+
+    public TransHistoryRequest(Authenticator authenticator, TransactionHistoryCallback callback, long timeout) {
+        super(authenticator, callback, timeout);
         this.callback = callback;
     }
 
@@ -37,17 +40,7 @@ public class TransHistoryRequest extends AccountRequest {
 
     @Override
     protected String[] getRequiredParams() {
-        return new String[0];
-    }
-
-    @Override
-    public void failed(UnirestException e) {
-
-    }
-
-    @Override
-    public void cancelled() {
-
+        return NO_PARAMS;
     }
 
 }

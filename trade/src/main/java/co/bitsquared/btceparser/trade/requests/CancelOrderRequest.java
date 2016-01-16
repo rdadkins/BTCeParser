@@ -5,16 +5,20 @@ import co.bitsquared.btceparser.trade.ParameterBuilder;
 import co.bitsquared.btceparser.trade.TAPI;
 import co.bitsquared.btceparser.trade.authentication.Authenticator;
 import co.bitsquared.btceparser.trade.callbacks.CancelOrderCallback;
-import co.bitsquared.btceparser.trade.exceptions.MissingParametersException;
-import com.mashape.unirest.http.exceptions.UnirestException;
 import org.json.JSONObject;
 
 public class CancelOrderRequest extends AccountRequest {
 
+    public static final String[] PARAMS = new String[]{"order_id"};
+
     private CancelOrderCallback callback;
 
-    public CancelOrderRequest(Authenticator authenticator, long timeout, CancelOrderCallback callback) {
-        super(authenticator, timeout, callback);
+    public CancelOrderRequest(Authenticator authenticator, CancelOrderCallback callback) {
+        this(authenticator, callback, DEFAULT_TIMEOUT);
+    }
+
+    public CancelOrderRequest(Authenticator authenticator, CancelOrderCallback callback, long timeout) {
+        super(authenticator, callback, timeout);
         this.callback = callback;
     }
 
@@ -26,24 +30,14 @@ public class CancelOrderRequest extends AccountRequest {
 
     @Override
     public void processReturn(JSONObject returnObject) {
-        int orderId = returnObject.getInt("order_id");
-        Funds[] funds = extractFunds(returnObject.getJSONObject("funds"));
+        int orderId = returnObject.getInt(ORDER_ID);
+        Funds[] funds = extractFunds(returnObject.getJSONObject(FUNDS));
         callback.onSuccess(orderId, funds);
     }
 
     @Override
     protected String[] getRequiredParams() {
-        return new String[]{"order_id"};
-    }
-
-    @Override
-    public void failed(UnirestException e) {
-        callback.onError(e.getMessage());
-    }
-
-    @Override
-    public void cancelled() {
-        callback.onError("User cancelled request");
+        return PARAMS;
     }
 
 }
