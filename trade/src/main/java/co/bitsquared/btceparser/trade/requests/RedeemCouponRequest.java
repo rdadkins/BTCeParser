@@ -10,6 +10,8 @@ import org.json.JSONObject;
 
 public class RedeemCouponRequest extends AccountRequest {
 
+    public static final TAPI METHOD = TAPI.REDEEM_COUPON;
+
     private static final String[] PARAMS = new String[]{"coupon"};
 
     private RedeemCouponCallback callback;
@@ -24,10 +26,8 @@ public class RedeemCouponRequest extends AccountRequest {
     }
 
     @Override
-    public void processRequest(ParameterBuilder parameters) {
-        checkValidParams(parameters, this);
-        parameters.method(TAPI.REDEEM_COUPON);
-        super.processRequest(parameters);
+    public void assignMethod(ParameterBuilder parameters) {
+        parameters.method(METHOD);
     }
 
     @Override

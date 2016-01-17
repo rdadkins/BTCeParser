@@ -9,6 +9,8 @@ import org.json.JSONObject;
 
 public class TradeRequest extends AccountRequest {
 
+    public static final TAPI METHOD = TAPI.TRADE;
+
     private static final String[] PARAMS = new String[]{"pair", "type", "rate", "amount"};
 
     private TradeRequestCallback callback;
@@ -23,10 +25,8 @@ public class TradeRequest extends AccountRequest {
     }
 
     @Override
-    public void processRequest(ParameterBuilder parameters) {
-        checkValidParams(parameters, this);
-        parameters.method(TAPI.TRADE);
-        super.processRequest(parameters);
+    public void assignMethod(ParameterBuilder parameters) {
+        parameters.method(METHOD);
     }
 
     @Override

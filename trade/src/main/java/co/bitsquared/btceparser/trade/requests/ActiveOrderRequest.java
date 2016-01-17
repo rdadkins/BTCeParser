@@ -9,6 +9,8 @@ import org.json.JSONObject;
 
 public class ActiveOrderRequest extends AccountRequest {
 
+    public static final TAPI METHOD = TAPI.ACTIVE_ORDERS;
+
     private ActiveOrderCallback callback;
 
     public ActiveOrderRequest(Authenticator authenticator, ActiveOrderCallback callback) {
@@ -21,10 +23,8 @@ public class ActiveOrderRequest extends AccountRequest {
     }
 
     @Override
-    public void processRequest(ParameterBuilder parameters) {
-        checkValidParams(parameters, this);
-        parameters.method(TAPI.ACTIVE_ORDERS);
-        super.processRequest(parameters);
+    protected void assignMethod(ParameterBuilder parameterBuilder) {
+        parameterBuilder.method(METHOD);
     }
 
     @Override

@@ -10,6 +10,8 @@ import org.json.JSONObject;
 
 public class InfoRequest extends AccountRequest {
 
+    public static final TAPI METHOD = TAPI.GETINFO;
+
     public static final int TRANSACTION_COUNT = 0;
 
     private InfoCallback callback;
@@ -24,9 +26,8 @@ public class InfoRequest extends AccountRequest {
     }
 
     @Override
-    public void processRequest(ParameterBuilder parameters) {
-        parameters.method(TAPI.GETINFO);
-        super.processRequest(parameters);
+    public void assignMethod(ParameterBuilder parameters) {
+        parameters.method(METHOD);
     }
 
     @Override

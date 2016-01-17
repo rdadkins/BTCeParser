@@ -9,6 +9,8 @@ import org.json.JSONObject;
 
 public class TransHistoryRequest extends AccountRequest {
 
+    public static final TAPI METHOD = TAPI.TRANS_HISTORY;
+
     private TransactionHistoryCallback callback;
 
     public TransHistoryRequest(Authenticator authenticator, TransactionHistoryCallback callback) {
@@ -21,10 +23,8 @@ public class TransHistoryRequest extends AccountRequest {
     }
 
     @Override
-    public void processRequest(ParameterBuilder parameters) {
-        checkValidParams(parameters, this);
-        parameters.method(TAPI.TRANS_HISTORY);
-        super.processRequest(parameters);
+    public void assignMethod(ParameterBuilder parameters) {
+        parameters.method(METHOD);
     }
 
     @Override

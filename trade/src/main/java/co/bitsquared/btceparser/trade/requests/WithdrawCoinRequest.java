@@ -9,6 +9,8 @@ import org.json.JSONObject;
 
 public class WithdrawCoinRequest extends AccountRequest {
 
+    public static final TAPI METHOD = TAPI.WITHDRAW_COIN;
+
     public static final String[] PARAMS = new String[]{"coinName", "amount", "address"};
 
     private WithdrawCoinCallback callback;
@@ -23,10 +25,8 @@ public class WithdrawCoinRequest extends AccountRequest {
     }
 
     @Override
-    public void processRequest(ParameterBuilder parameters) {
-        checkValidParams(parameters, this);
-        parameters.method(TAPI.WITHDRAW_COIN);
-        super.processRequest(parameters);
+    public void assignMethod(ParameterBuilder parameters) {
+        parameters.method(METHOD);
     }
 
     @Override

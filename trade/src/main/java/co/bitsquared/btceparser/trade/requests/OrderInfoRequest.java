@@ -12,6 +12,8 @@ import java.util.Set;
 
 public class OrderInfoRequest extends AccountRequest {
 
+    public static final TAPI METHOD = TAPI.ORDER_INFO;
+
     public static final String[] PARAMS = new String[]{"order_id"};
 
     private OrderInfoCallback callback;
@@ -26,10 +28,8 @@ public class OrderInfoRequest extends AccountRequest {
     }
 
     @Override
-    public void processRequest(ParameterBuilder parameters) {
-        checkValidParams(parameters, this);
-        parameters.method(TAPI.ORDER_INFO);
-        super.processRequest(parameters);
+    public void assignMethod(ParameterBuilder parameters) {
+        parameters.method(METHOD);
     }
 
     @Override

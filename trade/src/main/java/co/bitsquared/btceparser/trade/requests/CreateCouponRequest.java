@@ -9,6 +9,8 @@ import org.json.JSONObject;
 
 public class CreateCouponRequest extends AccountRequest {
 
+    public static final TAPI METHOD = TAPI.CREATE_COUPON;
+
     public static final String[] PARAMS = new String[]{"currency", "amount"};
 
     private CreateCouponCallback callback;
@@ -23,10 +25,8 @@ public class CreateCouponRequest extends AccountRequest {
     }
 
     @Override
-    public void processRequest(ParameterBuilder parameters) {
-        checkValidParams(parameters, this);
-        parameters.method(TAPI.CREATE_COUPON);
-        super.processRequest(parameters);
+    public void assignMethod(ParameterBuilder parameters) {
+        parameters.method(METHOD);
     }
 
     @Override

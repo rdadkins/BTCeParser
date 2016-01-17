@@ -9,6 +9,8 @@ import org.json.JSONObject;
 
 public class CancelOrderRequest extends AccountRequest {
 
+    public static final TAPI METHOD = TAPI.CANCEL_ORDER;
+
     public static final String[] PARAMS = new String[]{"order_id"};
 
     private CancelOrderCallback callback;
@@ -22,10 +24,9 @@ public class CancelOrderRequest extends AccountRequest {
         this.callback = callback;
     }
 
-    public void processRequest(ParameterBuilder parameters) {
-        checkValidParams(parameters, this);
-        parameters.method(TAPI.CANCEL_ORDER);
-        super.processRequest(parameters);
+    @Override
+    public void assignMethod(ParameterBuilder parameters) {
+        parameters.method(METHOD);
     }
 
     @Override

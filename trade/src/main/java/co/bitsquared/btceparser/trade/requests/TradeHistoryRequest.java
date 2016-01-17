@@ -9,6 +9,8 @@ import org.json.JSONObject;
 
 public class TradeHistoryRequest extends AccountRequest {
 
+    public static final TAPI METHOD = TAPI.TRADE_HISTORY;
+
     private TradeHistoryCallback callback;
 
     public TradeHistoryRequest(Authenticator authenticator, TradeHistoryCallback callback) {
@@ -21,10 +23,8 @@ public class TradeHistoryRequest extends AccountRequest {
     }
 
     @Override
-    public void processRequest(ParameterBuilder parameters) {
-        checkValidParams(parameters, this);
-        parameters.method(TAPI.TRADE_HISTORY);
-        super.processRequest(parameters);
+    public void assignMethod(ParameterBuilder parameters) {
+        parameters.method(METHOD);
     }
 
     @Override

@@ -15,7 +15,7 @@ public abstract class Request implements Callback<JsonNode> {
     public static final int DEFAULT_TIMEOUT = 10000;
 
     protected Future<HttpResponse<JsonNode>> task;
-    protected String url;
+    protected final String url;
 
     public Request(String url) {
         this(url, DEFAULT_TIMEOUT);

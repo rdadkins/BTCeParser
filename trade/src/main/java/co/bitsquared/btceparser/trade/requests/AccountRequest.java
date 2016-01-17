@@ -65,28 +65,43 @@ public abstract class AccountRequest extends Request {
         this.callback = callback;
     }
 
-    /**
-     * This should be called when you want to process the same request again with the nonce already being changed for you.
-     */
     @Override
     public final void processRequest() {
+        if (parameterBuilder == null) {
+            throw new RuntimeException("Must call assignParameters() first.");
+        }
         processRequest(parameterBuilder);
     }
 
-    /**
-     * Should be called whenever a request needs to be made. This handles the nonce from the authenticator. All implemenations
-     * should be overridden and assign the method to the ParametereBuilder before calling super().
-     */
-    public void processRequest(ParameterBuilder parameters) {
-        this.parameterBuilder = parameters;
+    public final void processRequest(ParameterBuilder parameters) {
+        assignMethod(parameters);
         parameters.nonce(authenticator);
-        processRequest(parameters.build());
+        checkValidParams(parameters, getRequiredParams());
+        Map<String, String> parametersAsMap = parameters.build();
+        task = Unirest.post(TAPI.URL).
+                headers(authenticator.getHeaders(parametersAsMap)).
+                fields(asFields(parametersAsMap)).
+                asJsonAsync(this);
     }
 
     @Override
     public final void completed(HttpResponse<JsonNode> response) {
         if (callback != null) {
             processResponseBody(response.getBody().getObject());
+        }
+    }
+
+    @Override
+    public final void failed(UnirestException exception) {
+        if (callback != null) {
+            callback.error(exception.getMessage());
+        }
+    }
+
+    @Override
+    public final void cancelled() {
+        if (callback != null) {
+            callback.cancelled();
         }
     }
 
@@ -100,20 +115,8 @@ public abstract class AccountRequest extends Request {
         }
     }
 
-    protected abstract void processReturn(JSONObject returnObject);
-
-    @Override
-    public final void cancelled() {
-        if (callback != null) {
-            callback.cancelled();
-        }
-    }
-
-    @Override
-    public final void failed(UnirestException exception) {
-        if (callback != null) {
-            callback.error(exception.getMessage());
-        }
+    public final void assignParameters(ParameterBuilder builder) {
+        parameterBuilder = builder;
     }
 
     /**
@@ -130,26 +133,10 @@ public abstract class AccountRequest extends Request {
         return accountFunds;
     }
 
-    protected abstract String[] getRequiredParams();
-
-    /**
-     * Checks to see if all of the required parameters are present before making a request. If not, MissingParametersException
-     * will be thrown. This should be called before calling AccountRequest.processRequest(ParameterBuilder)
-     */
-    protected void checkValidParams(ParameterBuilder parameters, AccountRequest request) {
-        if (!parameters.contains(request.getRequiredParams())) {
-            throw new MissingParametersException(request.getRequiredParams());
+    protected final void checkValidParams(ParameterBuilder parameters, String[] requiredParams) {
+        if (!parameters.contains(requiredParams)) {
+            throw new MissingParametersException(requiredParams);
         }
-    }
-
-    /**
-     * Processes a request on a valid (all required parameters are present for this request) set of parameters.
-     */
-    private void processRequest(Map<String, String> parameters) {
-        task = Unirest.post(TAPI.URL).
-                headers(authenticator.getHeaders(parameters)).
-                fields(asFields(parameters)).
-                asJsonAsync(this);
     }
 
     /**
@@ -160,5 +147,11 @@ public abstract class AccountRequest extends Request {
         type.putAll(parameters);
         return type;
     }
+
+    protected abstract void assignMethod(ParameterBuilder parameterBuilder);
+
+    protected abstract void processReturn(JSONObject returnObject);
+
+    protected abstract String[] getRequiredParams();
 
 }
