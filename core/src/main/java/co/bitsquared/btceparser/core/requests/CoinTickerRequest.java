@@ -4,8 +4,6 @@ import co.bitsquared.btceparser.core.API;
 import co.bitsquared.btceparser.core.TradingPair;
 import co.bitsquared.btceparser.core.callbacks.CoinTickerCallback;
 import co.bitsquared.btceparser.core.data.CoinTicker;
-import com.mashape.unirest.http.HttpResponse;
-import com.mashape.unirest.http.JsonNode;
 import org.json.JSONObject;
 
 public class CoinTickerRequest extends PublicRequest {
@@ -22,9 +20,9 @@ public class CoinTickerRequest extends PublicRequest {
     }
 
     @Override
-    protected void processResponse(HttpResponse<JsonNode> response) {
+    protected void processResponseBody(JSONObject body) {
         if (listener != null) {
-            JSONObject coinTicker = response.getBody().getObject().getJSONObject(tradingPair.toString());
+            JSONObject coinTicker = body.getJSONObject(tradingPair.toString());
             listener.onSuccess(new CoinTicker(tradingPair, coinTicker));
         }
     }

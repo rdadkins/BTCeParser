@@ -8,10 +8,7 @@ import co.bitsquared.btceparser.trade.TAPI;
 import co.bitsquared.btceparser.trade.authentication.Authenticator;
 import co.bitsquared.btceparser.trade.callbacks.AccountCallback;
 import co.bitsquared.btceparser.trade.exceptions.MissingParametersException;
-import com.mashape.unirest.http.HttpResponse;
-import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
-import com.mashape.unirest.http.exceptions.UnirestException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -53,16 +50,16 @@ public abstract class AccountRequest extends Request {
 
     private Authenticator authenticator;
     private ParameterBuilder parameterBuilder;
-    protected AccountCallback callback;
+    protected AccountCallback listener;
 
-    public AccountRequest(Authenticator authenticator, AccountCallback callback) {
-        this(authenticator, callback, DEFAULT_TIMEOUT);
+    public AccountRequest(Authenticator authenticator, AccountCallback listener) {
+        this(authenticator, listener, DEFAULT_TIMEOUT);
     }
 
-    public AccountRequest(Authenticator authenticator, AccountCallback callback, long timeout) {
-        super(URL, timeout);
+    public AccountRequest(Authenticator authenticator, AccountCallback listener, long timeout) {
+        super(URL, listener, timeout);
         this.authenticator = authenticator;
-        this.callback = callback;
+        this.listener = listener;
     }
 
     @Override
@@ -85,32 +82,11 @@ public abstract class AccountRequest extends Request {
     }
 
     @Override
-    public final void completed(HttpResponse<JsonNode> response) {
-        if (callback != null) {
-            processResponseBody(response.getBody().getObject());
-        }
-    }
-
-    @Override
-    public final void failed(UnirestException exception) {
-        if (callback != null) {
-            callback.error(exception.getMessage());
-        }
-    }
-
-    @Override
-    public final void cancelled() {
-        if (callback != null) {
-            callback.cancelled();
-        }
-    }
-
-    @Override
     protected final void processResponseBody(JSONObject body) {
         if (body.getInt("success") == 0) {
-            callback.error(body.getString("error"));
+            listener.onUnsuccessfulReturn(body.getString("error"));
         } else {
-            callback.onSuccess();
+            listener.onSuccessReturn();
             processReturn(body.getJSONObject("return"));
         }
     }

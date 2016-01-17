@@ -2,10 +2,8 @@ package co.bitsquared.btceparser.examples;
 
 import co.bitsquared.btceparser.core.TradingPair;
 import co.bitsquared.btceparser.core.callbacks.CoinInfoCallback;
-import co.bitsquared.btceparser.core.callbacks.CoinInfoUpdater;
 import co.bitsquared.btceparser.core.data.CoinInfo;
 import co.bitsquared.btceparser.core.requests.CoinInfoRequest;
-import com.mashape.unirest.http.exceptions.UnirestException;
 
 public class CoinInfoExample implements BaseExample, CoinInfoCallback {
 
@@ -33,6 +31,6 @@ public class CoinInfoExample implements BaseExample, CoinInfoCallback {
     }
 
     public void onSuccess() {
-
+        System.out.println("Successful response");
     }
 }

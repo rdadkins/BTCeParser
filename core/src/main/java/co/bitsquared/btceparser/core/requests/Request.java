@@ -1,5 +1,6 @@
 package co.bitsquared.btceparser.core.requests;
 
+import co.bitsquared.btceparser.core.callbacks.BaseRequestCallback;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
@@ -15,15 +16,17 @@ public abstract class Request implements Callback<JsonNode> {
     public static final int DEFAULT_TIMEOUT = 10000;
 
     protected Future<HttpResponse<JsonNode>> task;
+    protected BaseRequestCallback listener;
     protected final String url;
 
-    public Request(String url) {
-        this(url, DEFAULT_TIMEOUT);
+    public Request(String url, BaseRequestCallback listener) {
+        this(url, listener, DEFAULT_TIMEOUT);
     }
 
-    public Request(String url, long timeout) {
+    public Request(String url, BaseRequestCallback listener, long timeout) {
         Unirest.setTimeouts(timeout, timeout);
         this.url = url;
+        this.listener = listener;
     }
 
     public final boolean isDone() {
@@ -47,11 +50,29 @@ public abstract class Request implements Callback<JsonNode> {
 
     public abstract void processRequest();
 
-    public abstract void completed(HttpResponse<JsonNode> response);
+    public final void completed(HttpResponse<JsonNode> response) {
+        if (listener != null) {
+            if (response.getStatus() == 200) {
+                listener.onSuccess();
+            } else {
+                listener.error("Return status: " + response.getStatus());
+                return;
+            }
+        }
+        processResponseBody(response.getBody().getObject());
+    }
 
-    public abstract void failed(UnirestException exception);
+    public final void failed(UnirestException exception) {
+        if (listener != null) {
+            listener.error(exception.getMessage());
+        }
+    }
 
-    public abstract void cancelled();
+    public final void cancelled() {
+        if (listener != null) {
+            listener.cancelled();
+        }
+    }
 
     protected abstract void processResponseBody(JSONObject body);
 
