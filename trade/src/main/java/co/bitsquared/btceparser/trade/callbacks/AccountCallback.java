@@ -1,26 +1,22 @@
 package co.bitsquared.btceparser.trade.callbacks;
 
+import co.bitsquared.btceparser.core.callbacks.BaseRequestCallback;
+
 /**
- * Simple interface to let the calling class know when something fails. Possible implementations can be used in a GUI
- * approach where error lets the user know why something went wrong. onSuccess can let the user know everything is
- * working properly
+ * Simple interface to let the calling class know when an AccountRequest fails. Possible implementations can be used in a GUI
+ * approach where error lets the user know why something went wrong.
  */
-public interface AccountCallback {
+public interface AccountCallback extends BaseRequestCallback {
 
     /**
-     * Called when an AccountRequest returns a success == 1.
+     * Called when an AccountRequest returns success == 1.
      */
-    void onSuccess();
+    void onSuccessReturn();
 
     /**
-     * Called when there is an error with a reason given.
-     * @param reason the error.
+     * Called when an AccountRequest returns success == 0.
+     * @param reason the reason why there was an error
      */
-    void error(String reason);
-
-    /**
-     * Called when a user cancels a request.
-     */
-    void cancelled();
+    void onUnsuccessfulReturn(String reason);
 
 }
