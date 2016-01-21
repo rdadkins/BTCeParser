@@ -30,6 +30,8 @@ public interface BaseCurrency<T> {
 
     boolean isSamePrice(BaseCurrency<?> other);
 
+    boolean isAmountPositive();
+
     boolean equals(Object other);
 
 }

@@ -6,7 +6,7 @@ import java.math.RoundingMode;
 public final class Coin implements BaseCurrency<Coin> {
 
 	private BigDecimal value;
-	private static RoundingMode roundingMode = RoundingMode.HALF_UP;
+	private static final RoundingMode roundingMode = RoundingMode.HALF_UP;
 	private static final int decimalPlaces = 8;
 	private static final int SATOSHIS_PER_COIN = 100000000;
 
@@ -49,7 +49,7 @@ public final class Coin implements BaseCurrency<Coin> {
 	}
 
 	/**
-	 * If other is Coin, multiply them together. If other is Currency, return a new Currency object.
+	 * If other is a Coin, multiply them together. If other is Currency, return a new Currency object.
 	 */
 	public BaseCurrency<?> multiply(BaseCurrency<?> other) {
 		if (other instanceof Coin) {
@@ -95,6 +95,10 @@ public final class Coin implements BaseCurrency<Coin> {
 
 	public boolean isSamePrice(BaseCurrency<?> other) {
 		return other instanceof Coin && asBigDecimal().compareTo(other.asBigDecimal()) == 0;
+	}
+
+	public boolean isAmountPositive() {
+		return value.compareTo(BigDecimal.ZERO) == 1;
 	}
 
 	@Override

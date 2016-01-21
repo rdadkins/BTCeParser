@@ -87,6 +87,10 @@ public final class Currency implements BaseCurrency<Currency> {
         return other instanceof Currency && asBigDecimal().compareTo(other.asBigDecimal()) == 0;
     }
 
+    public boolean isAmountPositive() {
+        return value.compareTo(BigDecimal.ZERO) == 1;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -102,4 +106,5 @@ public final class Currency implements BaseCurrency<Currency> {
         result = 31 * result + decimalPlaces;
         return result;
     }
+
 }
