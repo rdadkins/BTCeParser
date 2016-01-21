@@ -48,8 +48,6 @@ public abstract class Request implements Callback<JsonNode> {
         }
     }
 
-    public abstract void processRequest();
-
     public final void completed(HttpResponse<JsonNode> response) {
         if (listener != null) {
             if (response.getStatus() == 200) {
@@ -73,6 +71,8 @@ public abstract class Request implements Callback<JsonNode> {
             listener.cancelled();
         }
     }
+
+    public abstract void processRequest();
 
     protected abstract void processResponseBody(JSONObject body);
 

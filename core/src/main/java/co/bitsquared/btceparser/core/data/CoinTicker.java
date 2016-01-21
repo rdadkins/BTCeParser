@@ -66,7 +66,7 @@ public class CoinTicker {
                 "|-[Volume: " + volume + "]\n" +
                 "|-[Buy: " + buyPrice + "]\n" +
                 "|-[Sell: " + sellPrice + "]\n" +
-                "|-[Last Updated: " + lastUpdated + "]\n";
+                "|-[Last Updated: " + lastUpdated + "]";
     }
 
     private void extractData(JSONObject object) {
