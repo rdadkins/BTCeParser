@@ -4,6 +4,7 @@ import co.bitsquared.btceparser.core.API;
 import co.bitsquared.btceparser.core.TradingPair;
 import co.bitsquared.btceparser.core.callbacks.CoinTickerCallback;
 import co.bitsquared.btceparser.core.data.CoinTicker;
+import co.bitsquared.btceparser.core.utils.Utils;
 import org.json.JSONObject;
 
 public class CoinTickerRequest extends PublicRequest {
@@ -22,9 +23,14 @@ public class CoinTickerRequest extends PublicRequest {
     @Override
     protected void processResponseBody(JSONObject body) {
         if (listener != null) {
-            JSONObject coinTicker = body.getJSONObject(tradingPair.toString());
-            listener.onSuccess(new CoinTicker(tradingPair, coinTicker));
+            CoinTicker ticker = Utils.extractCoinTicker(body, tradingPair);
+            listener.onSuccess(ticker);
         }
+    }
+
+    @Override
+    public PublicUpdatingRequest asUpdatingRequest() {
+        return new PublicUpdatingRequest(url, listener, this, 4);
     }
 
 }
