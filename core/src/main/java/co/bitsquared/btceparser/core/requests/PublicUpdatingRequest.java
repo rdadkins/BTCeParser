@@ -23,7 +23,7 @@ public class PublicUpdatingRequest extends UpdatingRequest {
      */
     @Override
     public final void processRequest() {
-        task = Unirest.get(url).asJsonAsync(this);
+        task = Unirest.get(url).queryString(publicRequest.getHeaders()).asJsonAsync(this);
     }
 
     /**

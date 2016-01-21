@@ -7,6 +7,8 @@ import co.bitsquared.btceparser.core.data.CoinTicker;
 import co.bitsquared.btceparser.core.utils.Utils;
 import org.json.JSONObject;
 
+import java.util.Map;
+
 public class CoinTickerRequest extends PublicRequest {
 
     private static final API METHOD = API.TICKER;
@@ -26,6 +28,11 @@ public class CoinTickerRequest extends PublicRequest {
             CoinTicker ticker = Utils.extractCoinTicker(body, tradingPair);
             listener.onSuccess(ticker);
         }
+    }
+
+    @Override
+    public Map<String, Object> getHeaders() {
+        return DEFAULT_PARAMETERS;
     }
 
     @Override

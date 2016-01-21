@@ -7,6 +7,8 @@ import co.bitsquared.btceparser.core.data.CoinInfo;
 import co.bitsquared.btceparser.core.utils.Utils;
 import org.json.JSONObject;
 
+import java.util.Map;
+
 /**
  * CoinInfoRequest gathers trading parameter information on a desired coin. Information that is obtained is used in how
  * to create valid trades with regards to decimal places, min / max price, fees, and the minimum amount to trade.
@@ -40,6 +42,11 @@ public class CoinInfoRequest extends PublicRequest {
                 listener.onSuccess(coinInfo);
             }
         }
+    }
+
+    @Override
+    public Map<String, Object> getHeaders() {
+        return DEFAULT_PARAMETERS;
     }
 
     @Override
