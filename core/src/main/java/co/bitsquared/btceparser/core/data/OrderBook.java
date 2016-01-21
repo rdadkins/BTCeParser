@@ -2,8 +2,6 @@ package co.bitsquared.btceparser.core.data;
 
 import co.bitsquared.btceparser.core.TradingPair;
 import co.bitsquared.btceparser.core.currency.BaseCurrency;
-import co.bitsquared.btceparser.core.currency.Coin;
-import co.bitsquared.btceparser.core.currency.Currency;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -15,7 +13,6 @@ public class OrderBook {
     private final TradingPair tradingPair;
     private final TreeSet<Order> bidBook;
     private final TreeSet<Order> askBook;
-    private double fee;
 
     public OrderBook(TradingPair tradingPair) {
         this.tradingPair = tradingPair;
@@ -23,73 +20,109 @@ public class OrderBook {
         askBook = new TreeSet<Order>();
     }
 
+    /**
+     * Add a new bid book's orders to the current bid book.
+     * @param bids the new list of bids.
+     */
     public void addBidBook(ArrayList<Order> bids) {
         bidBook.addAll(bids);
     }
 
+    /**
+     * Add a new ask book's orders to the current ask book.
+     * @param asks the new list of asks.
+     */
     public void addAskBook(ArrayList<Order> asks) {
         askBook.addAll(asks);
     }
 
+    /**
+     * Add a list of traded bid orders to update the current bid book. All bid orders that have their amount set to 0 or
+     * below will be automatically removed from the stored bid book.
+     * @param bidTrades a list of traded bid orders.
+     */
     public void addTradedBids(ArrayList<Order> bidTrades) {
         modifyBook(bidBook, bidTrades);
     }
 
+    /**
+     * Add a list of traded ask orders to update the current ask book. All ask orders that have their amount set to 0 or
+     * below will be automatically removed from the stored ask book.
+     * @param askTrades a list of traded ask orders.
+     */
     public void addTradedAsks(ArrayList<Order> askTrades) {
         modifyBook(askBook, askTrades);
     }
 
+    /**
+     * Modify the storedBook with the new incoming trades. First, add all of the orders from trades in to the stored
+     * book and then remove 0 or negative orders in terms of their amount.
+     */
     private void modifyBook(TreeSet<Order> storedBook, ArrayList<Order> trades) {
         for (Order trade: trades) {
             for (Order stored: storedBook) {
-                if (trade.getPriceCurrency().isSamePrice(stored.getPriceCurrency())) {
-                    stored.setTargetCurrency(stored.getTargetCurrency().subtract(trade.getTargetCurrency()));
+                if (trade.getRate().isSamePrice(stored.getRate())) {
+                    stored.setAmount(stored.getAmount().subtract(trade.getAmount()));
                 }
             }
         }
         Iterator<Order> orderIterator = storedBook.iterator();
         while (orderIterator.hasNext()) {
             Order order = orderIterator.next();
-            if (order.getTargetCurrency().isSamePrice(new Currency(0.0)) || order.getTargetCurrency().isSamePrice(Coin.fromSatoshis(0))) {
+            if (order.getAmount().isAmountPositive()) {
                 orderIterator.remove();
             }
         }
     }
 
-    public BaseCurrency<?> getTotalBidDepth(boolean includeFee) {
-        return getTotalDepthFrom(bidBook, includeFee);
+    /**
+     * Get the total bid depth of this OrderBook with a fee applied.
+     * @param fee the optional fee to be applied to each order.
+     * @return a BaseCurrency object whose value is the sum of the bid book.
+     */
+    public BaseCurrency<?> getTotalBidDepth(double fee) {
+        return getTotalDepthFrom(bidBook, fee);
     }
 
-    public BaseCurrency<?> getTotalAskDepth(boolean includeFee) {
-        return getTotalDepthFrom(askBook, includeFee);
+    /**
+     * Get the total ask depth of this OrderBook with a fee applied.
+     * @param fee the optional fee to be applied to each order.
+     * @return a BaseCurrency object whose value is the sum of the ask book.
+     */
+    public BaseCurrency<?> getTotalAskDepth(double fee) {
+        return getTotalDepthFrom(askBook, fee);
     }
 
-    private BaseCurrency<?> getTotalDepthFrom(TreeSet<Order> book, boolean includeFee) {
-        BaseCurrency<?> depth = (BaseCurrency<?>) book.first().getPriceCurrency().multiply(BigDecimal.ZERO);
+    private BaseCurrency<?> getTotalDepthFrom(TreeSet<Order> book, double fee) {
+        BaseCurrency<?> depthSum = (BaseCurrency<?>) book.first().getRate().multiply(BigDecimal.ZERO);
         for (Order order: book) {
-            depth = depth.add(includeFee ? order.getOrderTotal(fee) : order.getOrderTotal());
+            depthSum = depthSum.add((BaseCurrency<?>) order.getOrderTotal(fee));
         }
-        return depth;
+        return depthSum;
     }
 
+    /**
+     * Get the total volume in relation to the rate of each order.
+     * @return a BaseCurrency object whose value is the sum of each order total in the bid book.
+     */
     public BaseCurrency<?> getTotalBidVolume() {
         return getVolumeFrom(bidBook);
     }
 
+    /**
+     * Get the total volume in relation to the rate of each order.
+     * @return a BaseCurrency object whose value is the sum of each order total in the bid book.
+     */
     public BaseCurrency<?> getTotalAskVolume() {
         return getVolumeFrom(askBook);
     }
 
     private BaseCurrency<?> getVolumeFrom(TreeSet<Order> book) {
-        BaseCurrency<?> value = (BaseCurrency<?>) book.first().getTargetCurrency().multiply(BigDecimal.ZERO);
+        BaseCurrency<?> volume = (BaseCurrency<?>) book.first().getAmount().multiply(BigDecimal.ZERO);
         for (Order order: book) {
-            value = value.add(order.getTargetCurrency());
+            volume = volume.add(order.getAmount());
         }
-        return value;
-    }
-
-    public void setFee(double fee) {
-        this.fee = fee;
+        return volume;
     }
 
 }
