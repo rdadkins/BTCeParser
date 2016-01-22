@@ -5,6 +5,7 @@ import co.bitsquared.btceparser.core.currency.BaseCurrency;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.TreeSet;
 
@@ -54,11 +55,41 @@ public class OrderBook {
         modifyBook(askBook, askTrades);
     }
 
+    public void combineBooks(OrderBook other) {
+        combineBook(bidBook, other.bidBook);
+        combineBook(askBook, other.askBook);
+    }
+
+    private void combineBook(TreeSet<Order> storedBook, Collection<Order> incomingBook)  {
+        Order storedOrder, incomingOrder;
+        Iterator<Order> storedOrderIterator = storedBook.iterator();
+        Iterator<Order> incomingOrderIterator;
+        boolean foundOrder = false;
+        while (storedOrderIterator.hasNext()) {
+            storedOrder = storedOrderIterator.next();
+            incomingOrderIterator = incomingBook.iterator();
+            while (incomingOrderIterator.hasNext()) {
+                incomingOrder = incomingOrderIterator.next();
+                if (storedOrder.getRate().isSamePrice(incomingOrder.getRate())) {
+                    storedOrder.setAmount(incomingOrder.getAmount());
+                    incomingOrderIterator.remove();
+                    foundOrder = true;
+                    break;
+                }
+            }
+            if (!foundOrder) {
+                storedOrderIterator.remove();
+                foundOrder = false;
+            }
+        }
+        storedBook.addAll(incomingBook);
+    }
+
     /**
      * Modify the storedBook with the new incoming trades. First, add all of the orders from trades in to the stored
      * book and then remove 0 or negative orders in terms of their amount.
      */
-    private void modifyBook(TreeSet<Order> storedBook, ArrayList<Order> trades) {
+    private void modifyBook(TreeSet<Order> storedBook, Collection<Order> trades) {
         for (Order trade: trades) {
             for (Order stored: storedBook) {
                 if (trade.getRate().isSamePrice(stored.getRate())) {
