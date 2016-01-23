@@ -2,14 +2,12 @@ package co.bitsquared.btceparser.core.utils;
 
 import co.bitsquared.btceparser.core.DepthType;
 import co.bitsquared.btceparser.core.TradingPair;
-import co.bitsquared.btceparser.core.data.CoinInfo;
-import co.bitsquared.btceparser.core.data.CoinTicker;
-import co.bitsquared.btceparser.core.data.Order;
-import co.bitsquared.btceparser.core.data.OrderBook;
+import co.bitsquared.btceparser.core.data.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Set;
 
 public class Utils {
@@ -67,6 +65,17 @@ public class Utils {
             listOfOrders.add(order);
         }
         return listOfOrders;
+    }
+
+    public static ArrayList<Trade> extractTrades(JSONObject body, TradingPair tradingPair) {
+        JSONArray trades = body.getJSONArray(tradingPair.toString());
+        ArrayList<Trade> orders = new ArrayList<Trade>();
+        JSONObject rawTrade;
+        for (int i = 0; i < trades.length(); i++) {
+            rawTrade = trades.getJSONObject(i);
+            orders.add(new Trade(tradingPair, rawTrade));
+        }
+        return orders;
     }
 
 }
