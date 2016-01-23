@@ -3,6 +3,7 @@ package co.bitsquared.btceparser.core.data;
 import co.bitsquared.btceparser.core.DepthType;
 import co.bitsquared.btceparser.core.TradingPair;
 import co.bitsquared.btceparser.core.exceptions.NoTradingPairSuppliedException;
+import co.bitsquared.btceparser.core.hash.SHA256;
 import org.json.JSONObject;
 
 public class Trade {
@@ -78,6 +79,15 @@ public class Trade {
                 append(AMOUNT_KEY, amount).
                 append(TRANSACTION_ID_KEY, transactionID).
                 append(TIMESTAMP_KEY, timestamp).toString();
+    }
+
+    /**
+     * Hashes this Trade using SHA256. Since each Trade is marked with a TransactionID, this method should never* return
+     * duplicate hashes.
+     * @return a SHA256 hash from this trade.
+     */
+    public String getTradeHash() {
+        return SHA256.getHash(asJSONString());
     }
 
     private void extractJSON(JSONObject tradeObject) {
