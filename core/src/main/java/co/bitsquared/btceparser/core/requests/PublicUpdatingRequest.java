@@ -1,6 +1,5 @@
 package co.bitsquared.btceparser.core.requests;
 
-import co.bitsquared.btceparser.core.callbacks.BaseRequestCallback;
 import com.mashape.unirest.http.Unirest;
 import org.json.JSONObject;
 
