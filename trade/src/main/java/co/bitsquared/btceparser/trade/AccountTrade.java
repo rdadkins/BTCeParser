@@ -4,7 +4,7 @@ import co.bitsquared.btceparser.core.TradingPair;
 import co.bitsquared.btceparser.core.DepthType;
 import org.json.JSONObject;
 
-public class Trade {
+public class AccountTrade {
 
     public static final String PAIR = "pair";
     public static final String SELL = "sell";
@@ -24,7 +24,7 @@ public class Trade {
     private boolean isUserOrder;
     private long timeStamp;
 
-    public Trade(int tradeID, JSONObject object) {
+    public AccountTrade(int tradeID, JSONObject object) {
         this.tradeID = tradeID;
         extractJSON(object);
     }
