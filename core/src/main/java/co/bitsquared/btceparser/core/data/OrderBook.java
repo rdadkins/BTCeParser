@@ -45,24 +45,17 @@ public class OrderBook {
 
     /**
      * This will take a DepthType and an ArrayList of trades. Firstly, we need a list of deadStoredOrders which holds
-     * all orders (in a bid or ask book) whose amount() is not positive ( <= 0). We also need a list of filteredTrades
-     * which contains all Trades whose DepthType is equal to depthType, this list is populated by removing all depthType
-     * matches in trades (this should make it quicker on the second pass). Then, we go through each Trade that we just
-     * filtered and compare rates with all Orders in the book we are comparing to and we update the amounts. All amounts
-     * that are <= 0 are added to deadStoredOrders and removed at the end.
+     * all orders (in a bid or ask book) whose amount() is not positive ( <= 0). Then, we go through each Trade that matches
+     * the depthType provided and compare rates with all Orders in the book we are comparing to and we update the amounts.
+     * All amounts that are <= 0 are added to deadStoredOrders and removed at the end.
      */
     private void addTradesToBook(DepthType depthType, ArrayList<Trade> trades) {
         TreeSet<Order> storedBook = (depthType == DepthType.ASK ? askBook : bidBook);
         ArrayList<Order> deadStoredOrders = new ArrayList<>();
-        ArrayList<Trade> filteredTrades = new ArrayList<>();
-        trades.removeIf(trade -> {
-            if (trade.getDepthType() == depthType) {
-                filteredTrades.add(trade);
-                return true;
+        for (Trade trade: trades) {
+            if (trade.getDepthType() != depthType) {
+                continue;
             }
-            return false;
-        });
-        for (Trade trade: filteredTrades) {
             for (Order storedOrder: storedBook) {
                 if (storedOrder.getRate().isSamePrice(trade.getRateAsCurrency())) {
                     BaseCurrency<?> tempAmount = storedOrder.getAmount().subtract(trade.getAmountAsCurrency());
@@ -150,7 +143,7 @@ public class OrderBook {
     private BaseCurrency<?> getTotalDepthFrom(TreeSet<Order> book, double fee) {
         BaseCurrency<?> depthSum = (BaseCurrency<?>) book.first().getRate().multiply(BigDecimal.ZERO);
         for (Order order: book) {
-            depthSum = depthSum.add((BaseCurrency<?>) order.getOrderTotal(fee));
+            depthSum = depthSum.add(order.getOrderTotal(fee));
         }
         return depthSum;
     }
@@ -172,6 +165,9 @@ public class OrderBook {
     }
 
     private BaseCurrency<?> getVolumeFrom(TreeSet<Order> book) {
+        if (book.size() == 0) {
+            return (BaseCurrency<?>) tradingPair.getTargetCurrency().multiply(BigDecimal.ZERO);
+        }
         BaseCurrency<?> volume = (BaseCurrency<?>) book.first().getAmount().multiply(BigDecimal.ZERO);
         for (Order order: book) {
             volume = volume.add(order.getAmount());
