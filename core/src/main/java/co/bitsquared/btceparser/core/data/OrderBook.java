@@ -1,5 +1,6 @@
 package co.bitsquared.btceparser.core.data;
 
+import co.bitsquared.btceparser.core.DepthType;
 import co.bitsquared.btceparser.core.TradingPair;
 import co.bitsquared.btceparser.core.currency.BaseCurrency;
 
@@ -37,22 +38,44 @@ public class OrderBook {
         askBook.addAll(asks);
     }
 
-    /**
-     * Add a list of traded bid orders to update the current bid book. All bid orders that have their amount set to 0 or
-     * below will be automatically removed from the stored bid book.
-     * @param bidTrades a list of traded bid orders.
-     */
-    public void addTradedBids(ArrayList<Order> bidTrades) {
-        modifyBook(bidBook, bidTrades);
+    public void addTrades(ArrayList<Trade> trades) {
+        addTradesToBook(DepthType.ASK, trades);
+        addTradesToBook(DepthType.BID, trades);
     }
 
     /**
-     * Add a list of traded ask orders to update the current ask book. All ask orders that have their amount set to 0 or
-     * below will be automatically removed from the stored ask book.
-     * @param askTrades a list of traded ask orders.
+     * This will take a DepthType and an ArrayList of trades. Firstly, we need a list of deadStoredOrders which holds
+     * all orders (in a bid or ask book) whose amount() is not positive ( <= 0). We also need a list of filteredTrades
+     * which contains all Trades whose DepthType is equal to depthType, this list is populated by removing all depthType
+     * matches in trades (this should make it quicker on the second pass). Then, we go through each Trade that we just
+     * filtered and compare rates with all Orders in the book we are comparing to and we update the amounts. All amounts
+     * that are <= 0 are added to deadStoredOrders and removed at the end.
      */
-    public void addTradedAsks(ArrayList<Order> askTrades) {
-        modifyBook(askBook, askTrades);
+    private void addTradesToBook(DepthType depthType, ArrayList<Trade> trades) {
+        TreeSet<Order> storedBook = (depthType == DepthType.ASK ? askBook : bidBook);
+        ArrayList<Order> deadStoredOrders = new ArrayList<>();
+        ArrayList<Trade> filteredTrades = new ArrayList<>();
+        trades.removeIf(trade -> {
+            if (trade.getDepthType() == depthType) {
+                filteredTrades.add(trade);
+                return true;
+            }
+            return false;
+        });
+        for (Trade trade: filteredTrades) {
+            for (Order storedOrder: storedBook) {
+                if (storedOrder.getRate().isSamePrice(trade.getRateAsCurrency())) {
+                    BaseCurrency<?> tempAmount = storedOrder.getAmount().subtract(trade.getAmountAsCurrency());
+                    if (tempAmount.isAmountPositive()) {
+                        storedOrder.setAmount(tempAmount);
+                    } else {
+                        deadStoredOrders.add(storedOrder);
+                    }
+                    break;
+                }
+            }
+        }
+        storedBook.removeAll(deadStoredOrders);
     }
 
     public void combineBooks(OrderBook other) {
