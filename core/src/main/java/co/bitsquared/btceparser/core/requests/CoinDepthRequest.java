@@ -56,7 +56,7 @@ public class CoinDepthRequest extends PublicRequest {
 
     @Override
     public PublicUpdatingRequest asUpdatingRequest() {
-        return new PublicUpdatingRequest(url, listener, this, 5);
+        return new PublicUpdatingRequest(this, 10);
     }
 
 }

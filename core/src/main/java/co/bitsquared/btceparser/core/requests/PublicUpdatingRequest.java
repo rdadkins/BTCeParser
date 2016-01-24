@@ -12,8 +12,8 @@ public class PublicUpdatingRequest extends UpdatingRequest {
 
     private PublicRequest publicRequest;
 
-    protected PublicUpdatingRequest(String url, BaseRequestCallback callback, PublicRequest publicRequest, int secondsUpdateInterval) {
-        super(url, callback, secondsUpdateInterval);
+    protected PublicUpdatingRequest(PublicRequest publicRequest, int secondsUpdateInterval) {
+        super(publicRequest.url, publicRequest.listener, secondsUpdateInterval);
         this.publicRequest = publicRequest;
     }
 

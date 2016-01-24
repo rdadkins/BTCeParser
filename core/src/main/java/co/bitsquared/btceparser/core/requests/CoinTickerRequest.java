@@ -37,7 +37,7 @@ public class CoinTickerRequest extends PublicRequest {
 
     @Override
     public PublicUpdatingRequest asUpdatingRequest() {
-        return new PublicUpdatingRequest(url, listener, this, 4);
+        return new PublicUpdatingRequest(this, 10);
     }
 
 }
