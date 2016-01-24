@@ -7,6 +7,7 @@ import co.bitsquared.btceparser.trade.ParameterBuilder;
 import co.bitsquared.btceparser.trade.TAPI;
 import co.bitsquared.btceparser.trade.authentication.Authenticator;
 import co.bitsquared.btceparser.trade.callbacks.AccountCallback;
+import co.bitsquared.btceparser.trade.exceptions.MissingParameterBuilderException;
 import co.bitsquared.btceparser.trade.exceptions.MissingParametersException;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
@@ -126,7 +127,7 @@ public abstract class AccountRequest extends Request {
 
     protected final void checkForParameters() {
         if (parameterBuilder == null) {
-            throw new RuntimeException("Must call assignParameters() first or supply processRequest() with parameters.");
+            throw new MissingParameterBuilderException();
         }
     }
 
