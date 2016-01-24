@@ -41,4 +41,9 @@ public class CancelOrderRequest extends AccountRequest {
         return PARAMS;
     }
 
+    @Override
+    public UpdatingAccountRequest asUpdatingRequest() {
+        return new UpdatingAccountRequest(this, DEFAULT_UPDATING_TIME);
+    }
+
 }

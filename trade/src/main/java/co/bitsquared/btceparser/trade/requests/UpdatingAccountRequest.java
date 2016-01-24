@@ -5,18 +5,23 @@ import org.json.JSONObject;
 
 public class UpdatingAccountRequest extends UpdatingRequest {
 
-    protected UpdatingAccountRequest(String url, AccountRequest accountRequest, int secondsUpdateInterval) {
-        super(url, accountRequest.listener, secondsUpdateInterval);
+    private AccountRequest accountRequest;
+
+    protected UpdatingAccountRequest(AccountRequest accountRequest, int secondsUpdateInterval) {
+        super(AccountRequest.URL, accountRequest.listener, secondsUpdateInterval);
+        this.accountRequest = accountRequest;
     }
 
     @Override
     public final void processRequest() {
-
+        accountRequest.checkForParameters();
+        accountRequest.processRequestWithCallback(accountRequest.parameterBuilder, this);
     }
 
     @Override
     protected void processResponseBody(JSONObject body) {
-
+        accountRequest.processResponseBody(body);
+        scheduleNextTask();
     }
 
 }

@@ -43,4 +43,9 @@ public class TradeHistoryRequest extends AccountRequest {
         return NO_PARAMS;
     }
 
+    @Override
+    public UpdatingAccountRequest asUpdatingRequest() {
+        return new UpdatingAccountRequest(this, DEFAULT_UPDATING_TIME);
+    }
+
 }

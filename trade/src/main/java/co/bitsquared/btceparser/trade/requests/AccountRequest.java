@@ -46,9 +46,10 @@ public abstract class AccountRequest extends Request {
     public static final String SERVER_TIME = "server_time";
     public static final String COUPON = "coupon";
 
-    private static final String URL = TAPI.URL;
+    protected static final String URL = TAPI.URL;
 
     protected static final String[] NO_PARAMS = new String[0];
+    protected static final int DEFAULT_UPDATING_TIME = 10;
 
     protected Authenticator authenticator;
     protected ParameterBuilder parameterBuilder;
@@ -149,5 +150,7 @@ public abstract class AccountRequest extends Request {
     protected abstract void processReturn(JSONObject returnObject);
 
     protected abstract String[] getRequiredParams();
+
+    public abstract UpdatingAccountRequest asUpdatingRequest();
 
 }
