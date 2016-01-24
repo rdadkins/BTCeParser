@@ -30,7 +30,7 @@ public class PublicUpdatingRequest extends UpdatingRequest {
      * pass the body to the PublicRequest provided. This is the point where we schedule the next task via scheduleNextTask().
      */
     @Override
-    protected void processResponseBody(JSONObject body) {
+    protected final void processResponseBody(JSONObject body) {
         publicRequest.processResponseBody(body);
         scheduleNextTask();
     }
