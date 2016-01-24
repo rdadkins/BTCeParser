@@ -1,9 +1,9 @@
 package co.bitsquared.btceparser.trade.callbacks;
 
-import co.bitsquared.btceparser.trade.Trade;
+import co.bitsquared.btceparser.trade.AccountTrade;
 
 public interface TradeHistoryCallback extends AccountCallback {
 
-    void onSuccess(Trade[] trades);
+    void onSuccess(AccountTrade[] accountTrades);
 
 }
