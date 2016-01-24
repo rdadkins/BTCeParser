@@ -2,6 +2,7 @@ package co.bitsquared.btceparser.core.data;
 
 import co.bitsquared.btceparser.core.DepthType;
 import co.bitsquared.btceparser.core.TradingPair;
+import co.bitsquared.btceparser.core.currency.BaseCurrency;
 import co.bitsquared.btceparser.core.exceptions.NoTradingPairSuppliedException;
 import co.bitsquared.btceparser.core.hash.SHA256;
 import org.json.JSONObject;
@@ -60,8 +61,16 @@ public class Trade {
         return rate;
     }
 
+    public BaseCurrency<?> getRateAsCurrency() {
+        return tradingPair.getOrderTemplate(rate, 0, depthType).getRate();
+    }
+
     public double getAmount() {
         return amount;
+    }
+
+    public BaseCurrency<?> getAmountAsCurrency() {
+        return tradingPair.getOrderTemplate(0, amount, depthType).getAmount();
     }
 
     public long getTransactionID() {
