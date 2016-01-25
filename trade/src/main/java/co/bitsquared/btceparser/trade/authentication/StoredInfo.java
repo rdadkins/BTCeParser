@@ -3,9 +3,16 @@ package co.bitsquared.btceparser.trade.authentication;
 import co.bitsquared.btceparser.trade.security.AES;
 import co.bitsquared.btceparser.trade.security.AESKeySize;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import java.io.*;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 
-public class StoredInfo {
+public final class StoredInfo {
 
     public static AESKeySize KEY_SIZE = AESKeySize.SIZE_128;
 
@@ -13,9 +20,11 @@ public class StoredInfo {
      * Reads an Authenticator from a file and a password.
      * @param file the associated file with the encrypted Key / Secret.
      * @param password the password used to encrypt the file's content.
+     * @throws IOException if there is a problem reading the input file.
+     * @throws BadPaddingException
      * @return an Authenticator from the file, null if there is an error.
      */
-    public static Authenticator read(File file, String password) {
+    public static Authenticator read(File file, String password) throws IOException, BadPaddingException, InvalidKeyException, NoSuchAlgorithmException, IllegalBlockSizeException, NoSuchPaddingException, InvalidAlgorithmParameterException, InvalidKeySpecException {
         FileInputStream input = null;
         try {
             input = new FileInputStream(file);
@@ -26,16 +35,16 @@ public class StoredInfo {
             return null;
         }
         BufferedReader reader = new BufferedReader(new InputStreamReader(input));
+        String decryptedKey = AES.decrypt(readLine(reader), password, KEY_SIZE);
+        String decryptedSecret = AES.decrypt(readLine(reader), password, KEY_SIZE);
+        String nonce = readLine(reader);
+        Authenticator authenticator = new Authenticator(decryptedKey, decryptedSecret, Integer.valueOf(nonce));
         try {
-            String decryptedKey = AES.decrypt(readLine(reader), password, KEY_SIZE);
-            String decryptedSecret = AES.decrypt(readLine(reader), password, KEY_SIZE);
-            String nonce = readLine(reader);
             reader.close();
-            return new Authenticator(decryptedKey, decryptedSecret, Integer.valueOf(nonce));
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return null;
+        return authenticator;
     }
 
     private static String readLine(BufferedReader reader) throws IOException {
@@ -49,7 +58,7 @@ public class StoredInfo {
      * @param authenticator the authenticator with the Key / Secret.
      * @param password the password used to encrypt the information.
      */
-    public static void write(File file, Authenticator authenticator, String password) {
+    public static void write(File file, Authenticator authenticator, String password) throws NoSuchPaddingException, UnsupportedEncodingException, InvalidKeyException, NoSuchAlgorithmException, IllegalBlockSizeException, BadPaddingException, InvalidAlgorithmParameterException, InvalidKeySpecException {
         FileOutputStream output = null;
         try {
             output = new FileOutputStream(file);

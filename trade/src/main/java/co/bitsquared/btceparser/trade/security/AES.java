@@ -28,54 +28,57 @@ public abstract class AES {
      * Encrypt the data with the password provided.
      * @param data the plain text data to encrypt.
      * @param password the password to encrypt the data with.
+     * @throws NoSuchAlgorithmException thrown when the algorithm does not exist.
+     * @throws InvalidKeySpecException thrown when the supplied KeySpec does not work.
+     * @throws NoSuchPaddingException thrown when the padding method does not exist.
+     * @throws InvalidAlgorithmParameterException thrown when the version of Java does not contain the algorithm being used.
+     * @throws InvalidKeyException thrown when the SecretKey is of invalid length.
+     * @throws UnsupportedEncodingException thrown when the char set does not exist in this version of Java.
+     * @throws BadPaddingException thrown when there is improper padding
+     * @throws IllegalBlockSizeException thrown when the input being decrypted is not a multiple of the block size.
      * @return a multi-level formatted string that holds pieces together of encrypted text. Returns null if there is an error.
      */
     @Nullable
-    public static String encrypt(String data, String password, AESKeySize keySize) {
-        try {
-            SecretKeyFactory keyFactory = SecretKeyFactory.getInstance(KEY_FACTORY_METHOD);
-            SecureRandom random = new SecureRandom();
-            byte[] salt = getSalt(random);
-            PBEKeySpec keySpec = new PBEKeySpec(password.toCharArray(), salt, ITERATION_COUNT, keySize.getKeySize());
-            byte[] keyBytes = keyFactory.generateSecret(keySpec).getEncoded();
-            SecretKeySpec secretKeySpec = new SecretKeySpec(keyBytes, ENCRYPTION_METHOD);
-            Cipher cipher = Cipher.getInstance(CIPHER_METHOD);
-            byte[] ivBytes = new byte[cipher.getBlockSize()];
-            random.nextBytes(ivBytes);
-            IvParameterSpec ivSpec = new IvParameterSpec(ivBytes);
-            cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec, ivSpec);
-            byte[] encryptedText = cipher.doFinal(data.getBytes(CHAR_SET));
-            return Base64.encodeBase64String(salt) + SPLIT + Base64.encodeBase64String(ivBytes) + SPLIT + Base64.encodeBase64String(encryptedText);
-        } catch (NoSuchAlgorithmException | InvalidKeySpecException | NoSuchPaddingException | InvalidAlgorithmParameterException |
-                InvalidKeyException | UnsupportedEncodingException | BadPaddingException | IllegalBlockSizeException e) {
-            e.printStackTrace();
-        }
-        return null;
+    public static String encrypt(String data, String password, AESKeySize keySize) throws NoSuchAlgorithmException, InvalidKeySpecException, NoSuchPaddingException, InvalidAlgorithmParameterException, InvalidKeyException, BadPaddingException, UnsupportedEncodingException, IllegalBlockSizeException {
+        SecretKeyFactory keyFactory = SecretKeyFactory.getInstance(KEY_FACTORY_METHOD);
+        SecureRandom random = new SecureRandom();
+        byte[] salt = getSalt(random);
+        PBEKeySpec keySpec = new PBEKeySpec(password.toCharArray(), salt, ITERATION_COUNT, keySize.getKeySize());
+        byte[] keyBytes = keyFactory.generateSecret(keySpec).getEncoded();
+        SecretKeySpec secretKeySpec = new SecretKeySpec(keyBytes, ENCRYPTION_METHOD);
+        Cipher cipher = Cipher.getInstance(CIPHER_METHOD);
+        byte[] ivBytes = new byte[cipher.getBlockSize()];
+        random.nextBytes(ivBytes);
+        IvParameterSpec ivSpec = new IvParameterSpec(ivBytes);
+        cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec, ivSpec);
+        byte[] encryptedText = cipher.doFinal(data.getBytes(CHAR_SET));
+        return Base64.encodeBase64String(salt) + SPLIT + Base64.encodeBase64String(ivBytes) + SPLIT + Base64.encodeBase64String(encryptedText);
     }
 
     /**
      * Decrypt the data with the password provided.
      * @param data the formatted string from encrypt().
      * @param password the password to encrypt the data with.
+     * @throws BadPaddingException this is typically thrown when the password provided isn't correct.
+     * @throws IllegalBlockSizeException thrown when the input being decrypted is not a multiple of the block size.
+     * @throws InvalidAlgorithmParameterException thrown when the version of Java does not contain the algorithm being used.
+     * @throws InvalidKeyException thrown when the SecretKey is of invalid length.
+     * @throws NoSuchPaddingException thrown when the padding method does not exist.
+     * @throws NoSuchAlgorithmException thrown when the algorithm does not exist.
+     * @throws InvalidKeySpecException thrown when the supplied KeySpec is wrong.
      * @return the decrypted text. Returns null if there is an error.
      */
     @Nullable
-    public static String decrypt(String data, String password, AESKeySize keySize) {
+    public static String decrypt(String data, String password, AESKeySize keySize) throws BadPaddingException, IllegalBlockSizeException, InvalidAlgorithmParameterException, InvalidKeyException, NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeySpecException {
         String[] fields = data.split(SPLIT);
         byte[] salt = Base64.decodeBase64(fields[0]);
         byte[] iv = Base64.decodeBase64(fields[1]);
         byte[] message = Base64.decodeBase64(fields[2]);
-        try {
-            SecretKeySpec secretKey = deriveKey(salt, password, keySize.getKeySize());
-            Cipher cipher = Cipher.getInstance(CIPHER_METHOD);
-            IvParameterSpec ivSpec = new IvParameterSpec(iv);
-            cipher.init(Cipher.DECRYPT_MODE, secretKey, ivSpec);
-            return new String(cipher.doFinal(message));
-        } catch (NoSuchAlgorithmException | InvalidKeySpecException | NoSuchPaddingException | InvalidAlgorithmParameterException |
-                BadPaddingException | InvalidKeyException | IllegalBlockSizeException e) {
-            e.printStackTrace();
-        }
-        return null;
+        SecretKeySpec secretKey = deriveKey(salt, password, keySize.getKeySize());
+        Cipher cipher = Cipher.getInstance(CIPHER_METHOD);
+        IvParameterSpec ivSpec = new IvParameterSpec(iv);
+        cipher.init(Cipher.DECRYPT_MODE, secretKey, ivSpec);
+        return new String(cipher.doFinal(message));
     }
 
     private static byte[] getSalt(SecureRandom random) {

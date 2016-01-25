@@ -2,15 +2,21 @@ package co.bitsquared.btceparser.trade.authentication;
 
 import org.apache.commons.codec.binary.Hex;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.Mac;
+import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.File;
+import java.io.UnsupportedEncodingException;
+import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Authenticator {
+public final class Authenticator {
 
     private static final String INSTANCE = "HmacSHA512";
     private String apiKey;
@@ -75,7 +81,7 @@ public class Authenticator {
         return line;
     }
 
-    public void writeToFile(File file, String password) {
+    public void writeToFile(File file, String password) throws NoSuchPaddingException, InvalidAlgorithmParameterException, UnsupportedEncodingException, IllegalBlockSizeException, BadPaddingException, NoSuchAlgorithmException, InvalidKeyException, InvalidKeySpecException {
         StoredInfo.write(file, this, password);
     }
 
