@@ -23,7 +23,6 @@ public class Utils {
         BasePopup popup = loader.getController();
         popup.registerListener(callback);
         popup.start(popupStage);
-        popupStage.show();
     }
 
 }
