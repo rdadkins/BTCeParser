@@ -71,4 +71,14 @@ public class AccountTrade {
         return timeStamp;
     }
 
+    public String asJSONString() {
+        return new JSONObject().append(PAIR, tradingPair.name()).
+                append(TYPE, depthType.toString()).
+                append(RATE, rate).
+                append(AMOUNT, amount).
+                append(ORDER_ID, orderID).
+                append(IS_YOUR_ORDER, isUserOrder ? 1 : 0).
+                append(TIMESTAMP, timeStamp).toString();
+    }
+
 }
