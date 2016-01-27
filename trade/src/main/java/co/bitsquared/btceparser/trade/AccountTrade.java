@@ -14,6 +14,7 @@ public class AccountTrade {
     public static final String IS_YOUR_ORDER = "is_your_order";
     public static final String TIMESTAMP = "timestamp";
     public static final String TYPE = "type";
+    public static final String TRADE_ID = "tradeID";
 
     private int tradeID;
     private TradingPair tradingPair;
@@ -23,6 +24,10 @@ public class AccountTrade {
     private long orderID;
     private boolean isUserOrder;
     private long timeStamp;
+
+    public AccountTrade(JSONObject objectWithTradeID) {
+        tradeID = objectWithTradeID.getInt(TRADE_ID);
+    }
 
     public AccountTrade(int tradeID, JSONObject object) {
         this.tradeID = tradeID;
@@ -73,6 +78,7 @@ public class AccountTrade {
 
     public String asJSONString() {
         return new JSONObject().append(PAIR, tradingPair.name()).
+                append(TRADE_ID, tradeID).
                 append(TYPE, depthType.toString()).
                 append(RATE, rate).
                 append(AMOUNT, amount).
