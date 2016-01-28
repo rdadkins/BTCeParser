@@ -21,12 +21,9 @@ public class ParameterBuilder {
     }
 
     /**
-     * @return the map of parameters.
+     * @return the map of parameters as a Map<String, String>.
      */
     public Map<String, String> build() {
-        for (Map.Entry<String, String> value: parameters.entrySet()) {
-            System.out.println(value.getKey() + ":" + value.getValue());
-        }
         return parameters;
     }
 
@@ -209,6 +206,12 @@ public class ParameterBuilder {
         return this;
     }
 
+    /**
+     * Checks to see if this ParameterBuilder contains the list of keys. This checks every key and returns the status of
+     * containing each and every key.
+     * @param keys a list of keys to check against.
+     * @return a boolean representing if each key is represented in this ParameterBuilder.
+     */
     public boolean contains(String... keys) {
         boolean containsAll = true;
         for (String key: keys) {
