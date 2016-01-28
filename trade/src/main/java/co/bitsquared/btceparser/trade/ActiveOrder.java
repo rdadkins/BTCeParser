@@ -22,7 +22,7 @@ public class ActiveOrder {
     private BaseCurrency<?> amount;
     private BaseCurrency<?> rate;
     private long timestampCreated;
-    private static final int status = 0;
+    private static final int STATUS = 0;
 
     public ActiveOrder(int orderID, JSONObject orderAsJSON) {
         this.orderID = orderID;
@@ -39,32 +39,62 @@ public class ActiveOrder {
         timestampCreated = orderAsJSON.getLong(TIMESTAMP_CREATED);
     }
 
+    /**
+     * @return the unique order ID that was assigned to this order when it was created.
+     */
     public int getOrderID() {
         return orderID;
     }
 
+    /**
+     * @return the associated TradingPair of this order.
+     */
     public TradingPair getTradingPair() {
         return tradingPair;
     }
 
+    /**
+     * @return the type of order this is.
+     */
     public DepthType getDepthType() {
         return depthType;
     }
 
+    /**
+     * Represents the amount that you are exchanging the amount for. If you are exchanging X coins for Y price, this returns X.
+     * @return a BaseCurrency that is amount of the order.
+     */
     public BaseCurrency<?> getAmount() {
         return amount;
     }
 
+    /**
+     * Represents the price that you are exchanging the amount for. If you are exchanging X coins for Y price, this returns Y.
+     * @return a BaseCurrency that is the price of the order.
+     */
     public BaseCurrency<?> getRate() {
         return rate;
     }
 
+    /**
+     * Get the timestamp of when this order was created.
+     * @return a long that represents the date that this order was created.
+     */
     public long getTimeStamp() {
         return timestampCreated;
     }
 
+    /**
+     * Deprecated API return type. Is always 0.
+     * @return 0.
+     */
     public int getStatus() {
-        return status;
+        return STATUS;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("[%d] [%s] [%s] %s @ %s", orderID, tradingPair.name(), depthType.name(), amount.asBigDecimal(), rate.asBigDecimal());
     }
 
 }
