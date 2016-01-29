@@ -8,7 +8,7 @@ import javax.crypto.Mac;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.File;
-import java.io.UnsupportedEncodingException;
+import java.io.IOException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -30,7 +30,7 @@ public final class Authenticator {
     }
 
     public Map<String,String> getHeaders(Map<String, String> parameters) {
-        Map<String, String> headers = new HashMap<String, String>();
+        Map<String, String> headers = new HashMap<>();
         headers.put("key", apiKey);
         headers.put("sign", sign(parameters));
         return headers;
@@ -81,8 +81,22 @@ public final class Authenticator {
         return line;
     }
 
-    public void writeToFile(File file, String password) throws NoSuchPaddingException, InvalidAlgorithmParameterException, UnsupportedEncodingException, IllegalBlockSizeException, BadPaddingException, NoSuchAlgorithmException, InvalidKeyException, InvalidKeySpecException {
+    /**
+     * Attempts to write this Authenticator to a file with a desired password. Exceptions will be thrown if there is a
+     * problem with the encryption method.
+     * @param file the output file
+     * @param password the password used to encrypt this data.
+     */
+    public void writeToFile(File file, String password) throws IOException, NoSuchPaddingException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException, NoSuchAlgorithmException, InvalidKeyException, InvalidKeySpecException {
         StoredInfo.write(file, this, password);
+    }
+
+    /**
+     * Attempts to write the nonce to a file without overwriting the encrypted key / secret.
+     * @param file the output file
+     */
+    public void writeNonceToFile(File file) throws IOException {
+        StoredInfo.writeNonce(file, this);
     }
 
 }
