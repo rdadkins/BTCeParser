@@ -58,27 +58,38 @@ public final class StoredInfo {
      * @param authenticator the authenticator with the Key / Secret.
      * @param password the password used to encrypt the information.
      */
-    public static void write(File file, Authenticator authenticator, String password) throws NoSuchPaddingException, UnsupportedEncodingException, InvalidKeyException, NoSuchAlgorithmException, IllegalBlockSizeException, BadPaddingException, InvalidAlgorithmParameterException, InvalidKeySpecException {
-        FileOutputStream output = null;
-        try {
-            output = new FileOutputStream(file);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        if (!file.canWrite() || output == null) {
-            return;
-        }
+    public static void write(File file, Authenticator authenticator, String password) throws IOException, NoSuchPaddingException, InvalidKeyException, NoSuchAlgorithmException, IllegalBlockSizeException, BadPaddingException, InvalidAlgorithmParameterException, InvalidKeySpecException {
+        if (!file.canWrite()) return;
+        FileOutputStream output = getOutputStream(file);
         String encryptedKey = AES.encrypt(authenticator.getKey(), password, KEY_SIZE);
         String encryptedSecret = AES.encrypt(authenticator.getSecret(), password, KEY_SIZE);
         BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(output));
-        try {
-            writeLine(writer, encryptedKey);
-            writeLine(writer, encryptedSecret);
-            writeLine(writer, authenticator.getNonce(false));
-            writer.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        writeLine(writer, encryptedKey);
+        writeLine(writer, encryptedSecret);
+        writeLine(writer, authenticator.getNonce(false));
+        writer.close();
+    }
+
+    public static void writeNonce(File file, Authenticator authenticator) throws IOException {
+        if (!file.canWrite() || !file.exists()) return;
+        FileInputStream input = getInputStream(file);
+        BufferedReader inputReader = new BufferedReader(new InputStreamReader(input));
+        String encryptedKey = readLine(inputReader);
+        String encryptedSecret = readLine(inputReader);
+        inputReader.close();
+        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file)));
+        writeLine(writer, encryptedKey);
+        writeLine(writer, encryptedSecret);
+        writeLine(writer, authenticator.getNonce(true));
+        writer.close();
+    }
+
+    private static FileInputStream getInputStream(File file) throws FileNotFoundException {
+        return new FileInputStream(file);
+    }
+
+    private static FileOutputStream getOutputStream(File file) throws FileNotFoundException {
+        return new FileOutputStream(file);
     }
 
     private static void writeLine(BufferedWriter writer, int value) throws IOException {
