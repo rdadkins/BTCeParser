@@ -159,7 +159,7 @@ public abstract class AccountRequest extends Request {
 
     protected abstract void processReturn(JSONObject returnObject);
 
-    protected abstract String[] getRequiredParams();
+    public abstract String[] getRequiredParams();
 
     public abstract UpdatingAccountRequest asUpdatingRequest();
 

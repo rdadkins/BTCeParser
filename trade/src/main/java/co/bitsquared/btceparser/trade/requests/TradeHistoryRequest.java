@@ -39,7 +39,7 @@ public class TradeHistoryRequest extends AccountRequest {
     }
 
     @Override
-    protected String[] getRequiredParams() {
+    public String[] getRequiredParams() {
         return NO_PARAMS;
     }
 

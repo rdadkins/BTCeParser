@@ -40,7 +40,7 @@ public class RedeemCouponRequest extends AccountRequest {
     }
 
     @Override
-    protected String[] getRequiredParams() {
+    public String[] getRequiredParams() {
         return PARAMS;
     }
 

@@ -39,7 +39,7 @@ public class TradeRequest extends AccountRequest {
     }
 
     @Override
-    protected String[] getRequiredParams() {
+    public String[] getRequiredParams() {
         return PARAMS;
     }
 
