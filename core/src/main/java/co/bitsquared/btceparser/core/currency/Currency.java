@@ -1,20 +1,23 @@
 package co.bitsquared.btceparser.core.currency;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 
 public final class Currency implements BaseCurrency<Currency> {
 
-    private BigDecimal value;
-    private static RoundingMode roundingMode = RoundingMode.HALF_EVEN;
-    private int decimalPlaces = 3;
+    private final static int DECIMAL_PLACES = 3;
+
+    private final BigDecimal value;
 
     public Currency(double value) {
         this(BigDecimal.valueOf(value));
     }
 
     public Currency(BigDecimal decimal) {
-        value = decimal.setScale(decimalPlaces, roundingMode);
+        this(decimal, DECIMAL_PLACES);
+    }
+
+    protected Currency(BigDecimal decimal, int decimalPlaces) {
+        value = decimal.setScale(decimalPlaces, ROUNDING_MODE);
     }
 
     public Currency add(Currency other) {
@@ -71,7 +74,7 @@ public final class Currency implements BaseCurrency<Currency> {
     }
 
     public Currency divide(BigDecimal value) {
-        return new Currency(asBigDecimal().divide(value, roundingMode));
+        return new Currency(asBigDecimal().divide(value, ROUNDING_MODE));
     }
 
     public BigDecimal asBigDecimal() {
@@ -79,8 +82,7 @@ public final class Currency implements BaseCurrency<Currency> {
     }
 
     public Currency setDecimalPlaces(int decimalPlaces) {
-        this.decimalPlaces = decimalPlaces;
-        return new Currency(asBigDecimal());
+        return new Currency(asBigDecimal(), decimalPlaces);
     }
 
     public boolean isSamePrice(BaseCurrency<?> other) {
@@ -92,18 +94,22 @@ public final class Currency implements BaseCurrency<Currency> {
     }
 
     @Override
+    public String toString() {
+        return asBigDecimal().toString();
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Currency currency = (Currency) o;
-        if (decimalPlaces != currency.decimalPlaces) return false;
         return value != null ? value.equals(currency.value) : currency.value == null;
     }
 
     @Override
     public int hashCode() {
         int result = value != null ? value.hashCode() : 0;
-        result = 31 * result + decimalPlaces;
+        result = 31 * result + DECIMAL_PLACES;
         return result;
     }
 

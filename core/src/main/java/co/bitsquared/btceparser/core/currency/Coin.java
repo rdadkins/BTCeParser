@@ -1,17 +1,16 @@
 package co.bitsquared.btceparser.core.currency;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 
 public final class Coin implements BaseCurrency<Coin> {
 
-	private BigDecimal value;
-	private static final RoundingMode roundingMode = RoundingMode.HALF_UP;
-	private static final int decimalPlaces = 8;
+	private static final int DECIMAL_PLACES = 8;
 	private static final int SATOSHIS_PER_COIN = 100000000;
 
+	private final BigDecimal value;
+
 	private Coin(BigDecimal value) {
-		this.value = value.setScale(decimalPlaces, roundingMode);
+		this.value = value.setScale(DECIMAL_PLACES, ROUNDING_MODE);
 	}
 
 	public static Coin fromSatoshis(long satoshis) {
@@ -55,7 +54,7 @@ public final class Coin implements BaseCurrency<Coin> {
 		if (other instanceof Coin) {
 			return multiply((Coin) other);
 		} else if (other instanceof Currency) {
-			return ((Currency) other.multiply(asBigDecimal())).setDecimalPlaces(decimalPlaces);
+			return (Currency) other.multiply(asBigDecimal());
 		}
 		return (BaseCurrency<?>) other.multiply(asBigDecimal());
 	}
@@ -76,13 +75,13 @@ public final class Coin implements BaseCurrency<Coin> {
 		if (other instanceof Coin) {
 			return divide(other.asBigDecimal());
 		} else if (other instanceof Currency) {
-			return new Currency(divide(other.asBigDecimal()).asBigDecimal()).setDecimalPlaces(decimalPlaces);
+			return new Currency(divide(other.asBigDecimal()).asBigDecimal(), DECIMAL_PLACES);
 		}
 		return this;
 	}
 
 	public Coin divide(BigDecimal value) {
-		return new Coin(asBigDecimal().divide(value, roundingMode));
+		return new Coin(asBigDecimal().divide(value, ROUNDING_MODE));
 	}
 
 	public BigDecimal asBigDecimal() {
@@ -100,6 +99,11 @@ public final class Coin implements BaseCurrency<Coin> {
 	public boolean isAmountPositive() {
 		return value.compareTo(BigDecimal.ZERO) == 1;
 	}
+
+    @Override
+    public String toString() {
+        return asBigDecimal().toString();
+    }
 
 	@Override
 	public boolean equals(Object o) {
