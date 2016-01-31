@@ -53,7 +53,7 @@ public class AuthenticatorStorageExample implements BaseExample {
         }
     }
 
-    private void writeToFile() throws NoSuchPaddingException, InvalidKeyException, UnsupportedEncodingException, IllegalBlockSizeException, BadPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, InvalidKeySpecException {
+    private void writeToFile() throws NoSuchPaddingException, InvalidKeyException, IOException, IllegalBlockSizeException, BadPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, InvalidKeySpecException {
         Authenticator authenticator = new Authenticator(key, secret, nonce);
         initialSign = authenticator.getHeaders(ParameterBuilder.createBuilder().build()).get("sign");
         File file = new File(fileName);
