@@ -1,12 +1,10 @@
 package co.bitsquared.btceparser.core;
 
-import co.bitsquared.btceparser.core.callbacks.CoinInfoCallback;
 import co.bitsquared.btceparser.core.currency.BaseCurrency;
 import co.bitsquared.btceparser.core.currency.Coin;
 import co.bitsquared.btceparser.core.currency.Currency;
 import co.bitsquared.btceparser.core.data.CoinInfo;
 import co.bitsquared.btceparser.core.data.Order;
-import co.bitsquared.btceparser.core.requests.CoinInfoRequest;
 
 import java.math.BigDecimal;
 
@@ -30,26 +28,6 @@ public enum TradingPair {
     BTC_CNH("btc_cnh"),
     EUR_RUR("eur_rur"),
     CNC_BTC("cnh_btc");
-
-    static {
-        new CoinInfoRequest(new CoinInfoCallback() {
-
-            public void onSuccess() {
-                System.out.println("Successful request");
-            }
-
-            public void cancelled() {}
-
-            public void error(String reason) {
-                System.err.println("Error collection coin information: " + reason);
-            }
-
-            public void onSuccess(CoinInfo coinInfo) {
-                coinInfo.getTradingPair().coinInfo = coinInfo;
-            }
-
-        }, values()).processRequest();
-    }
 
     private String pair;
     private CoinInfo coinInfo;
@@ -78,10 +56,6 @@ public enum TradingPair {
             return new Currency(1.0);
         }
         return Coin.fromDouble(1.0);
-    }
-
-    public CoinInfo getCoinInfo() {
-        return coinInfo;
     }
 
     public static TradingPair extract(String string) {
