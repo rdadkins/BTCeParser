@@ -18,4 +18,9 @@ public class Funds {
         return amount;
     }
 
+    @Override
+    public String toString() {
+        return "[" + currency + "] " + amount;
+    }
+
 }

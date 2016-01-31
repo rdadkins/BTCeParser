@@ -68,11 +68,11 @@ public class ParameterBuilder {
 
     /**
      * Used in Trade.
-     * @param type the order type - ASK / BID.
+     * @param type the order type - BUY / SELL.
      * @return the current ParameterBuilder.
      */
-    public ParameterBuilder addOrderType(DepthType type) {
-        parameters.put("type", type.name().toLowerCase());
+    public ParameterBuilder addOrderType(OrderType type) {
+        parameters.put("type", type == OrderType.BUY ? "buy" : "sell");
         return this;
     }
 
