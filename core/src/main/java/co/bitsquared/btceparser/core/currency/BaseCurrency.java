@@ -1,8 +1,11 @@
 package co.bitsquared.btceparser.core.currency;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 public interface BaseCurrency<T> {
+
+    RoundingMode ROUNDING_MODE = RoundingMode.HALF_UP;
 
     T add(T other);
 
