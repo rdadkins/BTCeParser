@@ -3,11 +3,30 @@ package co.bitsquared.btceparser.trade;
 import co.bitsquared.btceparser.core.TradingPair;
 import co.bitsquared.btceparser.core.currency.BaseCurrency;
 import co.bitsquared.btceparser.trade.authentication.Authenticator;
+import co.bitsquared.btceparser.trade.exceptions.NullParameterNotAllowed;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class ParameterBuilder {
+
+    public static final String METHOD = "method";
+    public static final String NONCE = "nonce";
+    public static final String PAIR = "pair";
+    public static final String TYPE = "type";
+    public static final String RATE = "rate";
+    public static final String AMOUNT = "amount";
+    public static final String ORDER_ID = "order_id";
+    public static final String FROM = "from";
+    public static final String COUNT = "count";
+    public static final String FROM_ID = "from_id";
+    public static final String END_ID = "end_id";
+    public static final String ORDER = "order";
+    public static final String SINCE = "since";
+    public static final String END = "end";
+    public static final String COIN_NAME = "coinName";
+    public static final String CURRENCY = "currency";
+    public static final String COUPON = "coupon";
 
     private Map<String, String> parameters;
 
@@ -32,7 +51,10 @@ public class ParameterBuilder {
      * @return the current ParameterBuilder.
      */
     public ParameterBuilder method(TAPI method) {
-        parameters.put("method", method.getMethodName());
+        if (method == null) {
+            throw new NullParameterNotAllowed(METHOD);
+        }
+        parameters.put(METHOD, method.getMethodName());
         return this;
     }
 
@@ -42,7 +64,7 @@ public class ParameterBuilder {
      * @return the current ParameterBuilder.
      */
     public ParameterBuilder nonce(int nonce) {
-        parameters.put("nonce", nonce + "");
+        parameters.put(NONCE, nonce + "");
         return this;
     }
 
@@ -61,7 +83,7 @@ public class ParameterBuilder {
      * @return the current ParameterBuilder.
      */
     public ParameterBuilder addTradingPair(TradingPair tradingPair) {
-        parameters.put("pair", tradingPair.toString());
+        parameters.put(PAIR, tradingPair.toString());
         return this;
     }
 
@@ -71,7 +93,10 @@ public class ParameterBuilder {
      * @return the current ParameterBuilder.
      */
     public ParameterBuilder addOrderType(OrderType type) {
-        parameters.put("type", type == OrderType.BUY ? "buy" : "sell");
+        if (type == null) {
+            throw new NullParameterNotAllowed(TYPE);
+        }
+        parameters.put(TYPE, type.getOrderTypeAsString());
         return this;
     }
 
@@ -81,7 +106,7 @@ public class ParameterBuilder {
      * @return the current ParameterBuilder.
      */
     public ParameterBuilder addRate(BaseCurrency<?> currency) {
-        parameters.put("rate", currency.asBigDecimal().toString());
+        parameters.put(RATE, currency.asBigDecimal().toString());
         return this;
     }
 
@@ -91,7 +116,7 @@ public class ParameterBuilder {
      * @return the current ParameterBuilder.
      */
     public ParameterBuilder addAmount(BaseCurrency<?> amount) {
-        parameters.put("amount", amount.asBigDecimal().toString());
+        parameters.put(AMOUNT, amount.asBigDecimal().toString());
         return this;
     }
 
@@ -101,7 +126,7 @@ public class ParameterBuilder {
      * @return the current ParameterBuilder.
      */
     public ParameterBuilder addOrderID(String orderID) {
-        parameters.put("order_id", orderID);
+        parameters.put(ORDER_ID, orderID);
         return this;
     }
 
@@ -111,17 +136,23 @@ public class ParameterBuilder {
      * @return the current ParameterBuilder.
      */
     public ParameterBuilder fromTrade(int fromID) {
-        parameters.put("from", fromID + "");
+        if (fromID < TAPI.DEFAULT_FROM) {
+            fromID = TAPI.DEFAULT_FROM;
+        }
+        parameters.put(FROM, fromID + "");
         return this;
     }
 
     /**
      * Used in TradeHistory.
-     * @param countID the number of trades to display. Value is optional.
+     * @param countID the number of trades to display. Value is optional. Default is 1000 (set by API).
      * @return the current ParameterBuilder.
      */
     public ParameterBuilder countTrade(int countID) {
-        parameters.put("count", countID + "");
+        if (countID < TAPI.DEFAULT_TRADE_AMOUNT) {
+            countID = TAPI.DEFAULT_TRADE_AMOUNT;
+        }
+        parameters.put(COUNT, countID + "");
         return this;
     }
 
@@ -131,7 +162,10 @@ public class ParameterBuilder {
      * @return the current ParameterBuilder.
      */
     public ParameterBuilder fromIDTrade(int fromID) {
-        parameters.put("from_id", fromID + "");
+        if (fromID < TAPI.DEFAULT_FROM_TRADE_ID) {
+            fromID = TAPI.DEFAULT_FROM_TRADE_ID;
+        }
+        parameters.put(FROM_ID, fromID + "");
         return this;
     }
 
@@ -140,18 +174,24 @@ public class ParameterBuilder {
      * @param endID the ID where the trade history ends. Value is optional.
      * @return the current ParameterBuilder.
      */
-    public ParameterBuilder endID(int endID) {
-        parameters.put("end_id", endID + "");
+    public ParameterBuilder endID(long endID) {
+        if (endID < TAPI.DEFAULT_END_TRADE_ID) {
+            endID = TAPI.DEFAULT_END_TRADE_ID;
+        }
+        parameters.put(END_ID, endID + "");
         return this;
     }
 
     /**
      * Used in TradeHistory.
-     * @param mode the sorting mode for trade history. Value is optional. Default is DESC.
+     * @param mode the sorting mode for trade history. Value is optional.
      * @return the current ParameterBuilder.
      */
     public ParameterBuilder order(OrderMode mode) {
-        parameters.put("order", mode.name());
+        if (mode == null) {
+            mode = OrderMode.DEFAULT_ORDER_MODE;
+        }
+        parameters.put(ORDER, mode.getModeAsString());
         return this;
     }
 
@@ -161,7 +201,10 @@ public class ParameterBuilder {
      * @return the current ParameterBuilder.
      */
     public ParameterBuilder since(int unixTime) {
-        parameters.put("since", unixTime + "");
+        if (unixTime < TAPI.DEFAULT_SINCE) {
+            unixTime = TAPI.DEFAULT_SINCE;
+        }
+        parameters.put(SINCE, unixTime + "");
         return this;
     }
 
@@ -171,27 +214,60 @@ public class ParameterBuilder {
      * @return the current ParameterBuilder.
      */
     public ParameterBuilder end(int unixTime) {
-        parameters.put("end", unixTime + "");
+        if (unixTime < TAPI.DEFAULT_SINCE) {
+            unixTime = TAPI.DEFAULT_END;
+        }
+        parameters.put(END, unixTime + "");
         return this;
     }
 
     /**
      * Used in WithdrawCoin.
      * @param coinName the name of the coin you want to withdraw.
+     * @deprecated 02-01-16 use coinName(Currency) instead.
      * @return the current ParameterBuilder.
      */
+    @Deprecated
     public ParameterBuilder coinName(String coinName) {
-        parameters.put("coinName", coinName);
+        parameters.put(COIN_NAME, coinName);
+        return this;
+    }
+
+    /**
+     * Used in WithdrawCoin.
+     * @param currency the currency that you want to withdraw.
+     * @return the current ParameterBuilder.
+     */
+    public ParameterBuilder coinName(Currency currency) {
+        if (currency == null) {
+            throw new NullParameterNotAllowed(COIN_NAME);
+        }
+        parameters.put(COIN_NAME, currency.asAPIString());
         return this;
     }
 
     /**
      * Used in CreateCoupon.
      * @param currency the currency you are creating a coupon for.
+     * @deprecated 02-01-16 use currency(Currency) instead.
      * @return the current ParameterBuilder.
      */
+    @Deprecated
     public ParameterBuilder currency(String currency) {
-        parameters.put("currency", currency);
+        parameters.put(CURRENCY, currency);
+        return this;
+    }
+
+    /**
+     * Used in CreateCoupon.
+     * @param currency the currency that you want to create a coupon for.
+     * @return the current ParameterBuilder.
+     */
+    public ParameterBuilder currency(Currency currency) {
+        if (currency == null) {
+            throw new NullParameterNotAllowed(CURRENCY);
+        }
+        parameters.put(CURRENCY, currency.asAPIString());
         return this;
     }
 
@@ -201,7 +277,7 @@ public class ParameterBuilder {
      * @return the current ParameterBuilder.
      */
     public ParameterBuilder coupon(String couponCode) {
-        parameters.put("coupon", couponCode);
+        parameters.put(COUPON, couponCode);
         return this;
     }
 
