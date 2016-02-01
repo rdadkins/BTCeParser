@@ -19,7 +19,7 @@
     <parent>
         <groupId>co.bitsquared.btceparser</groupId>
         <artifactId>btceparser-parent</artifactId>
-        <version>v1.1.0</version>
+        <version>v1.2.0</version>
     </parent>
 
     <artifactId>core</artifactId>
