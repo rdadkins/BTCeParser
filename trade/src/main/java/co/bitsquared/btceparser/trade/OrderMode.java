@@ -21,7 +21,7 @@ public enum OrderMode {
 
     public static final OrderMode DEFAULT_ORDER_MODE = DESC;
 
-    private String modeAsString;
+    private final String modeAsString;
 
     OrderMode(String modeAsString) {
         this.modeAsString = modeAsString;
