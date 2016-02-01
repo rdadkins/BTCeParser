@@ -21,6 +21,13 @@ public enum Currency {
     CNH,
     GBP;
 
+    /**
+     * Returns the Currency as string used in the API. Currently it is just name() but implementation may change in the future.
+     */
+    public String asAPIString() {
+        return name();
+    }
+
     @Nullable
     public static Currency toCurrency(String value) {
         for (Currency currency: values()) {
@@ -30,4 +37,5 @@ public enum Currency {
         }
         return null;
     }
+
 }
