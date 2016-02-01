@@ -11,23 +11,21 @@ import java.math.BigDecimal;
 public enum TradingPair {
 
     BTC_USD("btc_usd"),
-    LTC_USD("ltc_usd"),
-    LTC_BTC("ltc_btc"),
     BTC_RUR("btc_rur"),
-    PPC_BTC("ppc_btc"),
-    USD_RUR("usd_rur"),
-    PPC_USD("ppc_usd"),
     BTC_EUR("btc_eur"),
+    LTC_BTC("ltc_btc"),
+    LTC_USD("ltc_usd"),
+    LTC_RUR("ltc_rur"),
     LTC_EUR("ltc_eur"),
     NMC_BTC("nmc_btc"),
     NMC_USD("nmc_usd"),
-    EUR_USD("eur_usd"),
     NVC_BTC("nvc_btc"),
-    LTC_CNH("ltc_cnh"),
-    USD_CNH("usd_cnh"),
-    BTC_CNH("btc_cnh"),
+    NVC_USD("nvc_usd"),
+    USD_RUR("usd_rur"),
+    EUR_USD("eur_usd"),
     EUR_RUR("eur_rur"),
-    CNC_BTC("cnh_btc");
+    PPC_BTC("ppc_btc"),
+    PPC_USD("ppc_usd");
 
     private String pair;
     private CoinInfo coinInfo;
