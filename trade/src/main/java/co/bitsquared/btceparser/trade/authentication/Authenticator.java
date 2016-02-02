@@ -1,5 +1,6 @@
 package co.bitsquared.btceparser.trade.authentication;
 
+import co.bitsquared.btceparser.trade.callbacks.NonceLeftCallback;
 import org.apache.commons.codec.binary.Hex;
 
 import javax.crypto.BadPaddingException;
@@ -19,11 +20,13 @@ import java.util.Map;
 public final class Authenticator {
 
     private static final String INSTANCE = "HmacSHA512";
-    private String apiKey;
-    private String secret;
-    private int nonce;
+    private static final long MAX_NONCE = 4294967294L;
+    private final String apiKey;
+    private final String secret;
+    private NonceLeftCallback nonceCallback;
+    private long nonce;
 
-    public Authenticator(String apiKey, String secret, int nonce) {
+    public Authenticator(String apiKey, String secret, long nonce) {
         this.apiKey = apiKey;
         this.secret = secret;
         this.nonce = nonce;
@@ -49,8 +52,16 @@ public final class Authenticator {
      * @param increment determines whether to increment on return or not (post increment).
      * @return the new nonce.
      */
-    public int getNonce(boolean increment) {
-        return increment ? nonce++ : nonce;
+    public long getNonce(boolean increment) {
+        long tempNonce = increment ? nonce++ : nonce;
+        if (nonceCallback != null) {
+            nonceCallback.nonceRemaining(MAX_NONCE - tempNonce);
+        }
+        return tempNonce;
+    }
+
+    public void registerNonceLeftCallback(NonceLeftCallback callback) {
+        nonceCallback = callback;
     }
 
     private String sign(Map<String, String> parameters) {
