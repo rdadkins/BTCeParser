@@ -63,7 +63,7 @@ public class ParameterBuilder {
      * @param nonce the incremented nonce for this request.
      * @return the current ParameterBuilder.
      */
-    public ParameterBuilder nonce(int nonce) {
+    public ParameterBuilder nonce(long nonce) {
         parameters.put(NONCE, nonce + "");
         return this;
     }
