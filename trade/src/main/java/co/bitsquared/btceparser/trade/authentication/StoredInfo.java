@@ -66,7 +66,7 @@ public final class StoredInfo {
         BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(output));
         writeLine(writer, encryptedKey);
         writeLine(writer, encryptedSecret);
-        writeLine(writer, authenticator.getNonce(false));
+        writeLine(writer, authenticator.getNonce(false) + "");
         writer.close();
     }
 
@@ -80,7 +80,7 @@ public final class StoredInfo {
         BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file)));
         writeLine(writer, encryptedKey);
         writeLine(writer, encryptedSecret);
-        writeLine(writer, authenticator.getNonce(true));
+        writeLine(writer, authenticator.getNonce(true) + "");
         writer.close();
     }
 
@@ -90,10 +90,6 @@ public final class StoredInfo {
 
     private static FileOutputStream getOutputStream(File file) throws FileNotFoundException {
         return new FileOutputStream(file);
-    }
-
-    private static void writeLine(BufferedWriter writer, int value) throws IOException {
-        writeLine(writer, value + "");
     }
 
     private static void writeLine(BufferedWriter writer, String line) throws IOException {
