@@ -107,8 +107,28 @@ public void onSuccess(double received, double remains, int orderID, Funds[] fund
 ```
 This still follows the same notion of having to call `startUpdating()` before anything actually happens.
 
+# Currency / Coin
+
+Some parts of the project use pre-determined <a href="https://github.com/rdadkins/BTCeParser/blob/master/core/src/main/java/co/bitsquared/btceparser/core/currency/BaseCurrency.java">BaseCurrency</a> implementations. The idea behind such complex currency systems is to keep certain logic at hand when doing math operations between two different types of BaseCurrency's. As it currently stands there is Currency, which handles all fiat based currencies, and Coin, which handle coin based currencies.
+
+The following table shows how to use math operations and their outcome when performing that operation on two different BaseCurrency's.
+
+| Math Operation   | Currency A      | Currency B      | Output of A (op) B |
+|------------------|-----------------|-----------------|--------------------|
+| Sum / Difference | Currency / Coin | Currency / Coin | Currency / Coin    |
+| Product          | Currency        | Currency / Coin | Currency           |
+| Product          | Coin            | Currency / Coin | Currency / Coin    |
+| Quotient         | Currency        | Currency / Coin | Currency           |
+| Quotient         | Coin            | Currency / Coin | Coin               |
+
+Note: you can NOT take the sum / difference between Currency and Coin (and vice-versa) as the operation doesn't make sense. The first row simply states that you can take the sum / difference when they are the same type. Currency multiplied by anything will output a new Currency. Coin x Currency = Currency and Coin x Coin = Coin and so on.
+
 # Future Goals
 
 * GUI for public API and TAPI
 * Logging public data to the users disk (at will)
 * Bot implementation
+
+# Donation
+
+If you think this project is useful feel free to donate to 1BVWmKHKRRms6UMWZaQZEwDXhHnLcbMpkx.
