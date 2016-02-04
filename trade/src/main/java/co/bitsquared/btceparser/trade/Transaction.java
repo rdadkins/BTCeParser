@@ -60,4 +60,10 @@ public class Transaction {
     public long getTimeStamp() {
         return timeStamp;
     }
+
+    @Override
+    public String toString() {
+        return String.format("%s %s %s\n\t- TID: %d\n\t- Description: %s\n\t- Timestamp: %d", transactionType.name(), amount, currency.name(), transactionID, description, timeStamp);
+    }
+
 }
