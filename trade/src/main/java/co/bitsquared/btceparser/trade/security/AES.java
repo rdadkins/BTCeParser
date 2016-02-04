@@ -14,7 +14,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 
-public abstract class AES {
+public class AES {
 
     public static final String ENCRYPTION_METHOD = "AES";
     public static final String CIPHER_METHOD = "AES/CBC/PKCS5Padding";
@@ -93,9 +93,5 @@ public abstract class AES {
         byte[] keyBytes = keyFactory.generateSecret(keySpec).getEncoded();
         return new SecretKeySpec(keyBytes, ENCRYPTION_METHOD);
     }
-
-    public abstract String encrypt(String data, String password);
-
-    public abstract String decrypt(String data, String password);
 
 }
