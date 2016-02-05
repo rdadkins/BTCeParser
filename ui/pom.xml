@@ -5,7 +5,7 @@
     <parent>
         <artifactId>btceparser-parent</artifactId>
         <groupId>co.bitsquared.btceparser</groupId>
-        <version>v1.2.0</version>
+        <version>v2.0.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -15,13 +15,8 @@
     <dependencies>
         <dependency>
             <groupId>co.bitsquared.btceparser</groupId>
-            <artifactId>core</artifactId>
-            <version>v1.2.0</version>
-        </dependency>
-        <dependency>
-            <groupId>co.bitsquared.btceparser</groupId>
             <artifactId>trade</artifactId>
-            <version>v1.2.0</version>
+            <version>v2.0.0</version>
         </dependency>
     </dependencies>
 
