@@ -53,14 +53,14 @@ public enum TAPI {
      */
     public static final int DEFAULT_END = Integer.MAX_VALUE;
 
-    private String methodName;
+    private final String METHOD_NAME;
 
     TAPI(String methodName) {
-        this.methodName = methodName;
+        this.METHOD_NAME = methodName;
     }
 
     public String getMethodName() {
-        return methodName;
+        return METHOD_NAME;
     }
 
 }

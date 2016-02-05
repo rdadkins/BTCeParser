@@ -7,19 +7,19 @@ public enum TransactionType {
     CREDIT(4),
     DEBIT(5);
 
-    private int typeNumber;
+    private final int TYPE_NUMBER;
 
     TransactionType(int type) {
-        typeNumber = type;
+        TYPE_NUMBER = type;
     }
 
-    public int getTypeNumber() {
-        return typeNumber;
-    }
-
+    /**
+     * Converts an integer to a TransactionType.
+     * @param type an integer representing a TransactionType
+     */
     public static TransactionType extract(int type) {
         for (TransactionType transactionType: values()) {
-            if (transactionType.typeNumber == type) {
+            if (transactionType.TYPE_NUMBER == type) {
                 return transactionType;
             }
         }
