@@ -1,6 +1,6 @@
 package co.bitsquared.btceparser.trade.requests;
 
-import co.bitsquared.btceparser.trade.AccountTrade;
+import co.bitsquared.btceparser.trade.data.AccountTrade;
 import co.bitsquared.btceparser.trade.ParameterBuilder;
 import co.bitsquared.btceparser.trade.TAPI;
 import co.bitsquared.btceparser.trade.authentication.Authenticator;

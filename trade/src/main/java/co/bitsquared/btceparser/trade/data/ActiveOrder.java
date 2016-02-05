@@ -1,4 +1,4 @@
-package co.bitsquared.btceparser.trade;
+package co.bitsquared.btceparser.trade.data;
 
 import co.bitsquared.btceparser.core.DepthType;
 import co.bitsquared.btceparser.core.TradingPair;

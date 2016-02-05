@@ -1,11 +1,10 @@
 package co.bitsquared.btceparser.examples;
 
-import co.bitsquared.btceparser.core.DepthType;
 import co.bitsquared.btceparser.core.TradingPair;
 import co.bitsquared.btceparser.core.currency.Coin;
 import co.bitsquared.btceparser.core.currency.Currency;
-import co.bitsquared.btceparser.trade.Funds;
-import co.bitsquared.btceparser.trade.OrderType;
+import co.bitsquared.btceparser.trade.data.Funds;
+import co.bitsquared.btceparser.trade.data.OrderType;
 import co.bitsquared.btceparser.trade.ParameterBuilder;
 import co.bitsquared.btceparser.trade.authentication.Authenticator;
 import co.bitsquared.btceparser.trade.callbacks.TradeRequestCallback;

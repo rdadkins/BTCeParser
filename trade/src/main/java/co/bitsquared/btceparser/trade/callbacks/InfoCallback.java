@@ -1,6 +1,6 @@
 package co.bitsquared.btceparser.trade.callbacks;
 
-import co.bitsquared.btceparser.trade.Funds;
+import co.bitsquared.btceparser.trade.data.Funds;
 
 public interface InfoCallback extends AccountCallback {
 

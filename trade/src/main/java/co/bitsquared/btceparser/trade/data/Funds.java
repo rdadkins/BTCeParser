@@ -1,4 +1,4 @@
-package co.bitsquared.btceparser.trade;
+package co.bitsquared.btceparser.trade.data;
 
 /**
  * Funds is a data class that wraps a Currency and an amount. This is created from certain AccountRequests which is passed

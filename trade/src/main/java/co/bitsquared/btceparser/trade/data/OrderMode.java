@@ -1,4 +1,4 @@
-package co.bitsquared.btceparser.trade;
+package co.bitsquared.btceparser.trade.data;
 
 /**
  * OrderMode is a sorting mode used in ParameterBuilder when viewing TradeHistory or TransHistory. The default value is

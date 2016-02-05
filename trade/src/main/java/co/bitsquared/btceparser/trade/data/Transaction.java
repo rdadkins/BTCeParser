@@ -1,4 +1,4 @@
-package co.bitsquared.btceparser.trade;
+package co.bitsquared.btceparser.trade.data;
 
 import org.json.JSONObject;
 

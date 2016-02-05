@@ -1,4 +1,4 @@
-package co.bitsquared.btceparser.trade;
+package co.bitsquared.btceparser.trade.data;
 
 /**
  * OrderType is used when creating a TradeRequest within the ParameterBuilder supplied. Usage is straightforward.

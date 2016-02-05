@@ -1,7 +1,7 @@
 package co.bitsquared.btceparser.trade.callbacks;
 
-import co.bitsquared.btceparser.trade.Currency;
-import co.bitsquared.btceparser.trade.Funds;
+import co.bitsquared.btceparser.trade.data.Currency;
+import co.bitsquared.btceparser.trade.data.Funds;
 
 public interface RedeemCouponCallback extends AccountCallback {
 

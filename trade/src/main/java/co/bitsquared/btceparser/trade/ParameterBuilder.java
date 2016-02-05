@@ -3,6 +3,9 @@ package co.bitsquared.btceparser.trade;
 import co.bitsquared.btceparser.core.TradingPair;
 import co.bitsquared.btceparser.core.currency.BaseCurrency;
 import co.bitsquared.btceparser.trade.authentication.Authenticator;
+import co.bitsquared.btceparser.trade.data.Currency;
+import co.bitsquared.btceparser.trade.data.OrderMode;
+import co.bitsquared.btceparser.trade.data.OrderType;
 import co.bitsquared.btceparser.trade.exceptions.NullParameterNotAllowed;
 
 import java.util.HashMap;
