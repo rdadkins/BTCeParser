@@ -1,7 +1,5 @@
 package co.bitsquared.btceparser.core.data;
 
-import co.bitsquared.btceparser.core.DepthType;
-import co.bitsquared.btceparser.core.TradingPair;
 import co.bitsquared.btceparser.core.currency.BaseCurrency;
 
 import java.math.BigDecimal;
@@ -18,8 +16,8 @@ public class OrderBook {
 
     public OrderBook(TradingPair tradingPair) {
         this.tradingPair = tradingPair;
-        bidBook = new TreeSet<Order>();
-        askBook = new TreeSet<Order>();
+        bidBook = new TreeSet<>();
+        askBook = new TreeSet<>();
     }
 
     /**

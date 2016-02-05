@@ -1,7 +1,7 @@
 package co.bitsquared.btceparser.core.requests;
 
 import co.bitsquared.btceparser.core.API;
-import co.bitsquared.btceparser.core.TradingPair;
+import co.bitsquared.btceparser.core.data.TradingPair;
 import co.bitsquared.btceparser.core.callbacks.CoinTradeCallback;
 import co.bitsquared.btceparser.core.data.OrderBook;
 import co.bitsquared.btceparser.core.data.Trade;
@@ -23,7 +23,7 @@ public class CoinTradeRequest extends PublicRequest {
 
     private TradingPair tradingPair;
     private CoinTradeCallback listener;
-    private Map<String, Object> parameters = new HashMap<String, Object>();
+    private Map<String, Object> parameters = new HashMap<>();
     private int tradeLimit = API.DEFAULT_TRADE_LIMIT;
 
     public static void main(String[] args) {

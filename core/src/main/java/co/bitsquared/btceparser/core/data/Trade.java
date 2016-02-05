@@ -1,7 +1,5 @@
 package co.bitsquared.btceparser.core.data;
 
-import co.bitsquared.btceparser.core.DepthType;
-import co.bitsquared.btceparser.core.TradingPair;
 import co.bitsquared.btceparser.core.currency.BaseCurrency;
 import co.bitsquared.btceparser.core.exceptions.NoTradingPairSuppliedException;
 import co.bitsquared.btceparser.core.hash.SHA256;

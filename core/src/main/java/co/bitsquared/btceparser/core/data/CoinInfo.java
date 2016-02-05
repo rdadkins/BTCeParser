@@ -1,6 +1,5 @@
 package co.bitsquared.btceparser.core.data;
 
-import co.bitsquared.btceparser.core.TradingPair;
 import org.json.JSONObject;
 
 public class CoinInfo {

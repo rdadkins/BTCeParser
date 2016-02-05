@@ -1,7 +1,7 @@
 package co.bitsquared.btceparser.core.requests;
 
 import co.bitsquared.btceparser.core.API;
-import co.bitsquared.btceparser.core.TradingPair;
+import co.bitsquared.btceparser.core.data.TradingPair;
 import co.bitsquared.btceparser.core.callbacks.CoinDepthCallback;
 import co.bitsquared.btceparser.core.data.OrderBook;
 import co.bitsquared.btceparser.core.utils.Utils;
@@ -24,7 +24,7 @@ public class CoinDepthRequest extends PublicRequest {
         super(METHOD.getUrl(tradingPair), listener);
         this.tradingPair = tradingPair;
         this.listener = listener;
-        parameters = new HashMap<String, Object>();
+        parameters = new HashMap<>();
         setDepthLimit(depthLimit);
     }
 

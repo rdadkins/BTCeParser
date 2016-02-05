@@ -1,7 +1,7 @@
 package co.bitsquared.btceparser.core.requests;
 
 import co.bitsquared.btceparser.core.API;
-import co.bitsquared.btceparser.core.TradingPair;
+import co.bitsquared.btceparser.core.data.TradingPair;
 import co.bitsquared.btceparser.core.callbacks.CoinTickerCallback;
 import co.bitsquared.btceparser.core.data.CoinTicker;
 import co.bitsquared.btceparser.core.utils.Utils;

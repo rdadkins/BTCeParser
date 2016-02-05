@@ -1,5 +1,7 @@
 package co.bitsquared.btceparser.core;
 
+import co.bitsquared.btceparser.core.data.TradingPair;
+
 public enum API {
 
     INFO("https://btc-e.com/api/3/info"),

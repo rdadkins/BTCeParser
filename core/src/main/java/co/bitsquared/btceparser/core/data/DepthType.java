@@ -1,4 +1,4 @@
-package co.bitsquared.btceparser.core;
+package co.bitsquared.btceparser.core.data;
 
 public enum DepthType {
 

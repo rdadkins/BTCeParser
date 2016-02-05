@@ -1,14 +1,12 @@
 package co.bitsquared.btceparser.core.utils;
 
-import co.bitsquared.btceparser.core.DepthType;
-import co.bitsquared.btceparser.core.TradingPair;
+import co.bitsquared.btceparser.core.data.DepthType;
+import co.bitsquared.btceparser.core.data.TradingPair;
 import co.bitsquared.btceparser.core.data.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Set;
 
 public class Utils {
 
@@ -56,7 +54,7 @@ public class Utils {
     private static ArrayList<Order> getBook(TradingPair tradingPair, JSONObject pairObject, String type) {
         final DepthType depthType = (type.equals("asks") ? DepthType.ASK : DepthType.BID);
         JSONArray book = pairObject.getJSONArray(type);
-        ArrayList<Order> listOfOrders = new ArrayList<Order>();
+        ArrayList<Order> listOfOrders = new ArrayList<>();
         Order order;
         JSONArray orderArray;
         for (int i = 0; i < book.length(); i++) {
@@ -69,7 +67,7 @@ public class Utils {
 
     public static ArrayList<Trade> extractTrades(JSONObject body, TradingPair tradingPair) {
         JSONArray trades = body.getJSONArray(tradingPair.toString());
-        ArrayList<Trade> orders = new ArrayList<Trade>();
+        ArrayList<Trade> orders = new ArrayList<>();
         JSONObject rawTrade;
         for (int i = 0; i < trades.length(); i++) {
             rawTrade = trades.getJSONObject(i);

@@ -1,10 +1,8 @@
-package co.bitsquared.btceparser.core;
+package co.bitsquared.btceparser.core.data;
 
 import co.bitsquared.btceparser.core.currency.BaseCurrency;
 import co.bitsquared.btceparser.core.currency.Coin;
 import co.bitsquared.btceparser.core.currency.Currency;
-import co.bitsquared.btceparser.core.data.CoinInfo;
-import co.bitsquared.btceparser.core.data.Order;
 
 import java.math.BigDecimal;
 

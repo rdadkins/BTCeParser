@@ -1,6 +1,6 @@
 package co.bitsquared.btceparser.examples;
 
-import co.bitsquared.btceparser.trade.ParameterBuilder;
+import co.bitsquared.btceparser.trade.requests.ParameterBuilder;
 import co.bitsquared.btceparser.trade.authentication.Authenticator;
 import co.bitsquared.btceparser.trade.authentication.StoredInfo;
 
