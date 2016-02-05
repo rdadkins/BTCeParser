@@ -1,6 +1,6 @@
 package co.bitsquared.btceparser.examples;
 
-import co.bitsquared.btceparser.core.TradingPair;
+import co.bitsquared.btceparser.core.data.TradingPair;
 import co.bitsquared.btceparser.core.callbacks.CoinTickerCallback;
 import co.bitsquared.btceparser.core.data.CoinTicker;
 import co.bitsquared.btceparser.core.requests.CoinTickerRequest;
