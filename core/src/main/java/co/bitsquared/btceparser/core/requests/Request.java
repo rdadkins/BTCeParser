@@ -59,13 +59,20 @@ public abstract class Request implements Callback<JsonNode> {
     public final void completed(HttpResponse<JsonNode> response) {
         if (listenersExist()) {
             if (response.getStatus() == 200) {
-                listeners.forEach(BaseRequestCallback::onSuccess);
+                listeners.forEach(listener -> execute(listener::onSuccess));
             } else {
-                listeners.forEach(listener -> listener.error("Return status: " + response.getStatus()));
+                listeners.forEach(listener -> execute(() -> listener.error("Return status: " + response.getStatus())));
                 return;
             }
         }
         processResponseBody(response.getBody().getObject());
+    }
+
+    /**
+     * Execute a runnable (from lambda) task in a separate thread.
+     */
+    protected final void execute(Runnable runnable) {
+        new Thread(runnable).start();
     }
 
     public final void failed(UnirestException exception) {
