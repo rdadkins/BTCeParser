@@ -1,7 +1,7 @@
 package co.bitsquared.btceparser.trade.callbacks;
 
-import co.bitsquared.btceparser.core.TradingPair;
-import co.bitsquared.btceparser.core.DepthType;
+import co.bitsquared.btceparser.core.data.TradingPair;
+import co.bitsquared.btceparser.core.data.DepthType;
 
 public interface OrderInfoCallback extends AccountCallback {
 
