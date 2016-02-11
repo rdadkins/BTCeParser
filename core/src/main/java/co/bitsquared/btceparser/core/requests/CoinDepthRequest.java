@@ -16,14 +16,12 @@ public class CoinDepthRequest extends PublicRequest {
     private static final String LIMIT_HEADER = "limit";
 
     private TradingPair tradingPair;
-    private CoinDepthCallback listener;
     private Map<String, Object> parameters;
     private int depthLimit = API.DEFAULT_ORDER_LIMIT;
 
     public CoinDepthRequest(TradingPair tradingPair, int depthLimit, CoinDepthCallback listener) {
         super(METHOD.getUrl(tradingPair), listener);
         this.tradingPair = tradingPair;
-        this.listener = listener;
         parameters = new HashMap<>();
         setDepthLimit(depthLimit);
     }
@@ -37,16 +35,17 @@ public class CoinDepthRequest extends PublicRequest {
 
     @Override
     protected void processResponseBody(JSONObject body) {
-        if (listener != null) {
+        listeners.stream().filter(callback -> callback instanceof CoinDepthCallback).forEach(callback -> {
+            CoinDepthCallback listener = (CoinDepthCallback) callback;
             OrderBook existingOrderBook = listener.getExistingOrderBook();
             OrderBook newOrderBook = Utils.extractOrderBook(body, tradingPair);
             if (existingOrderBook == null) {
-                listener.onSuccess(newOrderBook);
+                execute(() -> listener.onSuccess(newOrderBook));
             } else {
                 existingOrderBook.combineBooks(newOrderBook);
-                listener.orderBookUpdated();
+                execute(listener::orderBookUpdated);
             }
-        }
+        });
     }
 
     @Override

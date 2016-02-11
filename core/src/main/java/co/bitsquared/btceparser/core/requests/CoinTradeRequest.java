@@ -1,10 +1,10 @@
 package co.bitsquared.btceparser.core.requests;
 
 import co.bitsquared.btceparser.core.API;
-import co.bitsquared.btceparser.core.data.TradingPair;
 import co.bitsquared.btceparser.core.callbacks.CoinTradeCallback;
 import co.bitsquared.btceparser.core.data.OrderBook;
 import co.bitsquared.btceparser.core.data.Trade;
+import co.bitsquared.btceparser.core.data.TradingPair;
 import co.bitsquared.btceparser.core.utils.Utils;
 import org.json.JSONObject;
 
@@ -22,18 +22,12 @@ public class CoinTradeRequest extends PublicRequest {
     private static final String LIMIT_HEADER = "limit";
 
     private TradingPair tradingPair;
-    private CoinTradeCallback listener;
     private Map<String, Object> parameters = new HashMap<>();
     private int tradeLimit = API.DEFAULT_TRADE_LIMIT;
-
-    public static void main(String[] args) {
-        new CoinTradeRequest(TradingPair.BTC_USD, 10, null).processRequest();
-    }
 
     public CoinTradeRequest(TradingPair tradingPair, int limit, CoinTradeCallback listener) {
         super(METHOD.getUrl(tradingPair), listener);
         this.tradingPair = tradingPair;
-        this.listener = listener;
         setTradeLimit(limit);
     }
 
@@ -46,15 +40,16 @@ public class CoinTradeRequest extends PublicRequest {
 
     @Override
     protected void processResponseBody(JSONObject body) {
-        if (listener != null) {
+        listeners.stream().filter(callback -> callback instanceof CoinTradeCallback).forEach(callback -> {
+            CoinTradeCallback listener = (CoinTradeCallback) callback;
             OrderBook existingOrderBook = listener.getExistingOrderBook();
             ArrayList<Trade> trades = Utils.extractTrades(body, tradingPair);
             if (existingOrderBook != null) {
                 existingOrderBook.addTrades(trades);
-                listener.orderBookUpdated();
+                execute(listener::orderBookUpdated);
             }
-            listener.onSuccess(trades);
-        }
+            execute(() -> listener.onSuccess(trades));
+        });
     }
 
     @Override

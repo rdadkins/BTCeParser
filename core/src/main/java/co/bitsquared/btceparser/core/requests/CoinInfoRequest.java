@@ -17,7 +17,6 @@ public class CoinInfoRequest extends PublicRequest {
 
     private static final API METHOD = API.INFO;
 
-    private CoinInfoCallback listener;
     private TradingPair[] tradingPairs;
 
     public CoinInfoRequest(CoinInfoCallback listener, TradingPair... tradingPairs) {
@@ -29,19 +28,19 @@ public class CoinInfoRequest extends PublicRequest {
         if (tradingPairs.length == 0) {
             throw new RuntimeException("You must supply at least one TradingPair to make a CoinInfoRequest");
         }
-        this.listener = listener;
         this.tradingPairs = tradingPairs;
     }
 
     @Override
     protected void processResponseBody(JSONObject body) {
-        if (listener != null) {
+        listeners.stream().filter(callback -> callback instanceof CoinInfoCallback).forEach(callback -> {
+            CoinInfoCallback listener = (CoinInfoCallback) callback;
             JSONObject pairs = body.getJSONObject("pairs");
             CoinInfo[] coinInfoPairs = Utils.extractCoinInfo(pairs, tradingPairs);
             for (CoinInfo coinInfo: coinInfoPairs) {
-                listener.onSuccess(coinInfo);
+                execute(() -> listener.onSuccess(coinInfo));
             }
-        }
+        });
     }
 
     @Override
