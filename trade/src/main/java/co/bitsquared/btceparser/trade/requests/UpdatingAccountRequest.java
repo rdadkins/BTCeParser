@@ -8,7 +8,7 @@ public class UpdatingAccountRequest extends UpdatingRequest {
     private AccountRequest accountRequest;
 
     protected UpdatingAccountRequest(AccountRequest accountRequest, int secondsUpdateInterval) {
-        super(AccountRequest.URL, accountRequest.listener, secondsUpdateInterval);
+        super(accountRequest, secondsUpdateInterval);
         this.accountRequest = accountRequest;
     }
 

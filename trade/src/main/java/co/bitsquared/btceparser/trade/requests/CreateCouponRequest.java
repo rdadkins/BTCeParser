@@ -12,15 +12,12 @@ public class CreateCouponRequest extends AccountRequest {
 
     public static final String[] PARAMS = new String[]{"currency", "amount"};
 
-    private CreateCouponCallback callback;
-
     public CreateCouponRequest(Authenticator authenticator, CreateCouponCallback callback) {
         this(authenticator, callback, DEFAULT_TIMEOUT);
     }
 
     public CreateCouponRequest(Authenticator authenticator, CreateCouponCallback callback, long timeout) {
         super(authenticator, callback, timeout);
-        this.callback = callback;
     }
 
     @Override
@@ -33,7 +30,9 @@ public class CreateCouponRequest extends AccountRequest {
         String coupon = returnObject.getString(COUPON);
         long transactionID = returnObject.getLong(TRANS_ID);
         Funds[] funds = extractFunds(returnObject.getJSONObject(FUNDS));
-        callback.onSuccess(coupon, transactionID, funds);
+        listeners.stream().filter(callback -> callback instanceof CreateCouponCallback).forEach(callback ->
+                execute(() -> ((CreateCouponCallback) callback).onSuccess(coupon, transactionID, funds))
+        );
     }
 
     @Override

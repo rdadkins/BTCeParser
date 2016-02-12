@@ -15,15 +15,12 @@ public class OrderInfoRequest extends AccountRequest {
 
     public static final String[] PARAMS = new String[]{"order_id"};
 
-    private OrderInfoCallback callback;
-
     public OrderInfoRequest(Authenticator authenticator, OrderInfoCallback callback) {
         this(authenticator, callback, DEFAULT_TIMEOUT);
     }
 
     public OrderInfoRequest(Authenticator authenticator, OrderInfoCallback callback, long timeout) {
         super(authenticator, callback, timeout);
-        this.callback = callback;
     }
 
     @Override
@@ -46,7 +43,9 @@ public class OrderInfoRequest extends AccountRequest {
         double rate = orderObject.getDouble(RATE);
         long timeStamp = orderObject.getLong(TIMESTAMP_CREATED);
         int status = orderObject.getInt(STATUS);
-        callback.onSuccess(orderID, tradingPair, type, startAmount, amount, rate, timeStamp, status);
+        listeners.stream().filter(callback -> callback instanceof OrderInfoCallback).forEach(callback ->
+                execute(() -> ((OrderInfoCallback) callback).onSuccess(orderID, tradingPair, type, startAmount, amount, rate, timeStamp, status))
+        );
     }
 
     @Override

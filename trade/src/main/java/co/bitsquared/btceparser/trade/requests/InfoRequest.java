@@ -38,7 +38,9 @@ public class InfoRequest extends AccountRequest {
         boolean canWithdraw = rights.getInt(WITHDRAW) == 1;
         int openOrders = returnObject.getInt(OPEN_ORDERS);
         long serverTime = returnObject.getLong(SERVER_TIME);
-        callback.onSuccess(accountFunds, accessInfo, canTrade, canWithdraw, TRANSACTION_COUNT, openOrders, serverTime);
+        listeners.stream().filter(callback -> callback instanceof InfoCallback).forEach(callback ->
+                execute(() -> ((InfoCallback) callback).onSuccess(accountFunds, accessInfo, canTrade, canWithdraw, TRANSACTION_COUNT, openOrders, serverTime))
+        );
     }
 
     @Override

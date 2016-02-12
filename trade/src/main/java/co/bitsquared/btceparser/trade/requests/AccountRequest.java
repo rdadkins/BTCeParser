@@ -53,7 +53,6 @@ public abstract class AccountRequest extends Request {
 
     protected Authenticator authenticator;
     protected ParameterBuilder parameterBuilder;
-    protected AccountCallback listener;
 
     public AccountRequest(Authenticator authenticator, AccountCallback listener) {
         this(authenticator, listener, DEFAULT_TIMEOUT);
@@ -62,7 +61,6 @@ public abstract class AccountRequest extends Request {
     public AccountRequest(Authenticator authenticator, AccountCallback listener, long timeout) {
         super(URL, listener, timeout);
         this.authenticator = authenticator;
-        this.listener = listener;
     }
 
     /**
@@ -108,9 +106,14 @@ public abstract class AccountRequest extends Request {
     @Override
     protected final void processResponseBody(JSONObject body) {
         if (body.getInt("success") == 0) {
-            listener.onUnsuccessfulReturn(body.getString("error"));
+            listeners.stream().filter(callback -> callback instanceof AccountCallback).forEach(callback -> {
+                AccountCallback accountCallback = (AccountCallback) callback;
+                execute(() -> accountCallback.onUnsuccessfulReturn(body.getString("error")));
+            });
         } else {
-            listener.onSuccessReturn();
+            listeners.stream().filter(callback -> callback instanceof AccountCallback).forEach(callback ->
+                    execute(((AccountCallback) callback)::onSuccessReturn)
+            );
             processReturn(body.getJSONObject("return"));
         }
     }

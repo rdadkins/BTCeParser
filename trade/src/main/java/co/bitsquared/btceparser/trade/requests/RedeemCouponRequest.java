@@ -13,15 +13,12 @@ public class RedeemCouponRequest extends AccountRequest {
 
     private static final String[] PARAMS = new String[]{"coupon"};
 
-    private RedeemCouponCallback callback;
-
     public RedeemCouponRequest(Authenticator authenticator, RedeemCouponCallback callback) {
         this(authenticator, callback, DEFAULT_TIMEOUT);
     }
 
     public RedeemCouponRequest(Authenticator authenticator, RedeemCouponCallback callback, long timeout) {
         super(authenticator, callback, timeout);
-        this.callback = callback;
     }
 
     @Override
@@ -35,7 +32,9 @@ public class RedeemCouponRequest extends AccountRequest {
         Currency couponCurrency = Currency.toCurrency(returnObject.getString(COUPON_CURRENCY).toLowerCase());
         long transactionID = returnObject.getLong(TRANS_ID);
         Funds[] funds = extractFunds(returnObject.getJSONObject(FUNDS));
-        callback.onSuccess(couponAmount, couponCurrency, transactionID, funds);
+        listeners.stream().filter(callback -> callback instanceof RedeemCouponCallback).forEach(callback ->
+                execute(() -> ((RedeemCouponCallback) callback).onSuccess(couponAmount, couponCurrency, transactionID, funds))
+        );
     }
 
     @Override

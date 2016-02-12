@@ -12,15 +12,12 @@ public class CancelOrderRequest extends AccountRequest {
 
     public static final String[] PARAMS = new String[]{"order_id"};
 
-    private CancelOrderCallback callback;
-
     public CancelOrderRequest(Authenticator authenticator, CancelOrderCallback callback) {
         this(authenticator, callback, DEFAULT_TIMEOUT);
     }
 
     public CancelOrderRequest(Authenticator authenticator, CancelOrderCallback callback, long timeout) {
         super(authenticator, callback, timeout);
-        this.callback = callback;
     }
 
     @Override
@@ -32,7 +29,9 @@ public class CancelOrderRequest extends AccountRequest {
     protected void processReturn(JSONObject returnObject) {
         int orderId = returnObject.getInt(ORDER_ID);
         Funds[] funds = extractFunds(returnObject.getJSONObject(FUNDS));
-        callback.onSuccess(orderId, funds);
+        listeners.stream().filter(callback -> callback instanceof CancelOrderCallback).forEach(callback ->
+                execute(() -> ((CancelOrderCallback) callback).onSuccess(orderId, funds))
+        );
     }
 
     @Override
