@@ -57,13 +57,11 @@ public abstract class Request implements Callback<JsonNode> {
     }
 
     public final void completed(HttpResponse<JsonNode> response) {
-        if (listenersExist()) {
-            if (response.getStatus() == 200) {
-                listeners.forEach(listener -> execute(listener::onSuccess));
-            } else {
-                listeners.forEach(listener -> execute(() -> listener.error("Return status: " + response.getStatus())));
-                return;
-            }
+        if (response.getStatus() == 200) {
+            listeners.forEach(listener -> execute(listener::onSuccess));
+        } else {
+            listeners.forEach(listener -> execute(() -> listener.error("Return status: " + response.getStatus())));
+            return;
         }
         processResponseBody(response.getBody().getObject());
     }
