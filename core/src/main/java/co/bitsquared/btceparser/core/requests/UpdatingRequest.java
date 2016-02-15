@@ -18,10 +18,12 @@ public abstract class UpdatingRequest extends Request {
 
     protected UpdatingRequest(Request request, int secondsUpdateInterval) {
         super(request.url, request.listeners, secondsUpdateInterval);
+        updateMilliSeconds(secondsUpdateInterval);
     }
 
     protected UpdatingRequest(String url, ArrayList<BaseRequestCallback> callbacks, int secondsUpdateInterval) {
         super(url, callbacks, secondsUpdateInterval);
+        updateMilliSeconds(secondsUpdateInterval);
     }
 
     public UpdatingRequest(String url, BaseRequestCallback callback, int secondsUpdateInterval, long timeout) {
