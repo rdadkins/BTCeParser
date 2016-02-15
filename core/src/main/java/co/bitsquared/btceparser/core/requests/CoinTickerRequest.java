@@ -22,7 +22,7 @@ public class CoinTickerRequest extends PublicRequest {
 
     @Override
     protected void processResponseBody(JSONObject body) {
-        listeners.stream().filter(callback -> callback instanceof CoinTickerRequest).forEach(callback -> {
+        listeners.stream().filter(callback -> callback instanceof CoinTickerCallback).forEach(callback -> {
             CoinTickerCallback listener = (CoinTickerCallback) callback;
             CoinTicker ticker = Utils.extractCoinTicker(body, tradingPair);
             execute(() -> listener.onSuccess(ticker));
