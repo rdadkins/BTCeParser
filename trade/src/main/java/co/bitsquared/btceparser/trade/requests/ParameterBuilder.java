@@ -106,7 +106,7 @@ public class ParameterBuilder {
 
     /**
      * Used in Trade.
-     * @param currency the rate that you are buying / selling at.
+     * @param currency the rate that is being bought / sold at.
      * @return the current ParameterBuilder.
      */
     public ParameterBuilder addRate(BaseCurrency<?> currency) {
@@ -115,12 +115,32 @@ public class ParameterBuilder {
     }
 
     /**
-     * Used in Trade, WithdrawCoin and CreateCoupon
-     * @param amount the amount that you are buying / selling / withdrawing.
+     * Used in Trade.
+     * @param rate the rate that is being bought / sold at.
+     * @return the current ParameterBuilder
+     */
+    public ParameterBuilder addRate(double rate) {
+        parameters.put(RATE, String.valueOf(rate));
+        return this;
+    }
+
+    /**
+     * Used in Trade, WithdrawCoin, and CreateCoupon
+     * @param amount the amount that is being bought / sold / withdrawn.
      * @return the current ParameterBuilder.
      */
     public ParameterBuilder addAmount(BaseCurrency<?> amount) {
         parameters.put(AMOUNT, amount.asBigDecimal().toString());
+        return this;
+    }
+
+    /**
+     * Used in Trade, WithdrawCoin, and CreateCoupon
+     * @param amount the amount that is being bought / sold / withdrawn.
+     * @return the current ParameterBuilder.
+     */
+    public ParameterBuilder addAmount(double amount) {
+        parameters.put(AMOUNT, String.valueOf(amount));
         return this;
     }
 
