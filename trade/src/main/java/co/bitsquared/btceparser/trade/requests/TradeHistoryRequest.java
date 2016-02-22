@@ -10,15 +10,12 @@ public class TradeHistoryRequest extends AccountRequest {
 
     public static final TAPI METHOD = TAPI.TRADE_HISTORY;
 
-    private TradeHistoryCallback callback;
-
     public TradeHistoryRequest(Authenticator authenticator, TradeHistoryCallback callback) {
         this(authenticator, callback, DEFAULT_TIMEOUT);
     }
 
     public TradeHistoryRequest(Authenticator authenticator, TradeHistoryCallback callback, long timeout) {
         super(authenticator, callback, timeout);
-        this.callback = callback;
     }
 
     @Override
@@ -34,7 +31,9 @@ public class TradeHistoryRequest extends AccountRequest {
             int transactionID = Integer.valueOf(object.toString());
             accountTrades[position++] = new AccountTrade(transactionID, returnObject.getJSONObject(transactionID + ""));
         }
-        callback.onSuccess(accountTrades);
+        listeners.stream().filter(callback -> callback instanceof TradeHistoryCallback).forEach(callback ->
+                execute(() -> ((TradeHistoryCallback) callback).onSuccess(accountTrades))
+        );
     }
 
     @Override

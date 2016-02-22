@@ -9,6 +9,7 @@ import com.mashape.unirest.http.exceptions.UnirestException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.concurrent.Future;
 
 public abstract class Request implements Callback<JsonNode> {
@@ -16,7 +17,7 @@ public abstract class Request implements Callback<JsonNode> {
     public static final int DEFAULT_TIMEOUT = 10000;
 
     protected Future<HttpResponse<JsonNode>> task;
-    protected BaseRequestCallback listener;
+    protected ArrayList<BaseRequestCallback> listeners;
     protected final String url;
 
     public Request(String url, BaseRequestCallback listener) {
@@ -26,7 +27,14 @@ public abstract class Request implements Callback<JsonNode> {
     public Request(String url, BaseRequestCallback listener, long timeout) {
         Unirest.setTimeouts(timeout, timeout);
         this.url = url;
-        this.listener = listener;
+        listeners = new ArrayList<>();
+        listeners.add(listener);
+    }
+
+    protected Request(String url, ArrayList<BaseRequestCallback> listeners, long timeout) {
+        Unirest.setTimeouts(timeout, timeout);
+        this.url = url;
+        this.listeners = listeners;
     }
 
     public final boolean isDone() {
@@ -49,27 +57,40 @@ public abstract class Request implements Callback<JsonNode> {
     }
 
     public final void completed(HttpResponse<JsonNode> response) {
-        if (listener != null) {
-            if (response.getStatus() == 200) {
-                listener.onSuccess();
-            } else {
-                listener.error("Return status: " + response.getStatus());
-                return;
-            }
+        if (response.getStatus() == 200) {
+            listeners.forEach(listener -> execute(listener::onSuccess));
+        } else {
+            listeners.forEach(listener -> execute(() -> listener.error("Return status: " + response.getStatus())));
+            return;
         }
         processResponseBody(response.getBody().getObject());
     }
 
+    /**
+     * Execute a runnable (from lambda) task in a separate thread.
+     */
+    protected final void execute(Runnable runnable) {
+        new Thread(runnable).start();
+    }
+
     public final void failed(UnirestException exception) {
-        if (listener != null) {
-            listener.error(exception.getMessage());
+        if (listenersExist()) {
+            listeners.forEach(listener -> listener.error(exception.getMessage()));
         }
     }
 
     public final void cancelled() {
-        if (listener != null) {
-            listener.cancelled();
+        if (listenersExist()) {
+            listeners.forEach(BaseRequestCallback::cancelled);
         }
+    }
+
+    protected final boolean listenersExist() {
+        return listeners.size() > 0;
+    }
+
+    public final void registerBaseRequestCallback(BaseRequestCallback callback) {
+        listeners.add(callback);
     }
 
     public abstract void processRequest();

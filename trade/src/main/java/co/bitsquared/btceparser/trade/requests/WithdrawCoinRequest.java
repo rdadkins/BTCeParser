@@ -12,15 +12,12 @@ public class WithdrawCoinRequest extends AccountRequest {
 
     public static final String[] PARAMS = new String[]{"coinName", "amount", "address"};
 
-    private WithdrawCoinCallback callback;
-
     public WithdrawCoinRequest(Authenticator authenticator, WithdrawCoinCallback callback) {
         this(authenticator, callback, DEFAULT_TIMEOUT);
     }
 
     public WithdrawCoinRequest(Authenticator authenticator, WithdrawCoinCallback callback, long timeout) {
         super(authenticator, callback, timeout);
-        this.callback = callback;
     }
 
     @Override
@@ -33,7 +30,9 @@ public class WithdrawCoinRequest extends AccountRequest {
         int transactionID = returnObject.getInt(T_ID);
         double amountSent = returnObject.getDouble(AMOUNT_SENT);
         Funds[] funds = extractFunds(returnObject.getJSONObject(FUNDS));
-        callback.onSuccess(transactionID, amountSent, funds);
+        listeners.stream().filter(callback -> callback instanceof WithdrawCoinCallback).forEach(callback ->
+                execute(() -> ((WithdrawCoinCallback) callback).onSuccess(transactionID, amountSent, funds))
+        );
     }
 
     @Override

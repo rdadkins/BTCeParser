@@ -10,15 +10,12 @@ public class ActiveOrderRequest extends AccountRequest {
 
     public static final TAPI METHOD = TAPI.ACTIVE_ORDERS;
 
-    private ActiveOrderCallback callback;
-
     public ActiveOrderRequest(Authenticator authenticator, ActiveOrderCallback callback) {
         this(authenticator, callback, DEFAULT_TIMEOUT);
     }
 
     public ActiveOrderRequest(Authenticator authenticator, ActiveOrderCallback callback, long timeout) {
         super(authenticator, callback, timeout);
-        this.callback = callback;
     }
 
     @Override
@@ -34,7 +31,9 @@ public class ActiveOrderRequest extends AccountRequest {
             int orderID = Integer.valueOf(object.toString());
             openOrders[position++] = new ActiveOrder(orderID, returnObject.getJSONObject(orderID + ""));
         }
-        callback.onSuccess(openOrders);
+        listeners.stream().filter(callback -> callback instanceof ActiveOrderCallback).forEach(callback ->
+                execute(() -> ((ActiveOrderCallback) callback).onSuccess(openOrders))
+        );
     }
 
     @Override

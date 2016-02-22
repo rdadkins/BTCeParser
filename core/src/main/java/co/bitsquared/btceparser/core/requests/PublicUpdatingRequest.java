@@ -12,7 +12,7 @@ public class PublicUpdatingRequest extends UpdatingRequest {
     private PublicRequest publicRequest;
 
     protected PublicUpdatingRequest(PublicRequest publicRequest, int secondsUpdateInterval) {
-        super(publicRequest.url, publicRequest.listener, secondsUpdateInterval);
+        super(publicRequest.url, publicRequest.listeners, secondsUpdateInterval);
         this.publicRequest = publicRequest;
     }
 

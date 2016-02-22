@@ -12,15 +12,12 @@ public class TradeRequest extends AccountRequest {
 
     private static final String[] PARAMS = new String[]{"pair", "type", "rate", "amount"};
 
-    private TradeRequestCallback callback;
-
     public TradeRequest(Authenticator authenticator, TradeRequestCallback callback) {
         this(authenticator, callback, DEFAULT_TIMEOUT);
     }
 
     public TradeRequest(Authenticator authenticator, TradeRequestCallback callback, long timeout) {
         super(authenticator, callback, timeout);
-        this.callback = callback;
     }
 
     @Override
@@ -34,7 +31,9 @@ public class TradeRequest extends AccountRequest {
         double remains = returnObject.getDouble(REMAINS);
         int orderID = returnObject.getInt(ORDER_ID);
         Funds[] funds = extractFunds(returnObject.getJSONObject(FUNDS));
-        callback.onSuccess(received, remains, orderID, funds);
+        listeners.stream().filter(callback -> callback instanceof TradeRequest).forEach(callback ->
+                execute(() -> ((TradeRequestCallback) callback).onSuccess(received, remains, orderID, funds))
+        );
     }
 
     @Override

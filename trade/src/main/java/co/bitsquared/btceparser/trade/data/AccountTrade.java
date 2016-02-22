@@ -1,7 +1,7 @@
 package co.bitsquared.btceparser.trade.data;
 
-import co.bitsquared.btceparser.core.TradingPair;
-import co.bitsquared.btceparser.core.DepthType;
+import co.bitsquared.btceparser.core.data.TradingPair;
+import co.bitsquared.btceparser.core.data.DepthType;
 import org.json.JSONObject;
 
 public class AccountTrade {

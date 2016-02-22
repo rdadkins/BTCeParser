@@ -13,21 +13,20 @@ public class CoinTickerRequest extends PublicRequest {
 
     private static final API METHOD = API.TICKER;
 
-    private CoinTickerCallback listener;
     private final TradingPair tradingPair;
 
     public CoinTickerRequest(TradingPair tradingPair, CoinTickerCallback listener) {
         super(METHOD.getUrl(tradingPair), listener);
-        this.listener = listener;
         this.tradingPair = tradingPair;
     }
 
     @Override
     protected void processResponseBody(JSONObject body) {
-        if (listener != null) {
+        listeners.stream().filter(callback -> callback instanceof CoinTickerCallback).forEach(callback -> {
+            CoinTickerCallback listener = (CoinTickerCallback) callback;
             CoinTicker ticker = Utils.extractCoinTicker(body, tradingPair);
-            listener.onSuccess(ticker);
-        }
+            execute(() -> listener.onSuccess(ticker));
+        });
     }
 
     @Override
