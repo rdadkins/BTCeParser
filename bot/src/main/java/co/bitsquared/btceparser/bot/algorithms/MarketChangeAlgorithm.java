@@ -29,7 +29,6 @@ public class MarketChangeAlgorithm extends TradeAlgorithm implements CoinTickerC
     }
 
     public void onSuccess(CoinTicker coinTicker) {
-        System.out.println(coinTicker.toString());
         if (action.conditionsAreMet(coinTicker)) {
             executeTrade();
         }
