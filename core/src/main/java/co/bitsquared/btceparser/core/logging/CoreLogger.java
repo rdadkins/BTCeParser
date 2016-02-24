@@ -9,14 +9,14 @@ public class CoreLogger extends AbstractLogger {
     private static final String FILE_NAME = "log.txt";
     private static boolean includeDate = false;
 
-    private CoreLogger(String fileName, boolean includeDate) throws IOException {
-        super(fileName, includeDate);
+    private CoreLogger() throws IOException {
+        super(FILE_NAME, includeDate);
     }
 
     public static CoreLogger getInstance() {
         if (ourInstance == null) {
             try {
-                ourInstance = new CoreLogger(FILE_NAME, includeDate);
+                ourInstance = new CoreLogger();
             } catch (IOException e) {
                 e.printStackTrace();
             }

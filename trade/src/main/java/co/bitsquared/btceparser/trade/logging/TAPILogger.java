@@ -2,15 +2,33 @@ package co.bitsquared.btceparser.trade.logging;
 
 import co.bitsquared.btceparser.core.logging.AbstractLogger;
 
-import java.io.File;
 import java.io.IOException;
 
 public class TAPILogger extends AbstractLogger {
 
-    private static final File filePath = new File("BTCeParser/BTCeAccountLogs");
+    private static TAPILogger instance;
+    private static final String SECONDARY_PATH = "tapi";
+    private static final String FILE_NAME = "log.txt";
+    private static final boolean includeDate = false;
 
-    public TAPILogger(File file) throws IOException {
-        super(filePath, file);
+    private TAPILogger() throws IOException {
+        super(FILE_NAME, includeDate);
+    }
+
+    public static TAPILogger getInstance() {
+        if (instance == null) {
+            try {
+                instance = new TAPILogger();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return instance;
+    }
+
+    @Override
+    protected String getSecondaryPath() {
+        return SECONDARY_PATH;
     }
 
 }
