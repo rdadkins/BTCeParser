@@ -1,5 +1,8 @@
 # BTCeParser
-This is an API JSON parser for <a href="https://btc-e.com">btc-e.com</a> built with Unirest.
+BTCeParser is an API wrapper for <a href="https://btc-e.com">btc-e.com</a> built with Unirest
+
+# Requirements
+* Java 8
 
 # What it does
 * Parses information about all coins currently listed on the exchange.
@@ -7,6 +10,7 @@ This is an API JSON parser for <a href="https://btc-e.com">btc-e.com</a> built w
 * Full access to the TAPI (Trade API)
 * Stores trading key + secret using AES 128 / 196 / 256.
 * Allows for automatic updating requests on a given interval.
+* Provides a base structure for automatic trading (bot).
 
 # Parsing Public Info
 All of the public methods used to parse information is stored in the <a href="https://github.com/rdadkins/BTCeParser/tree/master/core/src/main/java/co/bitsquared/btceparser/core">core</a> module. Public methods include coin information, ticker, depth, and recent trades. Each trading pair that btc-e offers is supplied in core/<a href="https://github.com/rdadkins/BTCeParser/blob/master/core/src/main/java/co/bitsquared/btceparser/core/TradingPair.java">TradingPair</a> and is used throughout core and trade modules. 
@@ -127,7 +131,7 @@ Note: you can NOT take the sum / difference between Currency and Coin (and vice-
 
 * GUI for public API and TAPI
 * Logging public data to the users disk (at will)
-* Bot implementation
+* Bot implementation (in the works)
 
 # Donation
 
