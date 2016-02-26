@@ -3,6 +3,7 @@ package co.bitsquared.btceparser.bot.algorithms;
 import co.bitsquared.btceparser.bot.actions.BaseAction;
 import co.bitsquared.btceparser.trade.authentication.Authenticator;
 import co.bitsquared.btceparser.trade.callbacks.TradeRequestCallback;
+import co.bitsquared.btceparser.trade.data.Funds;
 import co.bitsquared.btceparser.trade.requests.TradeRequest;
 
 /**
@@ -23,6 +24,14 @@ public abstract class TradeAlgorithm implements TradeRequestCallback {
 
     public final void executeTrade() {
         tradeRequest.processRequest(action.getPreOrder().asParams());
+    }
+
+    public final void registerTradeCallback(TradeRequestCallback callback) {
+        tradeRequest.registerBaseRequestCallback(callback);
+    }
+
+    public final void onSuccess(double received, double remains, int orderID, Funds[] funds) {
+
     }
 
     public final void onSuccessReturn() {

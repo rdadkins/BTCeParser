@@ -24,10 +24,6 @@ public class MarketChangeAlgorithm extends TradeAlgorithm implements CoinTickerC
         this.action = action;
     }
 
-    public void onSuccess(double received, double remains, int orderID, Funds[] funds) {
-
-    }
-
     public void onSuccess(CoinTicker coinTicker) {
         if (action.conditionsAreMet(coinTicker)) {
             executeTrade();
