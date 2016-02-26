@@ -1,6 +1,6 @@
 package co.bitsquared.btceparser.bot.conditions;
 
-import co.bitsquared.btceparser.bot.data.PriceComparison;
+import co.bitsquared.btceparser.bot.data.Comparison;
 import co.bitsquared.btceparser.core.data.CoinTicker;
 
 /**
@@ -12,20 +12,24 @@ import co.bitsquared.btceparser.core.data.CoinTicker;
 public class MarketChangeCondition extends Condition<CoinTicker> {
 
     private final double RATE;
-    private final PriceComparison COMPARISON;
+    private final Comparison COMPARISON;
 
-    public MarketChangeCondition(double rate, PriceComparison comparison) {
+    public MarketChangeCondition(double rate, Comparison comparison) {
         RATE = rate;
         COMPARISON = comparison;
     }
 
     @Override
     public boolean isValid(CoinTicker object) {
-        if (COMPARISON == PriceComparison.GREATER_THAN) {
-            return object.getLastPrice() >= RATE;
-        } else {
-            return object.getLastPrice() <= RATE;
-        }
+        return COMPARISON.compare(object.getLastPrice(), RATE);
+    }
+
+    protected Comparison getComparison() {
+        return COMPARISON;
+    }
+
+    protected double getRate() {
+        return RATE;
     }
 
 }
