@@ -1,5 +1,6 @@
 package co.bitsquared.btceparser.bot.data;
 
+import co.bitsquared.btceparser.core.data.TradingPair;
 import co.bitsquared.btceparser.trade.requests.ParameterBuilder;
 
 /**
@@ -8,11 +9,13 @@ import co.bitsquared.btceparser.trade.requests.ParameterBuilder;
  */
 public class PreOrder {
 
+    private final TradingPair tradingPair;
     private final TradeType tradeType;
     private final double rate;
     private final double amount;
 
-    public PreOrder(TradeType tradeType, double rate, double amount) {
+    public PreOrder(TradingPair tradingPair, TradeType tradeType, double rate, double amount) {
+        this.tradingPair = tradingPair;
         this.tradeType = tradeType;
         this.rate = rate;
         this.amount = amount;
@@ -21,7 +24,7 @@ public class PreOrder {
     public ParameterBuilder asParams() {
         ParameterBuilder builder = ParameterBuilder.createBuilder();
         if (tradeType != TradeType.HOLD) {
-            builder.addRate(rate).addAmount(amount).addOrderType(tradeType.toOrderType());
+            builder.addTradingPair(tradingPair).addRate(rate).addAmount(amount).addOrderType(tradeType.toOrderType());
         }
         return builder;
     }
