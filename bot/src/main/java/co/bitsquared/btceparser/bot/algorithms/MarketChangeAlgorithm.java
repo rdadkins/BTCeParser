@@ -4,7 +4,6 @@ import co.bitsquared.btceparser.bot.actions.MarketChangeAction;
 import co.bitsquared.btceparser.core.callbacks.CoinTickerCallback;
 import co.bitsquared.btceparser.core.data.CoinTicker;
 import co.bitsquared.btceparser.trade.authentication.Authenticator;
-import co.bitsquared.btceparser.trade.data.Funds;
 
 /**
  * MarketChangeAlgorithm simply waits for the price to reach a certain point to execute a PreOrder.
