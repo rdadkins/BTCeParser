@@ -17,7 +17,7 @@
     <dependencies>
         <dependency>
             <groupId>co.bitsquared.btceparser</groupId>
-            <artifactId>trade</artifactId>
+            <artifactId>bot</artifactId>
             <version>v2.1.0</version>
         </dependency>
     </dependencies>

@@ -1,4 +1,4 @@
-package co.bitsquared.btceparser.examples;
+package co.bitsquared.btceparser.examples.core;
 
 import co.bitsquared.btceparser.core.data.TradingPair;
 import co.bitsquared.btceparser.core.callbacks.CoinDepthCallback;
@@ -8,6 +8,7 @@ import co.bitsquared.btceparser.core.data.Trade;
 import co.bitsquared.btceparser.core.requests.CoinDepthRequest;
 import co.bitsquared.btceparser.core.requests.CoinTradeRequest;
 import co.bitsquared.btceparser.core.requests.PublicUpdatingRequest;
+import co.bitsquared.btceparser.examples.BaseExample;
 
 import java.util.ArrayList;
 

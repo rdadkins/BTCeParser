@@ -1,10 +1,11 @@
-package co.bitsquared.btceparser.examples;
+package co.bitsquared.btceparser.examples.core;
 
 import co.bitsquared.btceparser.core.data.TradingPair;
 import co.bitsquared.btceparser.core.callbacks.CoinTickerCallback;
 import co.bitsquared.btceparser.core.data.CoinTicker;
 import co.bitsquared.btceparser.core.requests.CoinTickerRequest;
 import co.bitsquared.btceparser.core.requests.PublicUpdatingRequest;
+import co.bitsquared.btceparser.examples.BaseExample;
 
 public class PublicUpdatingRequestExample implements BaseExample, CoinTickerCallback {
 
