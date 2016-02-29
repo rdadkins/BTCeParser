@@ -14,7 +14,6 @@
         <module>examples</module>
         <module>trade</module>
         <module>ui</module>
-        <module>utils</module>
         <module>bot</module>
     </modules>
     <dependencies>
