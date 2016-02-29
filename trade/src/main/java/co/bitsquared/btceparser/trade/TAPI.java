@@ -1,5 +1,11 @@
 package co.bitsquared.btceparser.trade;
 
+/**
+ * A list of all methods defined in the Trade API (TAPI). This also includes constants that are defined in the API
+ * documentation. Methods are tied to AccountRequests.
+ *
+ * @see co.bitsquared.btceparser.trade.requests
+ */
 public enum TAPI {
 
     GETINFO("getInfo"),
