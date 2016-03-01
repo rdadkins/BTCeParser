@@ -6,30 +6,37 @@ import co.bitsquared.btceparser.core.currency.Currency;
 
 import java.math.BigDecimal;
 
+/**
+ * Trading pairs that are defined within the API and on the site are stored here. Since some currencies are based on
+ * crypto-currencies and fiat, there are special methods to distinguish a proper Order via getOrderTemplate.
+ *
+ * @see co.bitsquared.btceparser.core.data.Order
+ */
 public enum TradingPair {
 
-    BTC_USD("btc_usd"),
-    BTC_RUR("btc_rur"),
-    BTC_EUR("btc_eur"),
-    LTC_BTC("ltc_btc"),
-    LTC_USD("ltc_usd"),
-    LTC_RUR("ltc_rur"),
-    LTC_EUR("ltc_eur"),
-    NMC_BTC("nmc_btc"),
-    NMC_USD("nmc_usd"),
-    NVC_BTC("nvc_btc"),
-    NVC_USD("nvc_usd"),
-    USD_RUR("usd_rur"),
-    EUR_USD("eur_usd"),
-    EUR_RUR("eur_rur"),
-    PPC_BTC("ppc_btc"),
-    PPC_USD("ppc_usd");
+    BTC_USD(TradableCurrency.BTC, TradableCurrency.USD),
+    BTC_RUR(TradableCurrency.BTC, TradableCurrency.RUR),
+    BTC_EUR(TradableCurrency.BTC, TradableCurrency.EUR),
+    LTC_BTC(TradableCurrency.LTC, TradableCurrency.BTC),
+    LTC_USD(TradableCurrency.LTC, TradableCurrency.USD),
+    LTC_RUR(TradableCurrency.LTC, TradableCurrency.RUR),
+    LTC_EUR(TradableCurrency.LTC, TradableCurrency.EUR),
+    NMC_BTC(TradableCurrency.NMC, TradableCurrency.BTC),
+    NMC_USD(TradableCurrency.NMC, TradableCurrency.USD),
+    NVC_BTC(TradableCurrency.NVC, TradableCurrency.BTC),
+    NVC_USD(TradableCurrency.NVC, TradableCurrency.USD),
+    USD_RUR(TradableCurrency.USD, TradableCurrency.RUR),
+    EUR_USD(TradableCurrency.EUR, TradableCurrency.USD),
+    EUR_RUR(TradableCurrency.EUR, TradableCurrency.RUR),
+    PPC_BTC(TradableCurrency.PPC, TradableCurrency.BTC),
+    PPC_USD(TradableCurrency.PPC, TradableCurrency.USD);
 
-    private String pair;
-    private CoinInfo coinInfo;
+    private final TradableCurrency PRICE_CURRENCY;
+    private final TradableCurrency TARGET_CURRENCY;
 
-    TradingPair(String pair) {
-        this.pair = pair;
+    TradingPair(TradableCurrency priceCurrency, TradableCurrency targetCurrency) {
+        PRICE_CURRENCY = priceCurrency;
+        TARGET_CURRENCY = targetCurrency;
     }
 
     public Order getOrderTemplate(double price, double target, DepthType type) {
@@ -39,24 +46,28 @@ public enum TradingPair {
     }
 
     public BaseCurrency<?> getTargetCurrency() {
-        return getCurrencyType(0);
+        return getCurrencyType(TARGET_CURRENCY);
     }
 
     public BaseCurrency<?> getPriceCurrency() {
-        return getCurrencyType(1);
+        return getCurrencyType(PRICE_CURRENCY);
     }
 
-    private BaseCurrency<?> getCurrencyType(int index) {
-        String currencyType = pair.split("_")[index];
-        if (currencyType.equals("usd") || currencyType.equals("eur") || currencyType.equals("cnh") || currencyType.equals("rur")) {
+    private BaseCurrency<?> getCurrencyType(TradableCurrency currency) {
+        if (currency.isCryptoCurrency()) {
+            return Coin.fromDouble(1.0);
+        } else {
             return new Currency(1.0);
         }
-        return Coin.fromDouble(1.0);
     }
 
     public static TradingPair extract(String string) {
+        String[] currencies = string.split("_");
+        if (currencies.length != 2) return null;
+        TradableCurrency price = TradableCurrency.valueOf(currencies[0].toUpperCase());
+        TradableCurrency target = TradableCurrency.valueOf(currencies[1].toUpperCase());
         for (TradingPair value: values()) {
-            if (value.name().equals(string) || value.pair.equals(string)) {
+            if (value.PRICE_CURRENCY == price && value.TARGET_CURRENCY == target) {
                 return value;
             }
         }
@@ -65,7 +76,7 @@ public enum TradingPair {
 
     @Override
     public String toString() {
-        return pair;
+        return (PRICE_CURRENCY + "_" + TARGET_CURRENCY).toLowerCase();
     }
 
 }
