@@ -1,5 +1,6 @@
 package co.bitsquared.btceparser.trade.data;
 
+import co.bitsquared.btceparser.core.data.TradableCurrency;
 import org.json.JSONObject;
 
 public class Transaction {
@@ -14,7 +15,7 @@ public class Transaction {
     private int transactionID;
     private TransactionType transactionType;
     private double amount;
-    private Currency currency;
+    private TradableCurrency currency;
     private String description;
     private int status;
     private long timeStamp;
@@ -27,7 +28,7 @@ public class Transaction {
     private void extractJSON(JSONObject object) {
         transactionType = TransactionType.extract(object.getInt(TYPE));
         amount = object.getDouble(AMOUNT);
-        currency = Currency.toCurrency(object.getString(CURRENCY));
+        currency = TradableCurrency.toCurrency(object.getString(CURRENCY));
         description = object.getString(DESC);
         status = object.getInt(STATUS);
         timeStamp = object.getLong(TIMESTAMP);
@@ -45,7 +46,7 @@ public class Transaction {
         return amount;
     }
 
-    public Currency getCurrency() {
+    public TradableCurrency getCurrency() {
         return currency;
     }
 

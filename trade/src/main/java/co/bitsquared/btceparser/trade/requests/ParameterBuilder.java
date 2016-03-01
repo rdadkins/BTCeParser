@@ -1,10 +1,10 @@
 package co.bitsquared.btceparser.trade.requests;
 
+import co.bitsquared.btceparser.core.data.TradableCurrency;
 import co.bitsquared.btceparser.core.data.TradingPair;
 import co.bitsquared.btceparser.core.currency.BaseCurrency;
 import co.bitsquared.btceparser.trade.TAPI;
 import co.bitsquared.btceparser.trade.authentication.Authenticator;
-import co.bitsquared.btceparser.trade.data.Currency;
 import co.bitsquared.btceparser.trade.data.OrderMode;
 import co.bitsquared.btceparser.trade.data.OrderType;
 import co.bitsquared.btceparser.trade.exceptions.NullParameterNotAllowed;
@@ -262,7 +262,7 @@ public class ParameterBuilder {
      * @param currency the currency that you want to withdraw.
      * @return the current ParameterBuilder.
      */
-    public ParameterBuilder coinName(Currency currency) {
+    public ParameterBuilder coinName(TradableCurrency currency) {
         if (currency == null) {
             throw new NullParameterNotAllowed(COIN_NAME);
         }
@@ -287,7 +287,7 @@ public class ParameterBuilder {
      * @param currency the currency that you want to create a coupon for.
      * @return the current ParameterBuilder.
      */
-    public ParameterBuilder currency(Currency currency) {
+    public ParameterBuilder currency(TradableCurrency currency) {
         if (currency == null) {
             throw new NullParameterNotAllowed(CURRENCY);
         }

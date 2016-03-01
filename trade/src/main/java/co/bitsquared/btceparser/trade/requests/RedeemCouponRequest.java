@@ -1,10 +1,10 @@
 package co.bitsquared.btceparser.trade.requests;
 
-import co.bitsquared.btceparser.trade.data.Currency;
-import co.bitsquared.btceparser.trade.data.Funds;
+import co.bitsquared.btceparser.core.data.TradableCurrency;
 import co.bitsquared.btceparser.trade.TAPI;
 import co.bitsquared.btceparser.trade.authentication.Authenticator;
 import co.bitsquared.btceparser.trade.callbacks.RedeemCouponCallback;
+import co.bitsquared.btceparser.trade.data.Funds;
 import org.json.JSONObject;
 
 public class RedeemCouponRequest extends AccountRequest {
@@ -29,7 +29,7 @@ public class RedeemCouponRequest extends AccountRequest {
     @Override
     protected void processReturn(JSONObject returnObject) {
         double couponAmount = returnObject.getDouble(COUPON_AMOUNT);
-        Currency couponCurrency = Currency.toCurrency(returnObject.getString(COUPON_CURRENCY).toLowerCase());
+        TradableCurrency couponCurrency = TradableCurrency.toCurrency(returnObject.getString(COUPON_CURRENCY).toLowerCase());
         long transactionID = returnObject.getLong(TRANS_ID);
         Funds[] funds = extractFunds(returnObject.getJSONObject(FUNDS));
         listeners.stream().filter(callback -> callback instanceof RedeemCouponCallback).forEach(callback ->

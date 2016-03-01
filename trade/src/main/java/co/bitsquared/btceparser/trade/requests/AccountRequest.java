@@ -1,11 +1,11 @@
 package co.bitsquared.btceparser.trade.requests;
 
+import co.bitsquared.btceparser.core.data.TradableCurrency;
 import co.bitsquared.btceparser.core.requests.Request;
-import co.bitsquared.btceparser.trade.data.Currency;
-import co.bitsquared.btceparser.trade.data.Funds;
 import co.bitsquared.btceparser.trade.TAPI;
 import co.bitsquared.btceparser.trade.authentication.Authenticator;
 import co.bitsquared.btceparser.trade.callbacks.AccountCallback;
+import co.bitsquared.btceparser.trade.data.Funds;
 import co.bitsquared.btceparser.trade.exceptions.MissingParameterBuilderException;
 import co.bitsquared.btceparser.trade.exceptions.MissingParametersException;
 import com.mashape.unirest.http.JsonNode;
@@ -127,10 +127,10 @@ public abstract class AccountRequest extends Request {
      * @param funds the JSONObject which should be 'funds'.
      */
     protected final Funds[] extractFunds(JSONObject funds) {
-        Funds[] accountFunds = new Funds[Currency.values().length];
-        Currency currentCurrency;
+        Funds[] accountFunds = new Funds[TradableCurrency.values().length];
+        TradableCurrency currentCurrency;
         for (int i = 0; i < accountFunds.length; i++) {
-            currentCurrency = Currency.values()[i];
+            currentCurrency = TradableCurrency.values()[i];
             accountFunds[i] = new Funds(currentCurrency, funds.getDouble(currentCurrency.name().toLowerCase()));
         }
         return accountFunds;
