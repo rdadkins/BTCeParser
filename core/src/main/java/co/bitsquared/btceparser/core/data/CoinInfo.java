@@ -2,89 +2,95 @@ package co.bitsquared.btceparser.core.data;
 
 import org.json.JSONObject;
 
-public class CoinInfo {
+import java.util.HashMap;
+import java.util.Map;
 
-    private final TradingPair tradingPair;
+public class CoinInfo extends LoggableData {
 
-    private int decimalPlaces;
-    private double minPrice;
-    private double maxPrice;
-    private double minAmount;
-    private boolean hidden;
-    private double fee;
+    public static final String TRADING_PAIR = "trading_pair";
+    public static final String DECIMAL_PLACES = "decimal_places";
+    public static final String MIN_PRICE = "min_price";
+    public static final String MAX_PRICE = "max_price";
+    public static final String MIN_AMOUNT = "min_amount";
+    public static final String HIDDEN = "hidden";
+    public static final String FEE = "fee";
+
+    private final Map<String, Object> dataMap;
 
     public CoinInfo(TradingPair tradingPair, JSONObject data) {
-        this.tradingPair = tradingPair;
-        extractData(data);
+        dataMap = new HashMap<>();
+        dataMap.put(DECIMAL_PLACES, getInt(data, DECIMAL_PLACES));
+        dataMap.put(MIN_PRICE, getDouble(data, MIN_PRICE));
+        dataMap.put(MAX_PRICE, getDouble(data, MAX_PRICE));
+        dataMap.put(MIN_AMOUNT, getDouble(data, MIN_AMOUNT));
+        dataMap.put(HIDDEN, getInt(data, HIDDEN));
+        dataMap.put(FEE, getDouble(data, FEE));
+        dataMap.put(TRADING_PAIR, tradingPair.name());
     }
 
     /**
      * Returns the amount of decimal places allowed for trading.
      */
     public int getDecimalPlaces() {
-        return decimalPlaces;
+        return (int) dataMap.get(DECIMAL_PLACES);
     }
 
     /**
      * Returns the minimum price allowed for a valid trade.
      */
     public double getMinPrice() {
-        return minPrice;
+        return (double) dataMap.get(MIN_PRICE);
     }
 
     /**
      * Returns the maximum price allowed for a valid trade.
      */
     public double getMaxPrice() {
-        return maxPrice;
+        return (double) dataMap.get(MAX_PRICE);
     }
 
     /**
      * Returns the minimum amount allowed for a valid trade.
      */
     public double getMinAmount() {
-        return minAmount;
+        return (double) dataMap.get(MIN_AMOUNT);
     }
 
     /**
      * Returns the fee associated with this TradingPair
      */
     public double getFee() {
-        return fee;
+        return (double) dataMap.get(FEE);
     }
 
     /**
      * Determines whether this pair is hidden from the public.
      */
     public boolean isHidden() {
-        return hidden;
+        return (int) dataMap.get(HIDDEN) == 1;
     }
 
     /**
      * Returns the TradingPair associated with this information
      */
     public TradingPair getTradingPair() {
-        return tradingPair;
+        return TradingPair.extract((String) dataMap.get(TRADING_PAIR));
+    }
+
+    @Override
+    public Map<String, Object> getDataAsMap() {
+        return dataMap;
     }
 
     @Override
     public String toString() {
-        return "[" + tradingPair.name() + "]\n" +
-                "|-[Decimal Places: " + decimalPlaces + "]\n" +
-                "|-[Minimum Price: " + minPrice + "]\n" +
-                "|-[Maximum Price: " + maxPrice + "]\n" +
-                "|-[Minimum Amount: " + minAmount + "]\n" +
-                "|-[Fee: " + fee + "]\n" +
-                "|-[Hidden: " + hidden + "]";
-    }
-
-    private void extractData(JSONObject object) {
-        decimalPlaces = getInt(object, "decimal_places");
-        minPrice = getDouble(object, "min_price");
-        maxPrice = getDouble(object, "max_price");
-        minAmount = getDouble(object, "min_amount");
-        hidden = getInt(object, "hidden") == 1;
-        fee = getDouble(object, "fee");
+        return "[" + getTradingPair().name() + "]\n" +
+                "|-[Decimal Places: " + getDecimalPlaces() + "]\n" +
+                "|-[Minimum Price: " + getMinPrice() + "]\n" +
+                "|-[Maximum Price: " + getMaxPrice() + "]\n" +
+                "|-[Minimum Amount: " + getMinAmount() + "]\n" +
+                "|-[Fee: " + getFee() + "]\n" +
+                "|-[Hidden: " + isHidden() + "]";
     }
 
     private int getInt(JSONObject pair, String key) {
