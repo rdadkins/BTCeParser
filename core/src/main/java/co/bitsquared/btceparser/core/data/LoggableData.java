@@ -20,4 +20,12 @@ public abstract class LoggableData {
 
     public abstract Map<String, Object> getDataAsMap();
 
+    protected final int getInt(JSONObject pair, String key) {
+        return pair.getInt(key);
+    }
+
+    protected final double getDouble(JSONObject pairs, String key) {
+        return pairs.getDouble(key);
+    }
+
 }

@@ -2,81 +2,88 @@ package co.bitsquared.btceparser.core.data;
 
 import org.json.JSONObject;
 
-public class CoinTicker {
+import java.util.HashMap;
+import java.util.Map;
 
-    private final TradingPair tradingPair;
-    private double highPrice;
-    private double lowPrice;
-    private double averagePrice;
-    private double lastPrice;
-    private double volume;
-    private double buyPrice;
-    private double sellPrice;
-    private int lastUpdated;
+public class CoinTicker extends LoggableData {
+
+    public static final String HIGH_KEY = "high";
+    public static final String LOW_KEY = "low";
+    public static final String AVERAGE_KEY = "avg";
+    public static final String LAST_KEY = "last";
+    public static final String VOLUME_KEY = "vol";
+    public static final String BUY_KEY = "buy";
+    public static final String SELL_KEY = "sell";
+    public static final String UPDATED_KEY = "updated";
+    private final TradingPair TRADING_PAIR;
+
+    private HashMap<String, Object> dataMap;
 
     public CoinTicker(TradingPair tradingPair, JSONObject object) {
-        this.tradingPair = tradingPair;
-        extractData(object);
+        TRADING_PAIR = tradingPair;
+        dataMap = new HashMap<>();
+        dataMap.put(HIGH_KEY, getDouble(object, HIGH_KEY));
+        dataMap.put(LOW_KEY, getDouble(object, LOW_KEY));
+        dataMap.put(AVERAGE_KEY, getDouble(object, AVERAGE_KEY));
+        dataMap.put(LAST_KEY, getDouble(object, LAST_KEY));
+        dataMap.put(VOLUME_KEY, getDouble(object, VOLUME_KEY));
+        dataMap.put(BUY_KEY, getDouble(object, BUY_KEY));
+        dataMap.put(SELL_KEY, getDouble(object, SELL_KEY));
+        dataMap.put(UPDATED_KEY, getInt(object, UPDATED_KEY));
     }
 
     public TradingPair getTradingPair() {
-        return tradingPair;
+        return TRADING_PAIR;
     }
 
     public double getHighPrice() {
-        return highPrice;
+        return (double) dataMap.get(HIGH_KEY);
     }
 
     public double getLowPrice() {
-        return lowPrice;
+        return (double) dataMap.get(LOW_KEY);
     }
 
     public double getAveragePrice() {
-        return averagePrice;
+        return (double) dataMap.get(AVERAGE_KEY);
     }
 
     public double getLastPrice() {
-        return lastPrice;
+        return (double) dataMap.get(LAST_KEY);
     }
 
     public double getVolume() {
-        return volume;
+        return (double) dataMap.get(VOLUME_KEY);
     }
 
     public double getBuyPrice() {
-        return buyPrice;
+        return (double) dataMap.get(BUY_KEY);
     }
 
     public double getSellPrice() {
-        return sellPrice;
+        return (double) dataMap.get(SELL_KEY);
     }
 
     public int getLastUpdatedTime() {
-        return lastUpdated;
+        return (int) dataMap.get(UPDATED_KEY);
+    }
+
+    @Override
+    public Map<String, Object> getDataAsMap() {
+        return dataMap;
     }
 
     @Override
     public String toString() {
-        return "[" + tradingPair.name() +"]\n" +
-                "|-[High: " + highPrice +"]\n" +
-                "|-[Low: " + lowPrice + "]\n" +
-                "|-[Average: " + averagePrice + "]\n" +
-                "|-[Last: " + lastPrice + "]\n" +
-                "|-[Volume: " + volume + "]\n" +
-                "|-[Buy: " + buyPrice + "]\n" +
-                "|-[Sell: " + sellPrice + "]\n" +
-                "|-[Last Updated: " + lastUpdated + "]";
-    }
-
-    private void extractData(JSONObject object) {
-        highPrice = object.getDouble("high");
-        lowPrice = object.getDouble("low");
-        averagePrice = object.getDouble("avg");
-        lastPrice = object.getDouble("last");
-        volume = object.getDouble("vol");
-        buyPrice = object.getDouble("buy");
-        sellPrice = object.getDouble("sell");
-        lastUpdated = object.getInt("updated");
+        return "[" + getTradingPair().name() +"]\n" +
+                "|-[High: " + getHighPrice() +"]\n" +
+                "|-[Low: " + getLowPrice() + "]\n" +
+                "|-[Average: " + getAveragePrice() + "]\n" +
+                "|-[Last: " + getLastPrice() + "]\n" +
+                "|-[Volume: " + getVolume() + "]\n" +
+                "|-[Buy: " + getBuyPrice() + "]\n" +
+                "|-[Sell: " + getSellPrice() + "]\n" +
+                "|-[Last Updated: " + getLastUpdatedTime() + "]";
     }
 
 }

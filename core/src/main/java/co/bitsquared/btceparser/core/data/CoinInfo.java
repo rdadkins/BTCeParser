@@ -7,7 +7,7 @@ import java.util.Map;
 
 public class CoinInfo extends LoggableData {
 
-    public static final String TRADING_PAIR = "trading_pair";
+    public static final String TRADING_PAIR_KEY = "trading_pair";
     public static final String DECIMAL_PLACES = "decimal_places";
     public static final String MIN_PRICE = "min_price";
     public static final String MAX_PRICE = "max_price";
@@ -16,8 +16,10 @@ public class CoinInfo extends LoggableData {
     public static final String FEE = "fee";
 
     private final Map<String, Object> dataMap;
+    private final TradingPair TRADING_PAIR;
 
     public CoinInfo(TradingPair tradingPair, JSONObject data) {
+        TRADING_PAIR = tradingPair;
         dataMap = new HashMap<>();
         dataMap.put(DECIMAL_PLACES, getInt(data, DECIMAL_PLACES));
         dataMap.put(MIN_PRICE, getDouble(data, MIN_PRICE));
@@ -25,7 +27,7 @@ public class CoinInfo extends LoggableData {
         dataMap.put(MIN_AMOUNT, getDouble(data, MIN_AMOUNT));
         dataMap.put(HIDDEN, getInt(data, HIDDEN));
         dataMap.put(FEE, getDouble(data, FEE));
-        dataMap.put(TRADING_PAIR, tradingPair.name());
+        dataMap.put(TRADING_PAIR_KEY, tradingPair.name());
     }
 
     /**
@@ -74,7 +76,7 @@ public class CoinInfo extends LoggableData {
      * Returns the TradingPair associated with this information
      */
     public TradingPair getTradingPair() {
-        return TradingPair.extract((String) dataMap.get(TRADING_PAIR));
+        return TradingPair.extract((String) dataMap.get(TRADING_PAIR_KEY));
     }
 
     @Override
@@ -91,14 +93,6 @@ public class CoinInfo extends LoggableData {
                 "|-[Minimum Amount: " + getMinAmount() + "]\n" +
                 "|-[Fee: " + getFee() + "]\n" +
                 "|-[Hidden: " + isHidden() + "]";
-    }
-
-    private int getInt(JSONObject pair, String key) {
-        return pair.getInt(key);
-    }
-
-    private double getDouble(JSONObject pairs, String key) {
-        return pairs.getDouble(key);
     }
 
 }
