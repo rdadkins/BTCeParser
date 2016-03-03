@@ -10,6 +10,8 @@ import java.util.Map;
  */
 public abstract class LoggableData {
 
+    public static final String TRADING_PAIR_KEY = "trading_pair";
+
     public final JSONObject toJSONObject() {
         JSONObject object = new JSONObject();
         for (Map.Entry<String, Object> set: getDataAsMap().entrySet()) {
@@ -18,14 +20,18 @@ public abstract class LoggableData {
         return object;
     }
 
+    protected final int getInt(JSONObject object, String key) {
+        return object.getInt(key);
+    }
+
+    protected final long getLong(JSONObject object, String key) {
+        return object.getLong(key);
+    }
+
+    protected final double getDouble(JSONObject object, String key) {
+        return object.getDouble(key);
+    }
+
     public abstract Map<String, Object> getDataAsMap();
-
-    protected final int getInt(JSONObject pair, String key) {
-        return pair.getInt(key);
-    }
-
-    protected final double getDouble(JSONObject pairs, String key) {
-        return pairs.getDouble(key);
-    }
 
 }

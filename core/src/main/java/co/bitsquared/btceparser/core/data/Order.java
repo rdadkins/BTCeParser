@@ -71,15 +71,17 @@ public class Order implements Comparable<Order> {
 		}
 	}
 
+	@Override
 	public String toString() {
-		return "[" + type + "] " + amount.asBigDecimal() + " @ " + rate.asBigDecimal() + " = " + getOrderTotal().asBigDecimal();
+		return String.format("[%s] %s @ %s = %s", type, amount.asBigDecimal(), rate.asBigDecimal(), getOrderTotal().asBigDecimal());
 	}
 
+	@Override
 	public int compareTo(Order other) {
         if (type == DepthType.ASK) {
-            return -amount.asBigDecimal().compareTo(other.getAmount().asBigDecimal());
+            return -amount.asBigDecimal().compareTo(other.amount.asBigDecimal());
         } else {
-            return rate.asBigDecimal().compareTo(other.getRate().asBigDecimal());
+            return rate.asBigDecimal().compareTo(other.rate.asBigDecimal());
         }
 	}
 

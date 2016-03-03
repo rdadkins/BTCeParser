@@ -7,7 +7,6 @@ import java.util.Map;
 
 public class CoinInfo extends LoggableData {
 
-    public static final String TRADING_PAIR_KEY = "trading_pair";
     public static final String DECIMAL_PLACES = "decimal_places";
     public static final String MIN_PRICE = "min_price";
     public static final String MAX_PRICE = "max_price";
@@ -21,13 +20,13 @@ public class CoinInfo extends LoggableData {
     public CoinInfo(TradingPair tradingPair, JSONObject data) {
         TRADING_PAIR = tradingPair;
         dataMap = new HashMap<>();
+        dataMap.put(TRADING_PAIR_KEY, TRADING_PAIR.toString());
         dataMap.put(DECIMAL_PLACES, getInt(data, DECIMAL_PLACES));
         dataMap.put(MIN_PRICE, getDouble(data, MIN_PRICE));
         dataMap.put(MAX_PRICE, getDouble(data, MAX_PRICE));
         dataMap.put(MIN_AMOUNT, getDouble(data, MIN_AMOUNT));
         dataMap.put(HIDDEN, getInt(data, HIDDEN));
         dataMap.put(FEE, getDouble(data, FEE));
-        dataMap.put(TRADING_PAIR_KEY, tradingPair.name());
     }
 
     /**
@@ -76,7 +75,7 @@ public class CoinInfo extends LoggableData {
      * Returns the TradingPair associated with this information
      */
     public TradingPair getTradingPair() {
-        return TradingPair.extract((String) dataMap.get(TRADING_PAIR_KEY));
+        return TRADING_PAIR;
     }
 
     @Override

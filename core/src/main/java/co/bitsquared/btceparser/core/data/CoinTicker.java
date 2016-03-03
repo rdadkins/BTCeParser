@@ -22,6 +22,7 @@ public class CoinTicker extends LoggableData {
     public CoinTicker(TradingPair tradingPair, JSONObject object) {
         TRADING_PAIR = tradingPair;
         dataMap = new HashMap<>();
+        dataMap.put(TRADING_PAIR_KEY, TRADING_PAIR.toString());
         dataMap.put(HIGH_KEY, getDouble(object, HIGH_KEY));
         dataMap.put(LOW_KEY, getDouble(object, LOW_KEY));
         dataMap.put(AVERAGE_KEY, getDouble(object, AVERAGE_KEY));

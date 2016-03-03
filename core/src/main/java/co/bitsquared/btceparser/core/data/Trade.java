@@ -5,7 +5,10 @@ import co.bitsquared.btceparser.core.exceptions.NoTradingPairSuppliedException;
 import co.bitsquared.btceparser.core.hash.SHA256;
 import org.json.JSONObject;
 
-public class Trade {
+import java.util.HashMap;
+import java.util.Map;
+
+public class Trade extends LoggableData {
 
     public static final String TYPE_KEY = "type";
     public static final String PRICE_KEY = "price";
@@ -14,12 +17,8 @@ public class Trade {
     public static final String TIMESTAMP_KEY = "timestamp";
     public static final String TRADING_PAIR_KEY = "TRADING_PAIR_KEY";
 
-    private TradingPair tradingPair;
-    private DepthType depthType;
-    private double rate;
-    private double amount;
-    private long transactionID;
-    private long timestamp;
+    private HashMap<String, Object> dataMap;
+    private final TradingPair TRADING_PAIR;
 
     /**
      * Create a Trade from a TradingPair and a JSONObject from a Request response.
@@ -27,8 +26,14 @@ public class Trade {
      * @param tradeObject a JSONObject that came from a Request.
      */
     public Trade(TradingPair tradingPair, JSONObject tradeObject) {
-        this.tradingPair = tradingPair;
-        extractJSON(tradeObject);
+        TRADING_PAIR = tradingPair;
+        dataMap = new HashMap<>();
+        dataMap.put(TRADING_PAIR_KEY, TRADING_PAIR.toString());
+        dataMap.put(TYPE_KEY, tradeObject.get(TYPE_KEY).equals("ask") ? DepthType.ASK : DepthType.BID);
+        dataMap.put(PRICE_KEY, getDouble(tradeObject, PRICE_KEY));
+        dataMap.put(AMOUNT_KEY, getDouble(tradeObject, AMOUNT_KEY));
+        dataMap.put(TRANSACTION_ID_KEY, getLong(tradeObject, TRANSACTION_ID_KEY));
+        dataMap.put(TIMESTAMP_KEY, getLong(tradeObject, TIMESTAMP_KEY));
     }
 
     /**
@@ -37,7 +42,10 @@ public class Trade {
      * @throws org.json.JSONException if tradeAsString is not formatted properly.
      * @throws NoTradingPairSuppliedException if tradeAsString does NOT contain a proper TradingPair.
      * @return a Trade object from the string provided.
+     *
+     * @since deprecated since v2.2.0;
      */
+    @Deprecated
     public static Trade fromSavedFile(String tradeAsString) {
         JSONObject tradeObject = new JSONObject(tradeAsString);
         String tradingPairAsString = tradeObject.getString(TRADING_PAIR_KEY);
@@ -48,44 +56,49 @@ public class Trade {
     }
 
     public TradingPair getTradingPair() {
-        return tradingPair;
+        return TRADING_PAIR;
     }
 
     public DepthType getDepthType() {
-        return depthType;
+        return (DepthType) dataMap.get(TYPE_KEY);
     }
 
     public double getRate() {
-        return rate;
+        return (double) dataMap.get(PRICE_KEY);
     }
 
     public BaseCurrency<?> getRateAsCurrency() {
-        return tradingPair.getOrderTemplate(rate, 0, depthType).getRate();
+        return TRADING_PAIR.getOrderTemplate(getRate(), 0, getDepthType()).getRate();
     }
 
     public double getAmount() {
-        return amount;
+        return (double) dataMap.get(AMOUNT_KEY);
     }
 
     public BaseCurrency<?> getAmountAsCurrency() {
-        return tradingPair.getOrderTemplate(0, amount, depthType).getAmount();
+        return TRADING_PAIR.getOrderTemplate(0, getAmount(), getDepthType()).getAmount();
     }
 
     public long getTransactionID() {
-        return transactionID;
+        return (long) dataMap.get(TRANSACTION_ID_KEY);
     }
 
     public long getTimestamp() {
-        return timestamp;
+        return (long) dataMap.get(TIMESTAMP_KEY);
     }
 
+    /**
+     * Use toJSONObject() instead.
+     * @since v2.2.0
+     */
+    @Deprecated
     public String asJSONString() {
-        return new JSONObject().append(TRADING_PAIR_KEY, tradingPair.name()).
-                append(TYPE_KEY, depthType.toString()).
-                append(PRICE_KEY, rate).
-                append(AMOUNT_KEY, amount).
-                append(TRANSACTION_ID_KEY, transactionID).
-                append(TIMESTAMP_KEY, timestamp).toString();
+        return new JSONObject().append(TRADING_PAIR_KEY, TRADING_PAIR.name()).
+                append(TYPE_KEY, getDepthType().toString()).
+                append(PRICE_KEY, getRate()).
+                append(AMOUNT_KEY, getAmount()).
+                append(TRANSACTION_ID_KEY, getTransactionID()).
+                append(TIMESTAMP_KEY, getTimestamp()).toString();
     }
 
     /**
@@ -94,15 +107,12 @@ public class Trade {
      * @return a SHA256 hash from this trade.
      */
     public String getTradeHash() {
-        return SHA256.getHash(asJSONString());
+        return SHA256.getHash(toJSONObject().toString());
     }
 
-    private void extractJSON(JSONObject tradeObject) {
-        depthType = tradeObject.getString(TYPE_KEY).equals("ask") ? DepthType.ASK : DepthType.BID;
-        rate = tradeObject.getDouble(PRICE_KEY);
-        amount = tradeObject.getDouble(AMOUNT_KEY);
-        transactionID = tradeObject.getLong(TRANSACTION_ID_KEY);
-        timestamp = tradeObject.getLong(TIMESTAMP_KEY);
+    @Override
+    public Map<String, Object> getDataAsMap() {
+        return dataMap;
     }
 
 }
