@@ -1,6 +1,5 @@
 package co.bitsquared.btceparser.trade.security;
 
-import com.sun.istack.internal.Nullable;
 import org.apache.commons.codec.binary.Base64;
 
 import javax.crypto.*;
@@ -38,7 +37,6 @@ public class AES {
      * @throws IllegalBlockSizeException thrown when the input being decrypted is not a multiple of the block size.
      * @return a multi-level formatted string that holds pieces together of encrypted text. Returns null if there is an error.
      */
-    @Nullable
     public static String encrypt(String data, String password, AESKeySize keySize) throws NoSuchAlgorithmException, InvalidKeySpecException, NoSuchPaddingException, InvalidAlgorithmParameterException, InvalidKeyException, BadPaddingException, UnsupportedEncodingException, IllegalBlockSizeException {
         SecretKeyFactory keyFactory = SecretKeyFactory.getInstance(KEY_FACTORY_METHOD);
         SecureRandom random = new SecureRandom();
@@ -68,7 +66,6 @@ public class AES {
      * @throws InvalidKeySpecException thrown when the supplied KeySpec is wrong.
      * @return the decrypted text. Returns null if there is an error.
      */
-    @Nullable
     public static String decrypt(String data, String password, AESKeySize keySize) throws BadPaddingException, IllegalBlockSizeException, InvalidAlgorithmParameterException, InvalidKeyException, NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeySpecException {
         String[] fields = data.split(SPLIT);
         byte[] salt = Base64.decodeBase64(fields[0]);
