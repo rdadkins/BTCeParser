@@ -17,7 +17,9 @@ public enum TradableCurrency {
     RUR(false),
     EUR(false),
     CNH(false),
-    GBP(false);
+    GBP(false),
+    DSH(true),
+    ETH(true);
 
     private final boolean IS_CRYPTO_CURRENCY;
 
