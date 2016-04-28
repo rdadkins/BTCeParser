@@ -26,7 +26,9 @@ public enum Constants {
     WITHDRAW("withdraw"),
     OPEN_ORDERS("open_orders"),
     SERVER_TIME("server_time"),
-    COUPON("coupon");
+    COUPON("coupon"),
+    COIN_NAME("coinName"),
+    ADDRESS("address");
 
     private final String API_CONSTANT_VALUE;
 
