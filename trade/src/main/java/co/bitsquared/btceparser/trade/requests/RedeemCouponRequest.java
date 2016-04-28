@@ -13,10 +13,22 @@ public class RedeemCouponRequest extends AccountRequest {
 
     private static final String[] PARAMS = new String[]{"coupon"};
 
+    private RedeemCouponRequest(Builder builder) {
+        super(builder);
+    }
+
+    /**
+     * @deprecated since v2.2.1 - use RedeemCouponRequest.Builder
+     */
+    @Deprecated
     public RedeemCouponRequest(Authenticator authenticator, RedeemCouponCallback callback) {
         this(authenticator, callback, DEFAULT_TIMEOUT);
     }
 
+    /**
+     * @deprecated since v2.2.1 - use RedeemCouponRequest.Builder
+     */
+    @Deprecated
     public RedeemCouponRequest(Authenticator authenticator, RedeemCouponCallback callback, long timeout) {
         super(authenticator, callback, timeout);
     }
@@ -32,8 +44,10 @@ public class RedeemCouponRequest extends AccountRequest {
         TradableCurrency couponCurrency = TradableCurrency.toCurrency(returnObject.getString(COUPON_CURRENCY).toLowerCase());
         long transactionID = returnObject.getLong(TRANS_ID);
         Funds[] funds = extractFunds(returnObject.getJSONObject(FUNDS));
-        listeners.stream().filter(callback -> callback instanceof RedeemCouponCallback).forEach(callback ->
-                execute(() -> ((RedeemCouponCallback) callback).onSuccess(couponAmount, couponCurrency, transactionID, funds))
+        listeners.stream().filter(callback -> callback instanceof RedeemCouponCallback).
+                forEach(callback -> execute(
+                        () -> ((RedeemCouponCallback) callback).onSuccess(couponAmount, couponCurrency, transactionID, funds)
+                )
         );
     }
 
@@ -45,6 +59,24 @@ public class RedeemCouponRequest extends AccountRequest {
     @Override
     public UpdatingAccountRequest asUpdatingRequest() {
         return new UpdatingAccountRequest(this, DEFAULT_UPDATING_TIME);
+    }
+
+    public static class Builder extends AccountRequest.Builder<Builder> {
+
+        public Builder(Authenticator authenticator) {
+            super(authenticator);
+        }
+
+        @Override
+        protected Builder retrieveInstance() {
+            return this;
+        }
+
+        @Override
+        public RedeemCouponRequest build() {
+            return new RedeemCouponRequest(this);
+        }
+
     }
 
 }

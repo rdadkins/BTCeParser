@@ -15,10 +15,22 @@ public class OrderInfoRequest extends AccountRequest {
 
     public static final String[] PARAMS = new String[]{"order_id"};
 
+    private OrderInfoRequest(Builder builder) {
+        super(builder);
+    }
+
+    /**
+     * @deprecated since v2.2.1 - use OrderInfoRequest.Builder
+     */
+    @Deprecated
     public OrderInfoRequest(Authenticator authenticator, OrderInfoCallback callback) {
         this(authenticator, callback, DEFAULT_TIMEOUT);
     }
 
+    /**
+     * @deprecated since v2.2.1 - use OrderInfoRequest.Builder
+     */
+    @Deprecated
     public OrderInfoRequest(Authenticator authenticator, OrderInfoCallback callback, long timeout) {
         super(authenticator, callback, timeout);
     }
@@ -43,8 +55,10 @@ public class OrderInfoRequest extends AccountRequest {
         double rate = orderObject.getDouble(RATE);
         long timeStamp = orderObject.getLong(TIMESTAMP_CREATED);
         int status = orderObject.getInt(STATUS);
-        listeners.stream().filter(callback -> callback instanceof OrderInfoCallback).forEach(callback ->
-                execute(() -> ((OrderInfoCallback) callback).onSuccess(orderID, tradingPair, type, startAmount, amount, rate, timeStamp, status))
+        listeners.stream().filter(callback -> callback instanceof OrderInfoCallback).
+                forEach(callback -> execute(
+                        () -> ((OrderInfoCallback) callback).onSuccess(orderID, tradingPair, type, startAmount, amount, rate, timeStamp, status)
+                )
         );
     }
 
@@ -56,6 +70,24 @@ public class OrderInfoRequest extends AccountRequest {
     @Override
     public UpdatingAccountRequest asUpdatingRequest() {
         return new UpdatingAccountRequest(this, DEFAULT_UPDATING_TIME);
+    }
+
+    public static class Builder extends AccountRequest.Builder<Builder> {
+
+        public Builder(Authenticator authenticator) {
+            super(authenticator);
+        }
+
+        @Override
+        protected Builder retrieveInstance() {
+            return this;
+        }
+
+        @Override
+        public OrderInfoRequest build() {
+            return new OrderInfoRequest(this);
+        }
+
     }
 
 }

@@ -10,10 +10,22 @@ public class TradeHistoryRequest extends AccountRequest {
 
     public static final TAPI METHOD = TAPI.TRADE_HISTORY;
 
+    private TradeHistoryRequest(Builder builder) {
+        super(builder);
+    }
+
+    /**
+     * @deprecated since v2.2.1 - use TradeHistoryRequest.Builder
+     */
+    @Deprecated
     public TradeHistoryRequest(Authenticator authenticator, TradeHistoryCallback callback) {
         this(authenticator, callback, DEFAULT_TIMEOUT);
     }
 
+    /**
+     * @deprecated since v2.2.1 - use TradeHistoryRequest.Builder
+     */
+    @Deprecated
     public TradeHistoryRequest(Authenticator authenticator, TradeHistoryCallback callback, long timeout) {
         super(authenticator, callback, timeout);
     }
@@ -31,8 +43,10 @@ public class TradeHistoryRequest extends AccountRequest {
             int transactionID = Integer.valueOf(object.toString());
             accountTrades[position++] = new AccountTrade(transactionID, returnObject.getJSONObject(transactionID + ""));
         }
-        listeners.stream().filter(callback -> callback instanceof TradeHistoryCallback).forEach(callback ->
-                execute(() -> ((TradeHistoryCallback) callback).onSuccess(accountTrades))
+        listeners.stream().filter(callback -> callback instanceof TradeHistoryCallback).
+                forEach(callback -> execute(
+                        () -> ((TradeHistoryCallback) callback).onSuccess(accountTrades)
+                )
         );
     }
 
@@ -44,6 +58,24 @@ public class TradeHistoryRequest extends AccountRequest {
     @Override
     public UpdatingAccountRequest asUpdatingRequest() {
         return new UpdatingAccountRequest(this, DEFAULT_UPDATING_TIME);
+    }
+
+    public static class Builder extends AccountRequest.Builder<Builder> {
+
+        public Builder(Authenticator authenticator) {
+            super(authenticator);
+        }
+
+        @Override
+        protected Builder retrieveInstance() {
+            return this;
+        }
+
+        @Override
+        public TradeHistoryRequest build() {
+            return new TradeHistoryRequest(this);
+        }
+
     }
 
 }

@@ -12,10 +12,22 @@ public class CreateCouponRequest extends AccountRequest {
 
     public static final String[] PARAMS = new String[]{"currency", "amount"};
 
+    private CreateCouponRequest(Builder builder) {
+        super(builder);
+    }
+
+    /**
+     * @deprecated since v2.2.1 - use CreateCouponRequest.Builder
+     */
+    @Deprecated
     public CreateCouponRequest(Authenticator authenticator, CreateCouponCallback callback) {
         this(authenticator, callback, DEFAULT_TIMEOUT);
     }
 
+    /**
+     * @deprecated since v2.2.1 - use CreateCouponRequest.Builder
+     */
+    @Deprecated
     public CreateCouponRequest(Authenticator authenticator, CreateCouponCallback callback, long timeout) {
         super(authenticator, callback, timeout);
     }
@@ -30,8 +42,10 @@ public class CreateCouponRequest extends AccountRequest {
         String coupon = returnObject.getString(COUPON);
         long transactionID = returnObject.getLong(TRANS_ID);
         Funds[] funds = extractFunds(returnObject.getJSONObject(FUNDS));
-        listeners.stream().filter(callback -> callback instanceof CreateCouponCallback).forEach(callback ->
-                execute(() -> ((CreateCouponCallback) callback).onSuccess(coupon, transactionID, funds))
+        listeners.stream().filter(callback -> callback instanceof CreateCouponCallback).
+                forEach(callback -> execute(
+                        () -> ((CreateCouponCallback) callback).onSuccess(coupon, transactionID, funds)
+                )
         );
     }
 
@@ -43,6 +57,24 @@ public class CreateCouponRequest extends AccountRequest {
     @Override
     public UpdatingAccountRequest asUpdatingRequest() {
         return new UpdatingAccountRequest(this, DEFAULT_UPDATING_TIME);
+    }
+
+    public static class Builder extends AccountRequest.Builder<Builder> {
+
+        public Builder(Authenticator authenticator) {
+            super(authenticator);
+        }
+
+        @Override
+        protected Builder retrieveInstance() {
+            return this;
+        }
+
+        @Override
+        public CreateCouponRequest build() {
+            return new CreateCouponRequest(this);
+        }
+
     }
 
 }

@@ -10,10 +10,16 @@ public class TransHistoryRequest extends AccountRequest {
 
     public static final TAPI METHOD = TAPI.TRANS_HISTORY;
 
+    private TransHistoryRequest(Builder builder) {
+        super(builder);
+    }
+
+    @Deprecated
     public TransHistoryRequest(Authenticator authenticator, TransactionHistoryCallback callback) {
         this(authenticator, callback, DEFAULT_TIMEOUT);
     }
 
+    @Deprecated
     public TransHistoryRequest(Authenticator authenticator, TransactionHistoryCallback callback, long timeout) {
         super(authenticator, callback, timeout);
     }
@@ -31,8 +37,10 @@ public class TransHistoryRequest extends AccountRequest {
             int transactionID = Integer.valueOf(object.toString());
             transactions[position++] = new Transaction(transactionID, returnObject.getJSONObject(transactionID + ""));
         }
-        listeners.stream().filter(callback -> callback instanceof TransactionHistoryCallback).forEach(callback ->
-                execute(() -> ((TransactionHistoryCallback) callback).onSuccess(transactions))
+        listeners.stream().filter(callback -> callback instanceof TransactionHistoryCallback).
+                forEach(callback -> execute(
+                        () -> ((TransactionHistoryCallback) callback).onSuccess(transactions)
+                )
         );
     }
 
@@ -44,6 +52,24 @@ public class TransHistoryRequest extends AccountRequest {
     @Override
     public UpdatingAccountRequest asUpdatingRequest() {
         return new UpdatingAccountRequest(this, DEFAULT_UPDATING_TIME);
+    }
+
+    public static class Builder extends AccountRequest.Builder<Builder> {
+
+        public Builder(Authenticator authenticator) {
+            super(authenticator);
+        }
+
+        @Override
+        protected Builder retrieveInstance() {
+            return this;
+        }
+
+        @Override
+        public TransHistoryRequest build() {
+            return new TransHistoryRequest(this);
+        }
+
     }
 
 }

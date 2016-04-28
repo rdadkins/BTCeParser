@@ -14,10 +14,22 @@ public class InfoRequest extends AccountRequest {
 
     private InfoCallback callback;
 
+    private InfoRequest(Builder builder) {
+        super(builder);
+    }
+
+    /**
+     * @deprecated since v2.2.1 - use InfoRequest.Builder
+     */
+    @Deprecated
     public InfoRequest(Authenticator authenticator, InfoCallback callback) {
         this(authenticator, callback, DEFAULT_TIMEOUT);
     }
 
+    /**
+     * @deprecated since v2.2.1 - use InfoRequest.Builder
+     */
+    @Deprecated
     public InfoRequest(Authenticator authenticator, InfoCallback callback, long timeout) {
         super(authenticator, callback, timeout);
         this.callback = callback;
@@ -38,8 +50,10 @@ public class InfoRequest extends AccountRequest {
         boolean canWithdraw = rights.getInt(WITHDRAW) == 1;
         int openOrders = returnObject.getInt(OPEN_ORDERS);
         long serverTime = returnObject.getLong(SERVER_TIME);
-        listeners.stream().filter(callback -> callback instanceof InfoCallback).forEach(callback ->
-                execute(() -> ((InfoCallback) callback).onSuccess(accountFunds, accessInfo, canTrade, canWithdraw, TRANSACTION_COUNT, openOrders, serverTime))
+        listeners.stream().filter(callback -> callback instanceof InfoCallback).
+                forEach(callback -> execute(
+                        () -> ((InfoCallback) callback).onSuccess(accountFunds, accessInfo, canTrade, canWithdraw, TRANSACTION_COUNT, openOrders, serverTime)
+                )
         );
     }
 
@@ -51,6 +65,24 @@ public class InfoRequest extends AccountRequest {
     @Override
     public UpdatingAccountRequest asUpdatingRequest() {
         return new UpdatingAccountRequest(this, DEFAULT_UPDATING_TIME);
+    }
+
+    public static class Builder extends AccountRequest.Builder<Builder> {
+
+        public Builder(Authenticator authenticator) {
+            super(authenticator);
+        }
+
+        @Override
+        protected Builder retrieveInstance() {
+            return this;
+        }
+
+        @Override
+        public InfoRequest build() {
+            return new InfoRequest(this);
+        }
+
     }
 
 }
