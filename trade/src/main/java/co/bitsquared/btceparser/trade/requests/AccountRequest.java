@@ -54,10 +54,25 @@ public abstract class AccountRequest extends Request {
     protected Authenticator authenticator;
     protected ParameterBuilder parameterBuilder;
 
+    protected AccountRequest(Builder builder) {
+        super(URL, builder.callback, builder.timeout);
+        this.authenticator = builder.authenticator;
+    }
+
+    /**
+     * Creates an AccountRequest from an Authenticator and an AccountCallback and sets timeout to {@code DEFAULT_TIMEOUT}
+     * @deprecated since v2.1.1 - Use AccountRequest.Builder
+     */
+    @Deprecated
     public AccountRequest(Authenticator authenticator, AccountCallback listener) {
         this(authenticator, listener, DEFAULT_TIMEOUT);
     }
 
+    /**
+     * Creates an AccountRequest from an Authenticator, an AccountCallback, and a timeout
+     * @deprecated since v2.1.1 - Use AccountRequest.Builder
+     */
+    @Deprecated
     public AccountRequest(Authenticator authenticator, AccountCallback listener, long timeout) {
         super(URL, listener, timeout);
         this.authenticator = authenticator;
@@ -118,6 +133,9 @@ public abstract class AccountRequest extends Request {
         }
     }
 
+    /**
+     * Assign a ParameterBuilder to this Request. Parameters that are required can be found through {@code getRequiredParams()}
+     */
     public final void assignParameters(ParameterBuilder builder) {
         parameterBuilder = builder;
     }
@@ -157,12 +175,49 @@ public abstract class AccountRequest extends Request {
         return type;
     }
 
+    /**
+     * Assigns this implementors TAPI method through {@code ParameterBuilder.method()}
+     */
     protected abstract void assignMethod(ParameterBuilder parameterBuilder);
 
+    /**
+     * Processes the return body of the response. This is only called when success == 1.
+     */
     protected abstract void processReturn(JSONObject returnObject);
 
+    /**
+     * Returns the required parameters of this request as a String[].
+     */
     public abstract String[] getRequiredParams();
 
+    /**
+     * Turns this request into an UpdatingAccountRequest. Auto incrementing of the nonce will be handled.
+     */
     public abstract UpdatingAccountRequest asUpdatingRequest();
 
+    static abstract class Builder<T extends Builder<T>> {
+
+        protected Authenticator authenticator;
+        protected AccountCallback callback;
+        protected int timeout = AccountRequest.DEFAULT_TIMEOUT;
+
+        Builder(Authenticator authenticator) {
+            this.authenticator = authenticator;
+        }
+
+        public final T callback(AccountCallback callback) {
+            this.callback = callback;
+            return retrieveInstance();
+        }
+
+        public final T timeout(int timeout) {
+            this.timeout = timeout;
+            return retrieveInstance();
+        }
+
+        protected abstract T retrieveInstance();
+
+        public abstract AccountRequest build();
+
+    }
 }
