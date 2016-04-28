@@ -8,6 +8,7 @@ public enum Constants {
     RECEIVED("received"),
     REMAINS("remains"),
     ORDER_ID("order_id"),
+    CURRENCY("currency"),
     COUPON_AMOUNT("couponAmount"),
     COUPON_CURRENCY("couponCurrency"),
     TRANS_ID("transID"),
@@ -35,6 +36,11 @@ public enum Constants {
 
     public String asAPIFriendlyValue() {
         return API_CONSTANT_VALUE;
+    }
+
+    @Override
+    public String toString() {
+        return asAPIFriendlyValue();
     }
 
 }
