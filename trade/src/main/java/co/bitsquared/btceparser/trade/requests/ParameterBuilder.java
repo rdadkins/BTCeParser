@@ -14,6 +14,33 @@ import java.util.Map;
 
 public class ParameterBuilder {
 
+    public static enum Parameter {
+
+        PAIR("pair"),
+        TYPE("type"),
+        RATE("rate"),
+        AMOUNT("amount"),
+        ORDER_ID("order_id"),
+        FROM("from"),
+        COUNT("count"),
+        FROM_ID("from_id"),
+        END_ID("end_id"),
+        ORDER("order"),
+        SINCE("since"),
+        END("end"),
+        COIN_NAME("coinName"),
+        ADDRESS("address"),
+        CURRENCY("currency"),
+        COUPON("coupon");
+
+        private final String PARAMETER_VALUE;
+
+        Parameter(String value) {
+            PARAMETER_VALUE = value;
+        }
+
+    }
+
     public static final String METHOD = "method";
     public static final String NONCE = "nonce";
     public static final String PAIR = "pair";
