@@ -14,23 +14,43 @@ import java.util.Map;
 
 public class ParameterBuilder {
 
-    public static final String METHOD = "method";
-    public static final String NONCE = "nonce";
-    public static final String PAIR = "pair";
-    public static final String TYPE = "type";
-    public static final String RATE = "rate";
-    public static final String AMOUNT = "amount";
-    public static final String ORDER_ID = "order_id";
-    public static final String FROM = "from";
-    public static final String COUNT = "count";
-    public static final String FROM_ID = "from_id";
-    public static final String END_ID = "end_id";
-    public static final String ORDER = "order";
-    public static final String SINCE = "since";
-    public static final String END = "end";
-    public static final String COIN_NAME = "coinName";
-    public static final String CURRENCY = "currency";
-    public static final String COUPON = "coupon";
+    public static enum Parameter {
+
+        NONCE("nonce"),
+        METHOD("method"),
+        PAIR("pair"),
+        TYPE("type"),
+        RATE("rate"),
+        AMOUNT("amount"),
+        ORDER_ID("order_id"),
+        FROM("from"),
+        COUNT("count"),
+        FROM_ID("from_id"),
+        END_ID("end_id"),
+        ORDER("order"),
+        SINCE("since"),
+        END("end"),
+        COIN_NAME("coinName"),
+        ADDRESS("address"),
+        CURRENCY("currency"),
+        COUPON("coupon");
+
+        private final String PARAMETER_VALUE;
+
+        Parameter(String value) {
+            PARAMETER_VALUE = value;
+        }
+
+        public String asAPIFriendlyValue() {
+            return PARAMETER_VALUE;
+        }
+
+        @Override
+        public String toString() {
+            return asAPIFriendlyValue();
+        }
+
+    }
 
     private Map<String, String> parameters;
 
@@ -56,9 +76,9 @@ public class ParameterBuilder {
      */
     public ParameterBuilder method(TAPI method) {
         if (method == null) {
-            throw new NullParameterNotAllowed(METHOD);
+            throw new NullParameterNotAllowed(Parameter.METHOD.PARAMETER_VALUE);
         }
-        parameters.put(METHOD, method.getMethodName());
+        parameters.put(Parameter.METHOD.PARAMETER_VALUE, method.getMethodName());
         return this;
     }
 
@@ -68,7 +88,7 @@ public class ParameterBuilder {
      * @return the current ParameterBuilder.
      */
     public ParameterBuilder nonce(long nonce) {
-        parameters.put(NONCE, nonce + "");
+        parameters.put(Parameter.NONCE.PARAMETER_VALUE, nonce + "");
         return this;
     }
 
@@ -87,7 +107,7 @@ public class ParameterBuilder {
      * @return the current ParameterBuilder.
      */
     public ParameterBuilder addTradingPair(TradingPair tradingPair) {
-        parameters.put(PAIR, tradingPair.toString());
+        parameters.put(Parameter.PAIR.PARAMETER_VALUE, tradingPair.toString());
         return this;
     }
 
@@ -98,9 +118,9 @@ public class ParameterBuilder {
      */
     public ParameterBuilder addOrderType(OrderType type) {
         if (type == null) {
-            throw new NullParameterNotAllowed(TYPE);
+            throw new NullParameterNotAllowed(Parameter.TYPE.PARAMETER_VALUE);
         }
-        parameters.put(TYPE, type.getOrderTypeAsString());
+        parameters.put(Parameter.TYPE.PARAMETER_VALUE, type.getOrderTypeAsString());
         return this;
     }
 
@@ -110,7 +130,7 @@ public class ParameterBuilder {
      * @return the current ParameterBuilder.
      */
     public ParameterBuilder addRate(BaseCurrency<?> currency) {
-        parameters.put(RATE, currency.asBigDecimal().toString());
+        parameters.put(Parameter.RATE.PARAMETER_VALUE, currency.asBigDecimal().toString());
         return this;
     }
 
@@ -120,7 +140,7 @@ public class ParameterBuilder {
      * @return the current ParameterBuilder
      */
     public ParameterBuilder addRate(double rate) {
-        parameters.put(RATE, String.valueOf(rate));
+        parameters.put(Parameter.RATE.PARAMETER_VALUE, String.valueOf(rate));
         return this;
     }
 
@@ -130,7 +150,7 @@ public class ParameterBuilder {
      * @return the current ParameterBuilder.
      */
     public ParameterBuilder addAmount(BaseCurrency<?> amount) {
-        parameters.put(AMOUNT, amount.asBigDecimal().toString());
+        parameters.put(Parameter.AMOUNT.PARAMETER_VALUE, amount.asBigDecimal().toString());
         return this;
     }
 
@@ -140,7 +160,7 @@ public class ParameterBuilder {
      * @return the current ParameterBuilder.
      */
     public ParameterBuilder addAmount(double amount) {
-        parameters.put(AMOUNT, String.valueOf(amount));
+        parameters.put(Parameter.AMOUNT.PARAMETER_VALUE, String.valueOf(amount));
         return this;
     }
 
@@ -150,7 +170,7 @@ public class ParameterBuilder {
      * @return the current ParameterBuilder.
      */
     public ParameterBuilder addOrderID(String orderID) {
-        parameters.put(ORDER_ID, orderID);
+        parameters.put(Parameter.ORDER_ID.PARAMETER_VALUE, orderID);
         return this;
     }
 
@@ -163,7 +183,7 @@ public class ParameterBuilder {
         if (fromID < TAPI.DEFAULT_FROM) {
             fromID = TAPI.DEFAULT_FROM;
         }
-        parameters.put(FROM, fromID + "");
+        parameters.put(Parameter.FROM.PARAMETER_VALUE, fromID + "");
         return this;
     }
 
@@ -176,7 +196,7 @@ public class ParameterBuilder {
         if (countID < TAPI.DEFAULT_TRADE_AMOUNT) {
             countID = TAPI.DEFAULT_TRADE_AMOUNT;
         }
-        parameters.put(COUNT, countID + "");
+        parameters.put(Parameter.COUNT.PARAMETER_VALUE, countID + "");
         return this;
     }
 
@@ -189,7 +209,7 @@ public class ParameterBuilder {
         if (fromID < TAPI.DEFAULT_FROM_TRADE_ID) {
             fromID = TAPI.DEFAULT_FROM_TRADE_ID;
         }
-        parameters.put(FROM_ID, fromID + "");
+        parameters.put(Parameter.FROM_ID.PARAMETER_VALUE, fromID + "");
         return this;
     }
 
@@ -202,7 +222,7 @@ public class ParameterBuilder {
         if (endID < TAPI.DEFAULT_END_TRADE_ID) {
             endID = TAPI.DEFAULT_END_TRADE_ID;
         }
-        parameters.put(END_ID, endID + "");
+        parameters.put(Parameter.END_ID.PARAMETER_VALUE, endID + "");
         return this;
     }
 
@@ -215,7 +235,7 @@ public class ParameterBuilder {
         if (mode == null) {
             mode = OrderMode.DEFAULT_ORDER_MODE;
         }
-        parameters.put(ORDER, mode.getModeAsString());
+        parameters.put(Parameter.ORDER.PARAMETER_VALUE, mode.getModeAsString());
         return this;
     }
 
@@ -228,7 +248,7 @@ public class ParameterBuilder {
         if (unixTime < TAPI.DEFAULT_SINCE) {
             unixTime = TAPI.DEFAULT_SINCE;
         }
-        parameters.put(SINCE, unixTime + "");
+        parameters.put(Parameter.SINCE.PARAMETER_VALUE, unixTime + "");
         return this;
     }
 
@@ -241,7 +261,7 @@ public class ParameterBuilder {
         if (unixTime < TAPI.DEFAULT_SINCE) {
             unixTime = TAPI.DEFAULT_END;
         }
-        parameters.put(END, unixTime + "");
+        parameters.put(Parameter.END.PARAMETER_VALUE, unixTime + "");
         return this;
     }
 
@@ -253,7 +273,7 @@ public class ParameterBuilder {
      */
     @Deprecated
     public ParameterBuilder coinName(String coinName) {
-        parameters.put(COIN_NAME, coinName);
+        parameters.put(Parameter.COIN_NAME.PARAMETER_VALUE, coinName);
         return this;
     }
 
@@ -264,9 +284,9 @@ public class ParameterBuilder {
      */
     public ParameterBuilder coinName(TradableCurrency currency) {
         if (currency == null) {
-            throw new NullParameterNotAllowed(COIN_NAME);
+            throw new NullParameterNotAllowed(Parameter.COIN_NAME.PARAMETER_VALUE);
         }
-        parameters.put(COIN_NAME, currency.asAPIString());
+        parameters.put(Parameter.COIN_NAME.PARAMETER_VALUE, currency.asAPIString());
         return this;
     }
 
@@ -278,7 +298,7 @@ public class ParameterBuilder {
      */
     @Deprecated
     public ParameterBuilder currency(String currency) {
-        parameters.put(CURRENCY, currency);
+        parameters.put(Parameter.CURRENCY.PARAMETER_VALUE, currency);
         return this;
     }
 
@@ -289,9 +309,17 @@ public class ParameterBuilder {
      */
     public ParameterBuilder currency(TradableCurrency currency) {
         if (currency == null) {
-            throw new NullParameterNotAllowed(CURRENCY);
+            throw new NullParameterNotAllowed(Parameter.CURRENCY.PARAMETER_VALUE);
         }
-        parameters.put(CURRENCY, currency.asAPIString());
+        parameters.put(Parameter.CURRENCY.PARAMETER_VALUE, currency.asAPIString());
+        return this;
+    }
+
+    public ParameterBuilder address(String address) {
+        if (address == null) {
+            throw new NullParameterNotAllowed(Parameter.ADDRESS.PARAMETER_VALUE);
+        }
+        parameters.put(Parameter.ADDRESS.PARAMETER_VALUE, address);
         return this;
     }
 
@@ -301,7 +329,7 @@ public class ParameterBuilder {
      * @return the current ParameterBuilder.
      */
     public ParameterBuilder coupon(String couponCode) {
-        parameters.put(COUPON, couponCode);
+        parameters.put(Parameter.COUPON.PARAMETER_VALUE, couponCode);
         return this;
     }
 
