@@ -6,7 +6,7 @@ import co.bitsquared.btceparser.trade.callbacks.InfoCallback;
 import co.bitsquared.btceparser.trade.data.Funds;
 import org.json.JSONObject;
 
-import static co.bitsquared.btceparser.trade.Constants.*;
+import static co.bitsquared.btceparser.trade.Constant.*;
 
 public class InfoRequest extends AccountRequest {
 

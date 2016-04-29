@@ -1,6 +1,6 @@
 package co.bitsquared.btceparser.trade.requests;
 
-import co.bitsquared.btceparser.trade.Constants;
+import co.bitsquared.btceparser.trade.Constant;
 import co.bitsquared.btceparser.trade.TAPI;
 import co.bitsquared.btceparser.trade.authentication.Authenticator;
 import co.bitsquared.btceparser.trade.callbacks.CreateCouponCallback;
@@ -31,9 +31,9 @@ public class CreateCouponRequest extends AccountRequest {
 
     @Override
     protected void processReturn(JSONObject returnObject) {
-        String coupon = returnObject.getString(Constants.COUPON.asAPIFriendlyValue());
-        long transactionID = returnObject.getLong(Constants.TRANS_ID.asAPIFriendlyValue());
-        Funds[] funds = extractFunds(returnObject.getJSONObject(Constants.FUNDS.asAPIFriendlyValue()));
+        String coupon = returnObject.getString(Constant.COUPON.asAPIFriendlyValue());
+        long transactionID = returnObject.getLong(Constant.TRANS_ID.asAPIFriendlyValue());
+        Funds[] funds = extractFunds(returnObject.getJSONObject(Constant.FUNDS.asAPIFriendlyValue()));
         listeners.stream().filter(callback -> callback instanceof CreateCouponCallback).forEach(callback ->
                 execute(() -> ((CreateCouponCallback) callback).onSuccess(coupon, transactionID, funds))
         );

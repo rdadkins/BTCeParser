@@ -1,6 +1,6 @@
 package co.bitsquared.btceparser.trade.requests;
 
-import co.bitsquared.btceparser.trade.Constants;
+import co.bitsquared.btceparser.trade.Constant;
 import co.bitsquared.btceparser.trade.TAPI;
 import co.bitsquared.btceparser.trade.authentication.Authenticator;
 import co.bitsquared.btceparser.trade.callbacks.CancelOrderCallback;
@@ -29,8 +29,8 @@ public class CancelOrderRequest extends AccountRequest {
 
     @Override
     protected void processReturn(JSONObject returnObject) {
-        int orderId = returnObject.getInt(Constants.FUNDS.asAPIFriendlyValue());
-        Funds[] funds = extractFunds(returnObject.getJSONObject(Constants.FUNDS.asAPIFriendlyValue()));
+        int orderId = returnObject.getInt(Constant.FUNDS.asAPIFriendlyValue());
+        Funds[] funds = extractFunds(returnObject.getJSONObject(Constant.FUNDS.asAPIFriendlyValue()));
         listeners.stream().filter(callback -> callback instanceof CancelOrderCallback).forEach(callback ->
                 execute(() -> ((CancelOrderCallback) callback).onSuccess(orderId, funds))
         );

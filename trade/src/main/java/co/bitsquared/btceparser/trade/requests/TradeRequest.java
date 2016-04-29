@@ -7,7 +7,7 @@ import co.bitsquared.btceparser.trade.data.Funds;
 import co.bitsquared.btceparser.trade.requests.ParameterBuilder.Parameter;
 import org.json.JSONObject;
 
-import static co.bitsquared.btceparser.trade.Constants.*;
+import static co.bitsquared.btceparser.trade.Constant.*;
 
 public class TradeRequest extends AccountRequest {
 

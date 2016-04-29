@@ -146,7 +146,7 @@ public abstract class AccountRequest extends Request {
     }
 
     /**
-     * Gets the required parameters for this request. This should return an empty Constants[] if there are no required parameters.
+     * Gets the required parameters for this request. This should return an empty Constant[] if there are no required parameters.
      */
     public abstract ParameterBuilder.Parameter[] getRequiredParameters();
 

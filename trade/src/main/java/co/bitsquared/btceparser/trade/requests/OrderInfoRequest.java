@@ -10,7 +10,7 @@ import org.json.JSONObject;
 
 import java.util.Set;
 
-import static co.bitsquared.btceparser.trade.Constants.*;
+import static co.bitsquared.btceparser.trade.Constant.*;
 
 public class OrderInfoRequest extends AccountRequest {
 
