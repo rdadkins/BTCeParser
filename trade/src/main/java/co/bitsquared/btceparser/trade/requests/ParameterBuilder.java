@@ -41,6 +41,15 @@ public class ParameterBuilder {
             PARAMETER_VALUE = value;
         }
 
+        public String asAPIFriendlyValue() {
+            return PARAMETER_VALUE;
+        }
+
+        @Override
+        public String toString() {
+            return asAPIFriendlyValue();
+        }
+
     }
 
     private Map<String, String> parameters;
@@ -303,6 +312,14 @@ public class ParameterBuilder {
             throw new NullParameterNotAllowed(Parameter.CURRENCY.PARAMETER_VALUE);
         }
         parameters.put(Parameter.CURRENCY.PARAMETER_VALUE, currency.asAPIString());
+        return this;
+    }
+
+    public ParameterBuilder address(String address) {
+        if (address == null) {
+            throw new NullParameterNotAllowed(Parameter.ADDRESS.PARAMETER_VALUE);
+        }
+        parameters.put(Parameter.ADDRESS.PARAMETER_VALUE, address);
         return this;
     }
 
