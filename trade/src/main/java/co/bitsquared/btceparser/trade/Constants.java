@@ -2,7 +2,9 @@ package co.bitsquared.btceparser.trade;
 
 /**
  * Constants are literal values that are used in separate AccountRequests via the TAPI. Each Constant can have singular or
- * multiple uses. Each Constant describes its purpose and where its usage can be found.
+ * multiple uses. Each Constant describes its purpose and where its usage can be found. These are not to be confused with
+ * parameters that are used in actual requests.
+ * @see co.bitsquared.btceparser.trade.requests.ParameterBuilder.Parameter ParameterBuilder.Parameter for actual parameters used in requests
  */
 public enum Constants {
 
