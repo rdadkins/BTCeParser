@@ -13,6 +13,7 @@ import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.async.Callback;
 import org.json.JSONObject;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,34 +22,8 @@ public abstract class AccountRequest extends Request {
     /**
      * A list of all strings that are keys in successful returns. Usage can be found in subclasses processResponseBody()
      */
-    public static final String T_ID = "tId";
-    public static final String AMOUNT_SENT = "amountSent";
-    public static final String FUNDS = "funds";
-    public static final String RECEIVED = "received";
-    public static final String REMAINS = "remains";
-    public static final String ORDER_ID = "order_id";
-    public static final String COUPON_AMOUNT = "couponAmount";
-    public static final String COUPON_CURRENCY = "couponCurrency";
-    public static final String TRANS_ID = "transID";
-    public static final String PAIR = "pair";
-    public static final String TYPE = "type";
-    public static final String SELL = "sell";
-    public static final String START_AMOUNT = "start_amount";
-    public static final String AMOUNT = "amount";
-    public static final String RATE = "rate";
-    public static final String TIMESTAMP_CREATED = "timestamp_created";
-    public static final String STATUS = "status";
-    public static final String RIGHTS = "rights";
-    public static final String INFO = "info";
-    public static final String TRADE = "trade";
-    public static final String WITHDRAW = "withdraw";
-    public static final String OPEN_ORDERS = "open_orders";
-    public static final String SERVER_TIME = "server_time";
-    public static final String COUPON = "coupon";
-
     protected static final String URL = TAPI.URL;
 
-    protected static final String[] NO_PARAMS = new String[0];
     protected static final int DEFAULT_UPDATING_TIME = 10;
 
     protected Authenticator authenticator;
@@ -70,7 +45,7 @@ public abstract class AccountRequest extends Request {
      */
     @Override
     public final void processRequest() {
-        if (getRequiredParams().length > 1) {
+        if (getRequiredParameters().length > 1) {
             checkForParameters();
             processRequest(parameterBuilder);
         } else {
@@ -161,7 +136,19 @@ public abstract class AccountRequest extends Request {
 
     protected abstract void processReturn(JSONObject returnObject);
 
-    public abstract String[] getRequiredParams();
+    /**
+     * @deprecated use getRequiredParameters()
+     */
+    @Deprecated
+    public final String[] getRequiredParams() {
+        ParameterBuilder.Parameter[] constants = getRequiredParameters();
+        return Arrays.copyOf(constants, constants.length, String[].class);
+    }
+
+    /**
+     * Gets the required parameters for this request. This should return an empty Constants[] if there are no required parameters.
+     */
+    public abstract ParameterBuilder.Parameter[] getRequiredParameters();
 
     public abstract UpdatingAccountRequest asUpdatingRequest();
 

@@ -1,9 +1,9 @@
 package co.bitsquared.btceparser.trade.requests;
 
-import co.bitsquared.btceparser.trade.data.AccountTrade;
 import co.bitsquared.btceparser.trade.TAPI;
 import co.bitsquared.btceparser.trade.authentication.Authenticator;
 import co.bitsquared.btceparser.trade.callbacks.TradeHistoryCallback;
+import co.bitsquared.btceparser.trade.data.AccountTrade;
 import org.json.JSONObject;
 
 public class TradeHistoryRequest extends AccountRequest {
@@ -37,8 +37,8 @@ public class TradeHistoryRequest extends AccountRequest {
     }
 
     @Override
-    public String[] getRequiredParams() {
-        return NO_PARAMS;
+    public ParameterBuilder.Parameter[] getRequiredParameters() {
+        return new ParameterBuilder.Parameter[0];
     }
 
     @Override

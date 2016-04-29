@@ -1,10 +1,12 @@
 package co.bitsquared.btceparser.trade.requests;
 
-import co.bitsquared.btceparser.trade.data.Funds;
 import co.bitsquared.btceparser.trade.TAPI;
 import co.bitsquared.btceparser.trade.authentication.Authenticator;
 import co.bitsquared.btceparser.trade.callbacks.InfoCallback;
+import co.bitsquared.btceparser.trade.data.Funds;
 import org.json.JSONObject;
+
+import static co.bitsquared.btceparser.trade.Constants.*;
 
 public class InfoRequest extends AccountRequest {
 
@@ -30,22 +32,22 @@ public class InfoRequest extends AccountRequest {
 
     @Override
     protected void processReturn(JSONObject returnObject) {
-        JSONObject funds = returnObject.getJSONObject(FUNDS);
+        JSONObject funds = returnObject.getJSONObject(FUNDS.asAPIFriendlyValue());
         Funds[] accountFunds = extractFunds(funds);
-        JSONObject rights = returnObject.getJSONObject(RIGHTS);
-        boolean accessInfo = rights.getInt(INFO) == 1;
-        boolean canTrade = rights.getInt(TRADE) == 1;
-        boolean canWithdraw = rights.getInt(WITHDRAW) == 1;
-        int openOrders = returnObject.getInt(OPEN_ORDERS);
-        long serverTime = returnObject.getLong(SERVER_TIME);
+        JSONObject rights = returnObject.getJSONObject(RIGHTS.asAPIFriendlyValue());
+        boolean accessInfo = rights.getInt(INFO.asAPIFriendlyValue()) == 1;
+        boolean canTrade = rights.getInt(TRADE.asAPIFriendlyValue()) == 1;
+        boolean canWithdraw = rights.getInt(WITHDRAW.asAPIFriendlyValue()) == 1;
+        int openOrders = returnObject.getInt(OPEN_ORDERS.asAPIFriendlyValue());
+        long serverTime = returnObject.getLong(SERVER_TIME.asAPIFriendlyValue());
         listeners.stream().filter(callback -> callback instanceof InfoCallback).forEach(callback ->
                 execute(() -> ((InfoCallback) callback).onSuccess(accountFunds, accessInfo, canTrade, canWithdraw, TRANSACTION_COUNT, openOrders, serverTime))
         );
     }
 
     @Override
-    public String[] getRequiredParams() {
-        return NO_PARAMS;
+    public ParameterBuilder.Parameter[] getRequiredParameters() {
+        return new ParameterBuilder.Parameter[0];
     }
 
     @Override
