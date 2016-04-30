@@ -27,7 +27,7 @@ public class TradeExample implements BaseExample, TradeRequestCallback {
 
     public void startExample() {
         Authenticator authenticator = new Authenticator(key, secret, 1);
-        TradeRequest tradeRequest = new TradeRequest(authenticator, this);
+        TradeRequest tradeRequest = new TradeRequest.Builder(authenticator).callback(this).build();
         tradeRequest.assignParameters(getParams());
         tradeRequest.processRequest();
     }
