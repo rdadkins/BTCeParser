@@ -151,7 +151,6 @@ public enum Constant {
      * <br />&nbsp;OrderInfo: Represents the status of an open order - 0: active, 1: executed, 2: canceled, 3: canceled but partially executed
      * <br />&nbsp;TransHistory: Represents the status of a transaction - 0: canceled/failed, 1: waiting for acceptance, 2: successful, 3: not confirmed
      */
-    @Deprecated
     STATUS("status"),
 
     /**
