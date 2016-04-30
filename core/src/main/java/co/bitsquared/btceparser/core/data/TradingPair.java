@@ -31,7 +31,8 @@ public enum TradingPair {
     PPC_BTC(TradableCurrency.PPC, TradableCurrency.BTC),
     PPC_USD(TradableCurrency.PPC, TradableCurrency.USD),
     DSH_BTC(TradableCurrency.DSH, TradableCurrency.BTC),
-    ETH_BTC(TradableCurrency.ETH, TradableCurrency.BTC);
+    ETH_BTC(TradableCurrency.ETH, TradableCurrency.BTC),
+    ETC_USD(TradableCurrency.ETH, TradableCurrency.USD);
 
     private final TradableCurrency PRICE_CURRENCY;
     private final TradableCurrency TARGET_CURRENCY;
