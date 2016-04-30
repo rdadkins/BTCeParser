@@ -65,7 +65,7 @@ Just like the public requests, all private requests are already defined in the <
 Usage of <a href="https://github.com/rdadkins/BTCeParser/blob/master/trade/src/main/java/co/bitsquared/btceparser/trade/requests/ActiveOrderRequest.java">ActiveOrderRequest</a> which requires no parameters is shown below:
 ```
 Authenticator auth = new Authenticator("key", "secret", 1);
-ActiveOrderRequest request = new ActiveOrderRequest(auth, this);
+ActiveOrderRequest request = new ActiveOrderRequest.Builder(auth).callback(this).build();
 request.processRequest();
 ...
 @Override
@@ -79,7 +79,7 @@ When an AccountRequest requires parameters, you are able to see by calling getRe
 Here is <a href="https://github.com/rdadkins/BTCeParser/blob/master/trade/src/main/java/co/bitsquared/btceparser/trade/requests/TradeRequest.java">TradeRequest</a> that requires 'pair', 'type', 'rate', and 'amount' to be defined.
 ```
 Authenticator auth = new Authenticator("key", "secret", 1);
-TradeRequest request = new TradeRequest(auth, this);
+TradeRequest request = new TradeRequest.Builder(auth).callback(this).build();
 String[] requiredParams = request.getRequiredParams();
 ...
 ParameterBuilder paramBuilder = ParameterBuilder.createBuilder().addTradingPair(TradingPair.BTC_USD).addOrderType(DepthType.BID).addRate(new Currency(500.0)).addAmount(Coin.fromSatoshi(5000000));
@@ -99,7 +99,7 @@ There is also the ability to have AccountRequests update on an interval. Usage i
 Here is an example of an updating TradeRequest:
 ```
 Authenticator auth = new Authenticator("key", "secret", 1);
-TradeRequest request = new TradeRequest(auth, this);
+TradeRequest request = new TradeRequest.Builder(auth).callback(this).build();
 request.assignParameters(paramBuilder);
 UpdatingAccountRequest updatingRequest = request.asUpdatingRequest();
 updatingRequest.startUpdating();
