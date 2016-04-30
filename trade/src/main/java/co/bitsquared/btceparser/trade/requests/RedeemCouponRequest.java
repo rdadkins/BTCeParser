@@ -16,10 +16,22 @@ public class RedeemCouponRequest extends AccountRequest {
 
     private static final Parameter[] PARAMS = new Parameter[]{Parameter.COUPON};
 
+    private RedeemCouponRequest(Builder builder) {
+        super(builder);
+    }
+
+    /**
+     * @deprecated since v2.2.1 - use RedeemCouponRequest.Builder
+     */
+    @Deprecated
     public RedeemCouponRequest(Authenticator authenticator, RedeemCouponCallback callback) {
         this(authenticator, callback, DEFAULT_TIMEOUT);
     }
 
+    /**
+     * @deprecated since v2.2.1 - use RedeemCouponRequest.Builder
+     */
+    @Deprecated
     public RedeemCouponRequest(Authenticator authenticator, RedeemCouponCallback callback, long timeout) {
         super(authenticator, callback, timeout);
     }
@@ -48,6 +60,24 @@ public class RedeemCouponRequest extends AccountRequest {
     @Override
     public UpdatingAccountRequest asUpdatingRequest() {
         return new UpdatingAccountRequest(this, DEFAULT_UPDATING_TIME);
+    }
+
+    public static class Builder extends AccountRequest.Builder<Builder> {
+
+        public Builder(Authenticator authenticator) {
+            super(authenticator);
+        }
+
+        @Override
+        protected Builder retrieveInstance() {
+            return this;
+        }
+
+        @Override
+        public RedeemCouponRequest build() {
+            return new RedeemCouponRequest(this);
+        }
+
     }
 
 }

@@ -14,10 +14,22 @@ public class CancelOrderRequest extends AccountRequest {
 
     public static final Parameter[] PARAMS = new Parameter[]{Parameter.ORDER_ID};
 
+    private CancelOrderRequest(Builder builder) {
+        super(builder);
+    }
+
+    /**
+     * @deprecated since v2.2.1 - use CancelOrderRequest.Builder
+     */
+    @Deprecated
     public CancelOrderRequest(Authenticator authenticator, CancelOrderCallback callback) {
         this(authenticator, callback, DEFAULT_TIMEOUT);
     }
 
+    /**
+     * @deprecated since v2.2. - use CancelOrderRequest.Builder
+     */
+    @Deprecated
     public CancelOrderRequest(Authenticator authenticator, CancelOrderCallback callback, long timeout) {
         super(authenticator, callback, timeout);
     }
@@ -44,6 +56,23 @@ public class CancelOrderRequest extends AccountRequest {
     @Override
     public UpdatingAccountRequest asUpdatingRequest() {
         return new UpdatingAccountRequest(this, DEFAULT_UPDATING_TIME);
+    }
+
+    public static class Builder extends AccountRequest.Builder<Builder> {
+
+        public Builder(Authenticator authenticator) {
+            super(authenticator);
+        }
+
+        @Override
+        protected Builder retrieveInstance() {
+            return this;
+        }
+
+        @Override
+        public CancelOrderRequest build() {
+            return new CancelOrderRequest(this);
+        }
     }
 
 }
