@@ -20,7 +20,7 @@ public abstract class TradeAlgorithm implements TradeRequestCallback {
 
     public TradeAlgorithm(Authenticator authenticator, BaseAction action) {
         this.action = action;
-        tradeRequest = new TradeRequest(authenticator, this);
+        tradeRequest = new TradeRequest.Builder(authenticator).callback(this).build();
     }
 
     public final void executeTrade() {
