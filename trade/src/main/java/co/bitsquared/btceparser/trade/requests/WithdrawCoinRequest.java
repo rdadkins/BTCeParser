@@ -20,7 +20,7 @@ public class WithdrawCoinRequest extends AccountRequest {
     }
 
     /**
-     * @deprecated since v2.2.1 - use WithdrawCoinRequest.Builder
+     * @deprecated since v2.2.0 - use WithdrawCoinRequest.Builder
      */
     @Deprecated
     public WithdrawCoinRequest(Authenticator authenticator, WithdrawCoinCallback callback) {
@@ -28,7 +28,7 @@ public class WithdrawCoinRequest extends AccountRequest {
     }
 
     /**
-     * @deprecated since v2.2.1 - use WithdrawCoinRequest.Builder
+     * @deprecated since v2.2.0 - use WithdrawCoinRequest.Builder
      */
     @Deprecated
     public WithdrawCoinRequest(Authenticator authenticator, WithdrawCoinCallback callback, long timeout) {

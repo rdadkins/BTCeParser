@@ -14,11 +14,17 @@ public class TransHistoryRequest extends AccountRequest {
         super(builder);
     }
 
+    /**
+     * @deprecated since v2.2.0 - use TransHistoryRequest.Builder
+     */
     @Deprecated
     public TransHistoryRequest(Authenticator authenticator, TransactionHistoryCallback callback) {
         this(authenticator, callback, DEFAULT_TIMEOUT);
     }
 
+    /**
+     * @deprecated since v2.2.0 - use TransHistoryRequest.Builder
+     */
     @Deprecated
     public TransHistoryRequest(Authenticator authenticator, TransactionHistoryCallback callback, long timeout) {
         super(authenticator, callback, timeout);

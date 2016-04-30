@@ -19,7 +19,7 @@ public class CancelOrderRequest extends AccountRequest {
     }
 
     /**
-     * @deprecated since v2.2.1 - use CancelOrderRequest.Builder
+     * @deprecated since v2.2.0 - use CancelOrderRequest.Builder
      */
     @Deprecated
     public CancelOrderRequest(Authenticator authenticator, CancelOrderCallback callback) {
@@ -27,7 +27,7 @@ public class CancelOrderRequest extends AccountRequest {
     }
 
     /**
-     * @deprecated since v2.2. - use CancelOrderRequest.Builder
+     * @deprecated since v2.2.0 - use CancelOrderRequest.Builder
      */
     @Deprecated
     public CancelOrderRequest(Authenticator authenticator, CancelOrderCallback callback, long timeout) {

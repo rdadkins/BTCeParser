@@ -15,7 +15,7 @@ public class TradeHistoryRequest extends AccountRequest {
     }
 
     /**
-     * @deprecated since v2.2.1 - use TradeHistoryRequest.Builder
+     * @deprecated since v2.2.0 - use TradeHistoryRequest.Builder
      */
     @Deprecated
     public TradeHistoryRequest(Authenticator authenticator, TradeHistoryCallback callback) {
@@ -23,7 +23,7 @@ public class TradeHistoryRequest extends AccountRequest {
     }
 
     /**
-     * @deprecated since v2.2.1 - use TradeHistoryRequest.Builder
+     * @deprecated since v2.2.0 - use TradeHistoryRequest.Builder
      */
     @Deprecated
     public TradeHistoryRequest(Authenticator authenticator, TradeHistoryCallback callback, long timeout) {

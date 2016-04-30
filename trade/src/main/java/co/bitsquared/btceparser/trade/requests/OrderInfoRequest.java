@@ -23,7 +23,7 @@ public class OrderInfoRequest extends AccountRequest {
     }
 
     /**
-     * @deprecated since v2.2.1 - use OrderInfoRequest.Builder
+     * @deprecated since v2.2.0 - use OrderInfoRequest.Builder
      */
     @Deprecated
     public OrderInfoRequest(Authenticator authenticator, OrderInfoCallback callback) {
@@ -31,7 +31,7 @@ public class OrderInfoRequest extends AccountRequest {
     }
 
     /**
-     * @deprecated since v2.2.1 - use OrderInfoRequest.Builder
+     * @deprecated since v2.2.0 - use OrderInfoRequest.Builder
      */
     @Deprecated
     public OrderInfoRequest(Authenticator authenticator, OrderInfoCallback callback, long timeout) {

@@ -19,7 +19,7 @@ public class CreateCouponRequest extends AccountRequest {
     }
 
     /**
-     * @deprecated since v2.2.1 - use CreateCouponRequest.Builder
+     * @deprecated since v2.2.0 - use CreateCouponRequest.Builder
      */
     @Deprecated
     public CreateCouponRequest(Authenticator authenticator, CreateCouponCallback callback) {
@@ -27,7 +27,7 @@ public class CreateCouponRequest extends AccountRequest {
     }
 
     /**
-     * @deprecated since v2.2.1 - use CreateCouponRequest.Builder
+     * @deprecated since v2.2.0 - use CreateCouponRequest.Builder
      */
     @Deprecated
     public CreateCouponRequest(Authenticator authenticator, CreateCouponCallback callback, long timeout) {

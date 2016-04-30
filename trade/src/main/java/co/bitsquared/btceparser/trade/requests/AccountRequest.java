@@ -36,7 +36,7 @@ public abstract class AccountRequest extends Request {
 
     /**
      * Creates an AccountRequest from an Authenticator and an AccountCallback and sets timeout to {@code DEFAULT_TIMEOUT}
-     * @deprecated since v2.1.1 - Use AccountRequest.Builder
+     * @deprecated since v2.2.0 - Use AccountRequest.Builder
      */
     @Deprecated
     public AccountRequest(Authenticator authenticator, AccountCallback listener) {
@@ -45,7 +45,7 @@ public abstract class AccountRequest extends Request {
 
     /**
      * Creates an AccountRequest from an Authenticator, an AccountCallback, and a timeout
-     * @deprecated since v2.1.1 - Use AccountRequest.Builder
+     * @deprecated since v2.2.0 - Use AccountRequest.Builder
      */
     @Deprecated
     public AccountRequest(Authenticator authenticator, AccountCallback listener, long timeout) {

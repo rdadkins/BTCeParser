@@ -20,7 +20,7 @@ public class TradeRequest extends AccountRequest {
     }
 
     /**
-     * @deprecated since v2.2.1 - use TradeRequest.Builder
+     * @deprecated since v2.2.0 - use TradeRequest.Builder
      */
     @Deprecated
     public TradeRequest(Authenticator authenticator, TradeRequestCallback callback) {
@@ -28,7 +28,7 @@ public class TradeRequest extends AccountRequest {
     }
 
     /**
-     * @deprecated since v2.2.1 - use TradeRequest.Builder
+     * @deprecated since v2.2.0 - use TradeRequest.Builder
      */
     @Deprecated
     public TradeRequest(Authenticator authenticator, TradeRequestCallback callback, long timeout) {

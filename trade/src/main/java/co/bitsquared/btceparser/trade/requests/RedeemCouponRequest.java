@@ -21,7 +21,7 @@ public class RedeemCouponRequest extends AccountRequest {
     }
 
     /**
-     * @deprecated since v2.2.1 - use RedeemCouponRequest.Builder
+     * @deprecated since v2.2.0 - use RedeemCouponRequest.Builder
      */
     @Deprecated
     public RedeemCouponRequest(Authenticator authenticator, RedeemCouponCallback callback) {
@@ -29,7 +29,7 @@ public class RedeemCouponRequest extends AccountRequest {
     }
 
     /**
-     * @deprecated since v2.2.1 - use RedeemCouponRequest.Builder
+     * @deprecated since v2.2.0 - use RedeemCouponRequest.Builder
      */
     @Deprecated
     public RedeemCouponRequest(Authenticator authenticator, RedeemCouponCallback callback, long timeout) {

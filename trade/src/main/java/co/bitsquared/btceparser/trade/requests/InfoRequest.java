@@ -21,7 +21,7 @@ public class InfoRequest extends AccountRequest {
     }
 
     /**
-     * @deprecated since v2.2.1 - use InfoRequest.Builder
+     * @deprecated since v2.2.0 - use InfoRequest.Builder
      */
     @Deprecated
     public InfoRequest(Authenticator authenticator, InfoCallback callback) {
@@ -29,7 +29,7 @@ public class InfoRequest extends AccountRequest {
     }
 
     /**
-     * @deprecated since v2.2.1 - use InfoRequest.Builder
+     * @deprecated since v2.2.0 - use InfoRequest.Builder
      */
     @Deprecated
     public InfoRequest(Authenticator authenticator, InfoCallback callback, long timeout) {

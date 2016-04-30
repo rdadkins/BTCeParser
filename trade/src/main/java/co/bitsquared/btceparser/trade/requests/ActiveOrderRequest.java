@@ -15,7 +15,7 @@ public class ActiveOrderRequest extends AccountRequest {
     }
 
     /**
-     * @deprecated since v2.2.1 - use ActiveOrderRequest.Builder
+     * @deprecated since v2.2.0 - use ActiveOrderRequest.Builder
      */
     @Deprecated
     public ActiveOrderRequest(Authenticator authenticator, ActiveOrderCallback callback) {
@@ -23,7 +23,7 @@ public class ActiveOrderRequest extends AccountRequest {
     }
 
     /**
-     * @deprecated since v2.2.1 - use ActiveOrderRequest.Builder
+     * @deprecated since v2.2.0 - use ActiveOrderRequest.Builder
      */
     @Deprecated
     public ActiveOrderRequest(Authenticator authenticator, ActiveOrderCallback callback, long timeout) {
