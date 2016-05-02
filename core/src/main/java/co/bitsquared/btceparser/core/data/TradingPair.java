@@ -49,10 +49,16 @@ public enum TradingPair {
         return new Order(priceCurrency, targetCurrency, type);
     }
 
+    /**
+     * Creates a unit BaseCurrency object from the target currency of this TradingPair, i.e., second part of TradingPair.
+     */
     public BaseCurrency<?> getTargetCurrency() {
         return getCurrencyType(TARGET_CURRENCY);
     }
 
+    /**
+     * Creates a unit BaseCurrency object from the price currency of this TradingPair, i.e.m first part of TradingPair.
+     */
     public BaseCurrency<?> getPriceCurrency() {
         return getCurrencyType(PRICE_CURRENCY);
     }
@@ -65,13 +71,9 @@ public enum TradingPair {
         }
     }
 
-    public static TradingPair extract(String string) {
-        String[] currencies = string.split("_");
-        if (currencies.length != 2) return null;
-        TradableCurrency price = TradableCurrency.valueOf(currencies[0].toUpperCase());
-        TradableCurrency target = TradableCurrency.valueOf(currencies[1].toUpperCase());
-        for (TradingPair value: values()) {
-            if (value.PRICE_CURRENCY == price && value.TARGET_CURRENCY == target) {
+    public static TradingPair extract(String input) {
+        for (TradingPair value : values()) {
+            if (value.toString().equalsIgnoreCase(input)) {
                 return value;
             }
         }
