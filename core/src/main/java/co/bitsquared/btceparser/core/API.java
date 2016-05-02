@@ -10,9 +10,24 @@ import co.bitsquared.btceparser.core.data.TradingPair;
  */
 public enum API {
 
+    /**
+     * INFO provides general information of active trading pairs on the exchange.
+     */
     INFO("https://btc-e.com/api/3/info"),
+
+    /**
+     * TICKER provides more in-depth information about all active trading pairs on the exchange such as price information and volume.
+     */
     TICKER("https://btc-e.com/api/3/ticker/"),
+
+    /**
+     * DEPTH provides information about a specific trading pairs current list of orders.
+     */
     DEPTH("https://btc-e.com/api/3/depth/"),
+
+    /**
+     * TRADES provides information about the most recent executed trades for a trading pair.
+     */
     TRADES("https://btc-e.com/api/3/trades/");
 
     /**
