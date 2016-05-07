@@ -16,21 +16,27 @@ public class CoinDepthRequest extends PublicRequest {
     private static final String LIMIT_HEADER = "limit";
 
     private TradingPair tradingPair;
-    private Map<String, Object> parameters;
-    private int depthLimit = API.DEFAULT_ORDER_LIMIT;
+    private Map<String, Object> parameters = new HashMap<>();
+
+    private CoinDepthRequest(Builder builder) {
+        super(builder);
+        parameters = new HashMap<>();
+        tradingPair = builder.tradingPair;
+        setDepthLimit(builder.depthLimit);
+    }
 
     public CoinDepthRequest(TradingPair tradingPair, int depthLimit, CoinDepthCallback listener) {
         super(METHOD.getUrl(tradingPair), listener);
         this.tradingPair = tradingPair;
-        parameters = new HashMap<>();
         setDepthLimit(depthLimit);
     }
 
     public void setDepthLimit(int depthLimit) {
         if (depthLimit > 0 && depthLimit <= API.MAX_ORDER_LIMIT) {
-            this.depthLimit = depthLimit;
+            parameters.put(LIMIT_HEADER, depthLimit);
+        } else {
+            parameters.put(LIMIT_HEADER, API.DEFAULT_ORDER_LIMIT);
         }
-        parameters.put(LIMIT_HEADER, this.depthLimit);
     }
 
     @Override
@@ -56,6 +62,37 @@ public class CoinDepthRequest extends PublicRequest {
     @Override
     public PublicUpdatingRequest asUpdatingRequest() {
         return new PublicUpdatingRequest(this, 10);
+    }
+
+    public static class Builder extends Request.Builder<Builder> {
+
+        private TradingPair tradingPair;
+        private int depthLimit = API.DEFAULT_ORDER_LIMIT;;
+
+        public Builder(TradingPair tradingPair) {
+            this.tradingPair = tradingPair;
+        }
+
+        public Builder depthLimit(int depthLimit) {
+            this.depthLimit = depthLimit;
+            return this;
+        }
+
+        @Override
+        protected String getTargetUrl() {
+            return METHOD.getUrl(tradingPair);
+        }
+
+        @Override
+        protected Builder retrieveInstance() {
+            return this;
+        }
+
+        @Override
+        public CoinDepthRequest build() {
+            return new CoinDepthRequest(this);
+        }
+
     }
 
 }

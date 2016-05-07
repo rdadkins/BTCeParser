@@ -10,6 +10,10 @@ public abstract class PublicRequest extends Request {
 
     protected static final HashMap<String, Object> DEFAULT_PARAMETERS = new HashMap<String, Object>();
 
+    public PublicRequest(Builder builder) {
+        super(builder);
+    }
+
     public PublicRequest(String url, BaseRequestCallback listener) {
         this(url, listener, DEFAULT_TIMEOUT);
     }
