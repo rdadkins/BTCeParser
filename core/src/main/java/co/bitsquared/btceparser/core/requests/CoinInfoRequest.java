@@ -1,9 +1,9 @@
 package co.bitsquared.btceparser.core.requests;
 
 import co.bitsquared.btceparser.core.API;
-import co.bitsquared.btceparser.core.data.TradingPair;
 import co.bitsquared.btceparser.core.callbacks.CoinInfoCallback;
 import co.bitsquared.btceparser.core.data.CoinInfo;
+import co.bitsquared.btceparser.core.data.TradingPair;
 import co.bitsquared.btceparser.core.utils.Utils;
 import org.json.JSONObject;
 
@@ -18,6 +18,11 @@ public class CoinInfoRequest extends PublicRequest {
     private static final API METHOD = API.INFO;
 
     private TradingPair[] tradingPairs;
+
+    private CoinInfoRequest(Builder builder) {
+        super(builder);
+        this.tradingPairs = builder.tradingPairs;
+    }
 
     public CoinInfoRequest(CoinInfoCallback listener, TradingPair... tradingPairs) {
         this(listener, DEFAULT_TIMEOUT, tradingPairs);
@@ -51,6 +56,35 @@ public class CoinInfoRequest extends PublicRequest {
     @Override
     public PublicUpdatingRequest asUpdatingRequest() {
         return new PublicUpdatingRequest(this, 10);
+    }
+
+    public static class Builder extends Request.Builder<Builder> {
+
+        private TradingPair[] tradingPairs;
+
+        public Builder(TradingPair tradingPair, TradingPair... additionalPairs) {
+            tradingPairs = new TradingPair[additionalPairs.length + 1];
+            tradingPairs[0] = tradingPair;
+            if (additionalPairs.length > 0) {
+                System.arraycopy(additionalPairs, 0, tradingPairs, 1, additionalPairs.length);
+            }
+        }
+
+        @Override
+        protected String getTargetUrl() {
+            return METHOD.getUrl(null);
+        }
+
+        @Override
+        protected Builder retrieveInstance() {
+            return this;
+        }
+
+        @Override
+        public CoinInfoRequest build() {
+            return new CoinInfoRequest(this);
+        }
+
     }
 
 }
