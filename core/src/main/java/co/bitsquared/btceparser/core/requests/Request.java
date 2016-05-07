@@ -20,6 +20,16 @@ public abstract class Request implements Callback<JsonNode> {
     protected ArrayList<BaseRequestCallback> listeners;
     protected final String url;
 
+    {
+        listeners = new ArrayList<>();
+    }
+
+    protected Request(Builder builder) {
+        url = builder.getTargetUrl();
+        listeners.add(builder.callback);
+        Unirest.setTimeouts(builder.timeout, builder.timeout);
+    }
+
     public Request(String url, BaseRequestCallback listener) {
         this(url, listener, DEFAULT_TIMEOUT);
     }
@@ -27,7 +37,6 @@ public abstract class Request implements Callback<JsonNode> {
     public Request(String url, BaseRequestCallback listener, long timeout) {
         Unirest.setTimeouts(timeout, timeout);
         this.url = url;
-        listeners = new ArrayList<>();
         listeners.add(listener);
     }
 
@@ -101,6 +110,29 @@ public abstract class Request implements Callback<JsonNode> {
         if (task == null) {
             throw new RuntimeException("processRequest() not called");
         }
+    }
+
+    public static abstract class Builder<T extends Builder<T>> {
+
+        private BaseRequestCallback callback;
+        private int timeout = DEFAULT_TIMEOUT;
+
+        public final T callback(BaseRequestCallback callback) {
+            this.callback = callback;
+            return retrieveInstance();
+        }
+
+        public final T timeout(int timeout) {
+            this.timeout = timeout;
+            return retrieveInstance();
+        }
+
+        protected abstract String getTargetUrl();
+
+        protected abstract T retrieveInstance();
+
+        public abstract Request build();
+
     }
 
 }
