@@ -25,10 +25,18 @@ public class CoinInfoRequest extends PublicRequest {
         this.tradingPairs = builder.tradingPairs;
     }
 
+    /**
+     * @deprecated use CoinInfoRequest.Builder
+     */
+    @Deprecated
     public CoinInfoRequest(CoinInfoCallback listener, TradingPair... tradingPairs) {
         this(listener, DEFAULT_TIMEOUT, tradingPairs);
     }
 
+    /**
+     * @deprecated use CoinInfoRequest.Builder
+     */
+    @Deprecated
     public CoinInfoRequest(CoinInfoCallback listener, long timeout, TradingPair... tradingPairs) {
         super(METHOD.getUrl(null), listener, timeout);
         if (tradingPairs.length == 0) {

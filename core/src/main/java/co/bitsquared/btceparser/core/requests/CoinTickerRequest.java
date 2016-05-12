@@ -21,6 +21,10 @@ public class CoinTickerRequest extends PublicRequest {
         tradingPair = builder.tradingPair;
     }
 
+    /**
+     * @deprecated use CoinTickerRequest.Builder
+     */
+    @Deprecated
     public CoinTickerRequest(TradingPair tradingPair, CoinTickerCallback listener) {
         super(METHOD.getUrl(tradingPair), listener);
         this.tradingPair = tradingPair;

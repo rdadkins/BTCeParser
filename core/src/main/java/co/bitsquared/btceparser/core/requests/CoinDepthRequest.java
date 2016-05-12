@@ -25,6 +25,10 @@ public class CoinDepthRequest extends PublicRequest {
         setDepthLimit(builder.depthLimit);
     }
 
+    /**
+     * @deprecated use CoinDepthRequest.Builder
+     */
+    @Deprecated
     public CoinDepthRequest(TradingPair tradingPair, int depthLimit, CoinDepthCallback listener) {
         super(METHOD.getUrl(tradingPair), listener);
         this.tradingPair = tradingPair;
