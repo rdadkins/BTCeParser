@@ -26,20 +26,34 @@ public abstract class Request implements Callback<JsonNode> {
 
     protected Request(Builder builder) {
         url = builder.getTargetUrl();
-        listeners.add(builder.callback);
+        if (builder.callback != null) {
+            listeners.add(builder.callback);
+        }
         Unirest.setTimeouts(builder.timeout, builder.timeout);
     }
 
+    /**
+     * @deprecated use subclass Builder class
+     */
+    @Deprecated
     public Request(String url, BaseRequestCallback listener) {
         this(url, listener, DEFAULT_TIMEOUT);
     }
 
+    /**
+     * @deprecated use subclass Builder class
+     */
+    @Deprecated
     public Request(String url, BaseRequestCallback listener, long timeout) {
         Unirest.setTimeouts(timeout, timeout);
         this.url = url;
         listeners.add(listener);
     }
 
+    /**
+     * @deprecated use subclass Builder class
+     */
+    @Deprecated
     protected Request(String url, ArrayList<BaseRequestCallback> listeners, long timeout) {
         Unirest.setTimeouts(timeout, timeout);
         this.url = url;
@@ -94,7 +108,7 @@ public abstract class Request implements Callback<JsonNode> {
         }
     }
 
-    protected final boolean listenersExist() {
+    private boolean listenersExist() {
         return listeners.size() > 0;
     }
 
