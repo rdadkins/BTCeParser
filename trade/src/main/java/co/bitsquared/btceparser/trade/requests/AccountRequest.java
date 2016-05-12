@@ -30,7 +30,7 @@ public abstract class AccountRequest extends Request {
     protected ParameterBuilder parameterBuilder;
 
     protected AccountRequest(Builder builder) {
-        super(URL, builder.callback, builder.timeout);
+        super(builder);
         this.authenticator = builder.authenticator;
     }
 
@@ -179,29 +179,25 @@ public abstract class AccountRequest extends Request {
      */
     public abstract UpdatingAccountRequest asUpdatingRequest();
 
-    static abstract class Builder<T extends Builder<T>> {
+    public static abstract class Builder<T extends Builder<T>> extends Request.Builder<T> {
 
         protected Authenticator authenticator;
-        protected AccountCallback callback;
-        protected int timeout = AccountRequest.DEFAULT_TIMEOUT;
 
-        Builder(Authenticator authenticator) {
+        public Builder(Authenticator authenticator) {
             this.authenticator = authenticator;
         }
 
-        public final T callback(AccountCallback callback) {
-            this.callback = callback;
-            return retrieveInstance();
+        @Override
+        protected String getTargetUrl() {
+            return TAPI.URL;
         }
-
-        public final T timeout(int timeout) {
-            this.timeout = timeout;
-            return retrieveInstance();
-        }
-
-        protected abstract T retrieveInstance();
 
         public abstract AccountRequest build();
+
+        @Override
+        public final UpdatingAccountRequest buildAsUpdatingRequest() {
+            return build().asUpdatingRequest();
+        }
 
     }
 }

@@ -1,9 +1,10 @@
 package co.bitsquared.btceparser.core.requests;
 
 import co.bitsquared.btceparser.core.API;
-import co.bitsquared.btceparser.core.data.TradingPair;
 import co.bitsquared.btceparser.core.callbacks.CoinInfoCallback;
 import co.bitsquared.btceparser.core.data.CoinInfo;
+import co.bitsquared.btceparser.core.data.TradingPair;
+import co.bitsquared.btceparser.core.exceptions.NullTradingPairException;
 import co.bitsquared.btceparser.core.utils.Utils;
 import org.json.JSONObject;
 
@@ -19,10 +20,23 @@ public class CoinInfoRequest extends PublicRequest {
 
     private TradingPair[] tradingPairs;
 
+    private CoinInfoRequest(Builder builder) {
+        super(builder);
+        this.tradingPairs = builder.tradingPairs;
+    }
+
+    /**
+     * @deprecated use CoinInfoRequest.Builder
+     */
+    @Deprecated
     public CoinInfoRequest(CoinInfoCallback listener, TradingPair... tradingPairs) {
         this(listener, DEFAULT_TIMEOUT, tradingPairs);
     }
 
+    /**
+     * @deprecated use CoinInfoRequest.Builder
+     */
+    @Deprecated
     public CoinInfoRequest(CoinInfoCallback listener, long timeout, TradingPair... tradingPairs) {
         super(METHOD.getUrl(null), listener, timeout);
         if (tradingPairs.length == 0) {
@@ -51,6 +65,53 @@ public class CoinInfoRequest extends PublicRequest {
     @Override
     public PublicUpdatingRequest asUpdatingRequest() {
         return new PublicUpdatingRequest(this, 10);
+    }
+
+    public static class Builder extends PublicRequest.Builder {
+
+        private TradingPair[] tradingPairs;
+
+        /**
+         * Creates a Builder with a default tradingPair and any additional pairs to be processed. This allows for 1-to-many
+         * TradingPair's to be defined.
+         * @param tradingPair the original tradingPair to process
+         * @param additionalPairs additional tradingPairs to gather information on.
+         */
+        public Builder(TradingPair tradingPair, TradingPair... additionalPairs) {
+            if (tradingPair == null) {
+                throw new NullTradingPairException();
+            }
+            tradingPairs = new TradingPair[additionalPairs.length + 1];
+            tradingPairs[0] = tradingPair;
+            if (additionalPairs.length > 0) {
+                System.arraycopy(additionalPairs, 0, tradingPairs, 1, additionalPairs.length);
+            }
+        }
+
+        /**
+         * Creates a CoinInfoRequest.Builder that contains ALL trading pairs found in TradingPair.
+         *
+         * @see co.bitsquared.btceparser.core.data.TradingPair
+         */
+        public Builder() {
+            tradingPairs = TradingPair.values();
+        }
+
+        @Override
+        protected String getTargetUrl() {
+            return METHOD.getUrl(null);
+        }
+
+        @Override
+        protected Builder retrieveInstance() {
+            return this;
+        }
+
+        @Override
+        public CoinInfoRequest build() {
+            return new CoinInfoRequest(this);
+        }
+
     }
 
 }

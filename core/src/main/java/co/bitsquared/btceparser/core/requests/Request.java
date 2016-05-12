@@ -20,17 +20,51 @@ public abstract class Request implements Callback<JsonNode> {
     protected ArrayList<BaseRequestCallback> listeners;
     protected final String url;
 
+    {
+        listeners = new ArrayList<>();
+    }
+
+    protected Request(Builder builder) {
+        url = builder.getTargetUrl();
+        if (builder.callback != null) {
+            listeners.add(builder.callback);
+        }
+        Unirest.setTimeouts(builder.timeout, builder.timeout);
+    }
+
+    /**
+     * Create a Request from a previously created Request.
+     *
+     * @see co.bitsquared.btceparser.core.requests.UpdatingRequest
+     */
+    protected Request(Request request) {
+        url = request.url;
+        listeners = request.listeners;
+        task = request.task;
+    }
+
+    /**
+     * @deprecated use subclass Builder class
+     */
+    @Deprecated
     public Request(String url, BaseRequestCallback listener) {
         this(url, listener, DEFAULT_TIMEOUT);
     }
 
+    /**
+     * @deprecated use subclass Builder class
+     */
+    @Deprecated
     public Request(String url, BaseRequestCallback listener, long timeout) {
         Unirest.setTimeouts(timeout, timeout);
         this.url = url;
-        listeners = new ArrayList<>();
         listeners.add(listener);
     }
 
+    /**
+     * @deprecated use subclass Builder class
+     */
+    @Deprecated
     protected Request(String url, ArrayList<BaseRequestCallback> listeners, long timeout) {
         Unirest.setTimeouts(timeout, timeout);
         this.url = url;
@@ -85,7 +119,7 @@ public abstract class Request implements Callback<JsonNode> {
         }
     }
 
-    protected final boolean listenersExist() {
+    private boolean listenersExist() {
         return listeners.size() > 0;
     }
 
@@ -101,6 +135,31 @@ public abstract class Request implements Callback<JsonNode> {
         if (task == null) {
             throw new RuntimeException("processRequest() not called");
         }
+    }
+
+    public static abstract class Builder<T extends Builder<T>> {
+
+        private BaseRequestCallback callback;
+        private int timeout = DEFAULT_TIMEOUT;
+
+        public final T callback(BaseRequestCallback callback) {
+            this.callback = callback;
+            return retrieveInstance();
+        }
+
+        public final T timeout(int timeout) {
+            this.timeout = timeout;
+            return retrieveInstance();
+        }
+
+        protected abstract String getTargetUrl();
+
+        protected abstract T retrieveInstance();
+
+        public abstract Request build();
+
+        public abstract UpdatingRequest buildAsUpdatingRequest();
+
     }
 
 }
