@@ -5,6 +5,7 @@ import co.bitsquared.btceparser.core.callbacks.CoinTradeCallback;
 import co.bitsquared.btceparser.core.data.OrderBook;
 import co.bitsquared.btceparser.core.data.Trade;
 import co.bitsquared.btceparser.core.data.TradingPair;
+import co.bitsquared.btceparser.core.exceptions.NullTradingPairException;
 import co.bitsquared.btceparser.core.utils.Utils;
 import org.json.JSONObject;
 
@@ -23,7 +24,11 @@ public class CoinTradeRequest extends PublicRequest {
 
     private TradingPair tradingPair;
     private Map<String, Object> parameters = new HashMap<>();
-    private int tradeLimit = API.DEFAULT_TRADE_LIMIT;
+
+    private CoinTradeRequest(Builder builder) {
+        super(builder);
+        setTradeLimit(builder.tradeLimit);
+    }
 
     public CoinTradeRequest(TradingPair tradingPair, int limit, CoinTradeCallback listener) {
         super(METHOD.getUrl(tradingPair), listener);
@@ -32,10 +37,13 @@ public class CoinTradeRequest extends PublicRequest {
     }
 
     public void setTradeLimit(int tradeLimit) {
+        int limit;
         if (tradeLimit > 0 && tradeLimit <= API.MAX_TRADE_LIMIT) {
-            this.tradeLimit = tradeLimit;
+            limit = tradeLimit;
+        } else {
+            limit = API.DEFAULT_TRADE_LIMIT;
         }
-        parameters.put(LIMIT_HEADER, this.tradeLimit);
+        parameters.put(LIMIT_HEADER, limit);
     }
 
     @Override
@@ -60,6 +68,44 @@ public class CoinTradeRequest extends PublicRequest {
     @Override
     public PublicUpdatingRequest asUpdatingRequest() {
         return new PublicUpdatingRequest(this, 5);
+    }
+
+    public static class Builder extends Request.Builder<Builder> {
+
+        private TradingPair tradingPair;
+        private int tradeLimit = API.DEFAULT_TRADE_LIMIT;
+
+        public Builder(TradingPair tradingPair) {
+            if (tradingPair == null) {
+                throw new NullTradingPairException();
+            }
+            this.tradingPair = tradingPair;
+        }
+
+        /**
+         * Sets the trade limit for this request. Default is set to {@code API.DEFAULT_TRADE_LIMIT} if this value is not set or
+         * the value passed is out of range.
+         */
+        public Builder tradeLimit(int tradeLimit) {
+            this.tradeLimit = tradeLimit;
+            return this;
+        }
+
+        @Override
+        protected String getTargetUrl() {
+            return METHOD.getUrl(tradingPair);
+        }
+
+        @Override
+        protected Builder retrieveInstance() {
+            return this;
+        }
+
+        @Override
+        public CoinTradeRequest build() {
+            return new CoinTradeRequest(this);
+        }
+
     }
 
 }
