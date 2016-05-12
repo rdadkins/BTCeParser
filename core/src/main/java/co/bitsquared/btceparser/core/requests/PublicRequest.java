@@ -10,14 +10,22 @@ public abstract class PublicRequest extends Request {
 
     protected static final HashMap<String, Object> DEFAULT_PARAMETERS = new HashMap<String, Object>();
 
-    public PublicRequest(Builder builder) {
+    protected PublicRequest(Builder builder) {
         super(builder);
     }
 
+    /**
+     * @deprecated use subclass Builder class to create requests
+     */
+    @Deprecated
     public PublicRequest(String url, BaseRequestCallback listener) {
         this(url, listener, DEFAULT_TIMEOUT);
     }
 
+    /**
+     * @deprecated use subclass Builder class to create requests
+     */
+    @Deprecated
 	public PublicRequest(String url, BaseRequestCallback listener, long timeout) {
 		super(url, listener, timeout);
 	}
