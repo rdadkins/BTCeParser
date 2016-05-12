@@ -62,12 +62,30 @@ public class CoinInfoRequest extends PublicRequest {
 
         private TradingPair[] tradingPairs;
 
+        /**
+         * Creates a Builder with a default tradingPair and any additional pairs to be processed. This allows for 1-to-many
+         * TradingPair's to be defined.
+         * @param tradingPair the original tradingPair to process
+         * @param additionalPairs additional tradingPairs to gather information on.
+         */
         public Builder(TradingPair tradingPair, TradingPair... additionalPairs) {
+            if (tradingPair == null) {
+                throw new NullPointerException("TradingPair cannot be null");
+            }
             tradingPairs = new TradingPair[additionalPairs.length + 1];
             tradingPairs[0] = tradingPair;
             if (additionalPairs.length > 0) {
                 System.arraycopy(additionalPairs, 0, tradingPairs, 1, additionalPairs.length);
             }
+        }
+
+        /**
+         * Creates a CoinInfoRequest.Builder that contains ALL trading pairs found in TradingPair.
+         *
+         * @see co.bitsquared.btceparser.core.data.TradingPair
+         */
+        public Builder() {
+            tradingPairs = TradingPair.values();
         }
 
         @Override
