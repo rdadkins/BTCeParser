@@ -33,10 +33,10 @@ public class CoinInfoRequest extends PublicRequest {
 
     @Override
     protected void processResponseBody(JSONObject body) {
+        JSONObject pairs = body.getJSONObject("pairs");
+        CoinInfo[] coinInfoPairs = Utils.extractCoinInfo(pairs, tradingPairs);
         listeners.stream().filter(callback -> callback instanceof CoinInfoCallback).forEach(callback -> {
             CoinInfoCallback listener = (CoinInfoCallback) callback;
-            JSONObject pairs = body.getJSONObject("pairs");
-            CoinInfo[] coinInfoPairs = Utils.extractCoinInfo(pairs, tradingPairs);
             for (CoinInfo coinInfo: coinInfoPairs) {
                 execute(() -> listener.onSuccess(coinInfo));
             }
