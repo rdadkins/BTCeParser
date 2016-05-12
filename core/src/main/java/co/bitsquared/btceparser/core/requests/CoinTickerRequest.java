@@ -4,6 +4,7 @@ import co.bitsquared.btceparser.core.API;
 import co.bitsquared.btceparser.core.data.TradingPair;
 import co.bitsquared.btceparser.core.callbacks.CoinTickerCallback;
 import co.bitsquared.btceparser.core.data.CoinTicker;
+import co.bitsquared.btceparser.core.exceptions.NullTradingPairException;
 import co.bitsquared.btceparser.core.utils.Utils;
 import org.json.JSONObject;
 
@@ -49,6 +50,9 @@ public class CoinTickerRequest extends PublicRequest {
         private TradingPair tradingPair;
 
         public Builder(TradingPair tradingPair) {
+            if (tradingPair == null) {
+                throw new NullTradingPairException();
+            }
             this.tradingPair = tradingPair;
         }
 

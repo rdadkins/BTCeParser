@@ -4,6 +4,7 @@ import co.bitsquared.btceparser.core.API;
 import co.bitsquared.btceparser.core.callbacks.CoinInfoCallback;
 import co.bitsquared.btceparser.core.data.CoinInfo;
 import co.bitsquared.btceparser.core.data.TradingPair;
+import co.bitsquared.btceparser.core.exceptions.NullTradingPairException;
 import co.bitsquared.btceparser.core.utils.Utils;
 import org.json.JSONObject;
 
@@ -70,7 +71,7 @@ public class CoinInfoRequest extends PublicRequest {
          */
         public Builder(TradingPair tradingPair, TradingPair... additionalPairs) {
             if (tradingPair == null) {
-                throw new NullPointerException("TradingPair cannot be null");
+                throw new NullTradingPairException();
             }
             tradingPairs = new TradingPair[additionalPairs.length + 1];
             tradingPairs[0] = tradingPair;
