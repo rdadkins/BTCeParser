@@ -44,6 +44,7 @@ public abstract class PublicRequest extends Request {
         /**
          * Builds this request as a PublicUpdatingRequest
          */
+        @Override
         public final PublicUpdatingRequest buildAsUpdatingRequest() {
             return build().asUpdatingRequest();
         }

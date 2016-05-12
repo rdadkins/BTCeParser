@@ -31,7 +31,6 @@ public abstract class AccountRequest extends Request {
 
     protected AccountRequest(Builder builder) {
         super(builder);
-//        super(URL, builder.callback, builder.timeout);
         this.authenticator = builder.authenticator;
     }
 
@@ -195,6 +194,7 @@ public abstract class AccountRequest extends Request {
 
         public abstract AccountRequest build();
 
+        @Override
         public final UpdatingAccountRequest buildAsUpdatingRequest() {
             return build().asUpdatingRequest();
         }
