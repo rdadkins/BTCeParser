@@ -74,7 +74,7 @@ public class CoinTradeRequest extends PublicRequest {
         return new PublicUpdatingRequest(this, 5);
     }
 
-    public static class Builder extends Request.Builder<Builder> {
+    public static class Builder extends PublicRequest.Builder {
 
         private TradingPair tradingPair;
         private int tradeLimit = API.DEFAULT_TRADE_LIMIT;

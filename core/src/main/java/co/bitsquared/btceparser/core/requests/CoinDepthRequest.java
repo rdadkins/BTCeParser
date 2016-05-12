@@ -68,7 +68,7 @@ public class CoinDepthRequest extends PublicRequest {
         return new PublicUpdatingRequest(this, 10);
     }
 
-    public static class Builder extends Request.Builder<Builder> {
+    public static class Builder extends PublicRequest.Builder {
 
         private TradingPair tradingPair;
         private int depthLimit = API.DEFAULT_ORDER_LIMIT;;
