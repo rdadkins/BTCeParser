@@ -15,6 +15,11 @@ public class CoinTickerRequest extends PublicRequest {
 
     private final TradingPair tradingPair;
 
+    private CoinTickerRequest(Builder builder) {
+        super(builder);
+        tradingPair = builder.tradingPair;
+    }
+
     public CoinTickerRequest(TradingPair tradingPair, CoinTickerCallback listener) {
         super(METHOD.getUrl(tradingPair), listener);
         this.tradingPair = tradingPair;
@@ -37,6 +42,31 @@ public class CoinTickerRequest extends PublicRequest {
     @Override
     public PublicUpdatingRequest asUpdatingRequest() {
         return new PublicUpdatingRequest(this, 10);
+    }
+
+    public static class Builder extends Request.Builder<Builder> {
+
+        private TradingPair tradingPair;
+
+        public Builder(TradingPair tradingPair) {
+            this.tradingPair = tradingPair;
+        }
+
+        @Override
+        protected String getTargetUrl() {
+            return METHOD.getUrl(tradingPair);
+        }
+
+        @Override
+        protected Builder retrieveInstance() {
+            return this;
+        }
+
+        @Override
+        public CoinTickerRequest build() {
+            return new CoinTickerRequest(this);
+        }
+
     }
 
 }
