@@ -195,6 +195,7 @@ public abstract class AccountRequest extends Request {
 
         public abstract AccountRequest build();
 
+        @Override
         public final UpdatingAccountRequest buildAsUpdatingRequest() {
             return build().asUpdatingRequest();
         }

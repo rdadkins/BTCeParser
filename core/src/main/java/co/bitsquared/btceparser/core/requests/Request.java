@@ -158,6 +158,8 @@ public abstract class Request implements Callback<JsonNode> {
 
         public abstract Request build();
 
+        public abstract UpdatingRequest buildAsUpdatingRequest();
+
     }
 
 }
