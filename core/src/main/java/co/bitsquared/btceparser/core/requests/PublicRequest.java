@@ -39,4 +39,18 @@ public abstract class PublicRequest extends Request {
 
     public abstract PublicUpdatingRequest asUpdatingRequest();
 
+    public static abstract class Builder extends Request.Builder<Builder> {
+
+        /**
+         * Builds this request as a PublicUpdatingRequest
+         */
+        public final PublicUpdatingRequest buildAsUpdatingRequest() {
+            PublicRequest request = build();
+            return request.asUpdatingRequest();
+        }
+
+        public abstract PublicRequest build();
+
+    }
+
 }
