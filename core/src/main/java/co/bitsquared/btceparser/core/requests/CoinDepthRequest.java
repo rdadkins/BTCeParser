@@ -20,7 +20,6 @@ public class CoinDepthRequest extends PublicRequest {
 
     private CoinDepthRequest(Builder builder) {
         super(builder);
-        parameters = new HashMap<>();
         tradingPair = builder.tradingPair;
         setDepthLimit(builder.depthLimit);
     }
@@ -70,9 +69,16 @@ public class CoinDepthRequest extends PublicRequest {
         private int depthLimit = API.DEFAULT_ORDER_LIMIT;;
 
         public Builder(TradingPair tradingPair) {
+            if (tradingPair == null) {
+                throw new NullPointerException("TradingPair cannot be null");
+            }
             this.tradingPair = tradingPair;
         }
 
+        /**
+         * Sets the depth limit for this request. Default is set to {@code API.DEFAULT_ORDER_LIMIT} if this value is not set or
+         * the value passed is out of range.
+         */
         public Builder depthLimit(int depthLimit) {
             this.depthLimit = depthLimit;
             return this;
