@@ -1,8 +1,5 @@
 package co.bitsquared.btceparser.core.requests;
 
-import co.bitsquared.btceparser.core.callbacks.BaseRequestCallback;
-
-import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -12,23 +9,9 @@ public abstract class UpdatingRequest extends Request {
     private boolean canUpdate = true;
     private Timer timer = new Timer();
 
-    public UpdatingRequest(String url, BaseRequestCallback callback, int secondsUpdateInterval) {
-        this(url, callback, secondsUpdateInterval, DEFAULT_TIMEOUT);
-    }
-
-    protected UpdatingRequest(Request request, int secondsUpdateInterval) {
-        super(request.url, request.listeners, secondsUpdateInterval);
-        updateMilliSeconds(secondsUpdateInterval);
-    }
-
-    protected UpdatingRequest(String url, ArrayList<BaseRequestCallback> callbacks, int secondsUpdateInterval) {
-        super(url, callbacks, secondsUpdateInterval);
-        updateMilliSeconds(secondsUpdateInterval);
-    }
-
-    public UpdatingRequest(String url, BaseRequestCallback callback, int secondsUpdateInterval, long timeout) {
-        super(url, callback, timeout);
-        updateMilliSeconds(secondsUpdateInterval);
+    protected UpdatingRequest(Request request, int interval) {
+        super(request);
+        updateMilliSeconds(interval);
     }
 
     public final void updateInterval(int secondsUpdateInterval, boolean cancelCurrentTask) {
