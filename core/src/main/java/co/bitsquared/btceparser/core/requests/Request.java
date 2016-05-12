@@ -33,6 +33,17 @@ public abstract class Request implements Callback<JsonNode> {
     }
 
     /**
+     * Create a Request from a previously created Request.
+     *
+     * @see co.bitsquared.btceparser.core.requests.UpdatingRequest
+     */
+    protected Request(Request request) {
+        url = request.url;
+        listeners = request.listeners;
+        task = request.task;
+    }
+
+    /**
      * @deprecated use subclass Builder class
      */
     @Deprecated
