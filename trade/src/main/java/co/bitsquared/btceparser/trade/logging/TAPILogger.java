@@ -11,18 +11,19 @@ public class TAPILogger extends AbstractLogger {
     private static final String FILE_NAME = "log.txt";
     private static final boolean includeDate = false;
 
+    static {
+        try {
+            instance = new TAPILogger();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     private TAPILogger() throws IOException {
         super(FILE_NAME, includeDate);
     }
 
     public static TAPILogger getInstance() {
-        if (instance == null) {
-            try {
-                instance = new TAPILogger();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
         return instance;
     }
 
