@@ -111,6 +111,14 @@ public class Trade extends LoggableData {
     }
 
     @Override
+    public String toLoggableString() {
+        return getTradingPair().name() + " " +
+                getDepthType().name() + " " + getAmount() + " at " + getRate() +
+                " Created: " + getTimestamp() +
+                " ID: " + getTransactionID();
+    }
+
+    @Override
     public Map<String, Object> getDataAsMap() {
         return dataMap;
     }

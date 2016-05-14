@@ -16,4 +16,5 @@ public enum DepthType {
 	public String toString() {
 		return name().toLowerCase();
 	}
+
 }

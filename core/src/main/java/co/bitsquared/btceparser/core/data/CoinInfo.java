@@ -79,6 +79,17 @@ public class CoinInfo extends LoggableData {
     }
 
     @Override
+    public String toLoggableString() {
+        return getTradingPair().name() +
+                " Decimal Places: " + getDecimalPlaces() +
+                " Fee: " + getFee() +
+                " Hidden: " + isHidden() +
+                " Min Amount: " + getMinAmount() +
+                " Min Price: " + getMinPrice() +
+                " Max Price: " + getMaxPrice();
+    }
+
+    @Override
     public Map<String, Object> getDataAsMap() {
         return dataMap;
     }

@@ -70,6 +70,18 @@ public class CoinTicker extends LoggableData {
     }
 
     @Override
+    public String toLoggableString() {
+        return getTradingPair().name() +
+                " High: " + getHighPrice() +
+                " Low: " + getLowPrice() +
+                " Buy: " + getBuyPrice() +
+                " Sell: " + getSellPrice() +
+                " Average: " + getAveragePrice() +
+                " Last: " + getLastPrice() +
+                " Volume: " + getVolume();
+    }
+
+    @Override
     public Map<String, Object> getDataAsMap() {
         return dataMap;
     }
