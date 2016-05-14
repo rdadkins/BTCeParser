@@ -49,7 +49,7 @@ public class CoinTickerRequest extends PublicRequest {
         return new PublicUpdatingRequest(this, 10);
     }
 
-    public static class Builder extends PublicRequest.Builder {
+    public static class Builder extends PublicRequest.Builder<Builder> {
 
         private TradingPair tradingPair;
 
