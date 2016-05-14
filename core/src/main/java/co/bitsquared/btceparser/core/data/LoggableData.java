@@ -12,13 +12,25 @@ public abstract class LoggableData {
 
     public static final String TRADING_PAIR_KEY = "trading_pair";
 
+    /**
+     * Turns this object into a JSONObject for JSON parsing and storing.
+     * @return
+     */
     public final JSONObject toJSONObject() {
         JSONObject object = new JSONObject();
+        Map<String, Object> data = getDataAsMap();
+        if (data == null) return object;
         for (Map.Entry<String, Object> set: getDataAsMap().entrySet()) {
             object.put(set.getKey(), set.getValue());
         }
         return object;
     }
+
+    /**
+     * @return a string representation of this object that can be stored in a text file.
+     * @see co.bitsquared.btceparser.core.logging.AbstractLogger
+     */
+    public abstract String toLoggableString();
 
     protected final int getInt(JSONObject object, String key) {
         return object.getInt(key);
@@ -32,6 +44,9 @@ public abstract class LoggableData {
         return object.getDouble(key);
     }
 
+    /**
+     * @return the data as a Map. Returns null if the data cannot be represented as a map.
+     */
     public abstract Map<String, Object> getDataAsMap();
 
 }
