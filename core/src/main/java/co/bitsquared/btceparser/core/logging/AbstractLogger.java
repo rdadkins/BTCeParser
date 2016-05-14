@@ -8,6 +8,10 @@ import java.util.Date;
 
 public abstract class AbstractLogger {
 
+    /**
+     * Default file path is $PROJECT_FOLDER/BTCeParser/Logs. If a secondary path is defined, the path will turn in to
+     * $PROJECT_FOLDER/BTCeParser/Logs/$SECONDARY_PATH.
+     */
     private static final String FILE_PATH = "BTCeParser" + File.separator + "Logs";
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("[yyyy-MM-dd HH:mm:ss.SSS] ");
     private File file;
@@ -25,8 +29,15 @@ public abstract class AbstractLogger {
         createFile();
     }
 
+    /**
+     * Defines a nested path / folder in which to place a file. The parent folder follows $PROJECT_FOLDER/BTCeParser/Logs
+     * @return a string if a nested path should be used, null if no path is desired.
+     */
     protected abstract String getSecondaryPath();
 
+    /**
+     * Logs each line to the specified file. Each line is tagged with a timestamp if includeDate is true.
+     */
     protected synchronized final void logLines(String... lines) {
         try {
             FileWriter writer = getFileWriter();
