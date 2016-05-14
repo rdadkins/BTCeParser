@@ -19,7 +19,7 @@ In order to create a request for public information, you need to create a <a hre
 
 An example of a pre-defined request is <a href="https://github.com/rdadkins/BTCeParser/blob/master/core/src/main/java/co/bitsquared/btceparser/core/requests/CoinInfoRequest.java">CoinInfoRequest</a> which needs to be supplied a <a href="https://github.com/rdadkins/BTCeParser/blob/master/core/src/main/java/co/bitsquared/btceparser/core/callbacks/CoinInfoCallback.java">CoinInfoCallback</a> and at least one TradingPair. Usage is shown as below:
 ```
-CoinInfoRequest request = new CoinInfoRequest(this, TradingPair.BTC_USD);
+CoinInfoRequest request = new CoinInfoRequest.Builder(TradingPair.BTC_USD).callback(this).build();
 request.processRequest();
 ...
 @Override
@@ -33,9 +33,13 @@ Each pre-defined PublicRequest has their own callback with defined onSuccess() m
 # Updating Public Requests
 When there is a need to have a request update on a certain interval, each PublicRequest is defined to do so. Usage is below:
 ```
-CoinInfoRequest request = new CoinInfoRequest(this, TradingPair.BTC_USD);
+// Method 1:
+CoinInfoRequest request = new CoinInfoRequest.Builder(TradingPair.BTC_USD).callback(this).build();
 PublicUpdatingRequest updatingRequest = request.asUpdatingRequest();
 updatingRequest.updateInterval(5, false);
+updatingRequest.startUpdating();
+// Method 2:
+PublicUpdatingRequest updatingRequest = new CoinInfoRequest.Builder(TradingPair.BTC_USD).callback(this).buildAsUpdatingRequest();
 updatingRequest.startUpdating();
 ...
 @Override
@@ -99,9 +103,13 @@ There is also the ability to have AccountRequests update on an interval. Usage i
 Here is an example of an updating TradeRequest:
 ```
 Authenticator auth = new Authenticator("key", "secret", 1);
+// Method 1
 TradeRequest request = new TradeRequest.Builder(auth).callback(this).build();
 request.assignParameters(paramBuilder);
 UpdatingAccountRequest updatingRequest = request.asUpdatingRequest();
+updatingRequest.startUpdating();
+// Method 2
+UpdatingAccountRequest updatingRequest = new TradeRequest.Builder(auth).callback(this).buildAsUpdatingRequest();
 updatingRequest.startUpdating();
 ...
 @Override
