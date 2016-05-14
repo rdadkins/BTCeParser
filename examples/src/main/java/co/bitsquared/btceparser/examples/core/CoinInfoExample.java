@@ -8,14 +8,12 @@ import co.bitsquared.btceparser.examples.BaseExample;
 
 public class CoinInfoExample implements BaseExample, CoinInfoCallback {
 
-    private CoinInfoRequest request;
-
     public static void main(String[] args) {
         new CoinInfoExample().startExample();
     }
 
     public void startExample() {
-        request = new CoinInfoRequest(this, TradingPair.BTC_USD, TradingPair.LTC_USD);
+        CoinInfoRequest request = new CoinInfoRequest.Builder(TradingPair.BTC_USD, TradingPair.DSH_BTC).callback(this).build();
         request.processRequest();
     }
 
