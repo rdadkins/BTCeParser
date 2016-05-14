@@ -1,5 +1,7 @@
 package co.bitsquared.btceparser.core.logging;
 
+import co.bitsquared.btceparser.core.data.LoggableData;
+
 import java.io.IOException;
 
 public class CoreLogger extends AbstractLogger {
@@ -23,6 +25,13 @@ public class CoreLogger extends AbstractLogger {
 
     public static CoreLogger getInstance() {
         return instance;
+    }
+
+    /**
+     * Logs a LoggableData's to a file. The information that is logged comes from LoggableData.toLoggableString().
+     */
+    public void log(LoggableData data) {
+        logLines(data.toLoggableString());
     }
 
     @Override
