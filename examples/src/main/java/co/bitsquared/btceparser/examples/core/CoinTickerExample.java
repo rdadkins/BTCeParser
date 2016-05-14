@@ -17,7 +17,7 @@ public class CoinTickerExample implements BaseExample, CoinTickerCallback {
 
     public CoinTickerExample() {
         pair = TradingPair.BTC_USD;
-        coinTickerRequest = new CoinTickerRequest(pair, this);
+        coinTickerRequest = new CoinTickerRequest.Builder(pair).callback(this).build();
     }
 
     public void startExample() {

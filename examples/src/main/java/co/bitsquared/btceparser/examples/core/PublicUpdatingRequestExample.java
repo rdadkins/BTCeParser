@@ -14,7 +14,7 @@ public class PublicUpdatingRequestExample implements BaseExample, CoinTickerCall
     }
 
     public void startExample() {
-        CoinTickerRequest request = new CoinTickerRequest(TradingPair.BTC_USD, this);
+        CoinTickerRequest request = new CoinTickerRequest.Builder(TradingPair.BTC_USD).callback(this).build();
         PublicUpdatingRequest publicUpdatingRequest = request.asUpdatingRequest();
         publicUpdatingRequest.updateInterval(3, false);
         publicUpdatingRequest.processRequest();

@@ -27,7 +27,7 @@ public class OrderBookExample implements BaseExample, CoinTradeCallback, CoinDep
     }
 
     private void startUpdatingTradeRequest() {
-        CoinTradeRequest tradeRequest = new CoinTradeRequest(tradingPair, 100, this);
+        CoinTradeRequest tradeRequest = new CoinTradeRequest.Builder(tradingPair).callback(this).tradeLimit(100).build();
         PublicUpdatingRequest publicUpdatingRequest = tradeRequest.asUpdatingRequest();
         publicUpdatingRequest.updateInterval(7, false);
         publicUpdatingRequest.processRequest();
