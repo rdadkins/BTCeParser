@@ -6,7 +6,7 @@
 
     <groupId>co.bitsquared.btceparser</groupId>
     <artifactId>btceparser-parent</artifactId>
-    <version>v2.3.0</version>
+    <version>v2.4.0</version>
     <packaging>pom</packaging>
 
     <name>BTCeParser</name>
