@@ -50,7 +50,7 @@ public abstract class PublicRequest extends Request {
 
     public abstract PublicUpdatingRequest asUpdatingRequest();
 
-    public static abstract class Builder extends Request.Builder<Builder> {
+    public static abstract class Builder<T extends Builder<T>> extends Request.Builder<T> {
 
         /**
          * Builds this request as a PublicUpdatingRequest
