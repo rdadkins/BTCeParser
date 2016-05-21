@@ -30,7 +30,7 @@ public class CoinTicker extends LoggableData {
         dataMap.put(VOLUME_KEY, getDouble(object, VOLUME_KEY));
         dataMap.put(BUY_KEY, getDouble(object, BUY_KEY));
         dataMap.put(SELL_KEY, getDouble(object, SELL_KEY));
-        dataMap.put(UPDATED_KEY, getInt(object, UPDATED_KEY));
+        dataMap.put(UPDATED_KEY, getDouble(object, UPDATED_KEY));
     }
 
     public TradingPair getTradingPair() {
@@ -65,8 +65,8 @@ public class CoinTicker extends LoggableData {
         return (double) dataMap.get(SELL_KEY);
     }
 
-    public int getLastUpdatedTime() {
-        return (int) dataMap.get(UPDATED_KEY);
+    public double getLastUpdatedTime() {
+        return (double) dataMap.get(UPDATED_KEY);
     }
 
     @Override
