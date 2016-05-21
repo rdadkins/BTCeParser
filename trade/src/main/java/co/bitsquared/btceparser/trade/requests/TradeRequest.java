@@ -1,5 +1,6 @@
 package co.bitsquared.btceparser.trade.requests;
 
+import co.bitsquared.btceparser.core.callbacks.BaseRequestCallback;
 import co.bitsquared.btceparser.trade.TAPI;
 import co.bitsquared.btceparser.trade.authentication.Authenticator;
 import co.bitsquared.btceparser.trade.callbacks.TradeRequestCallback;
@@ -42,13 +43,20 @@ public class TradeRequest extends AccountRequest {
 
     @Override
     protected void processReturn(JSONObject returnObject) {
-        double received = returnObject.getDouble(RECEIVED.asAPIFriendlyValue());
-        double remains = returnObject.getDouble(REMAINS.asAPIFriendlyValue());
-        int orderID = returnObject.getInt(ORDER_ID.asAPIFriendlyValue());
-        Funds[] funds = extractFunds(returnObject.getJSONObject(FUNDS.asAPIFriendlyValue()));
-        listeners.stream().filter(callback -> callback instanceof TradeRequest).forEach(callback ->
-                execute(() -> ((TradeRequestCallback) callback).onSuccess(received, remains, orderID, funds))
-        );
+        final double received = returnObject.getDouble(RECEIVED.asAPIFriendlyValue());
+        final double remains = returnObject.getDouble(REMAINS.asAPIFriendlyValue());
+        final int orderID = returnObject.getInt(ORDER_ID.asAPIFriendlyValue());
+        final Funds[] funds = extractFunds(returnObject.getJSONObject(FUNDS.asAPIFriendlyValue()));
+        for (final BaseRequestCallback callback: listeners) {
+            if (callback instanceof TradeRequestCallback) {
+                execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        ((TradeRequestCallback) callback).onSuccess(received, remains, orderID, funds);
+                    }
+                });
+            }
+        }
     }
 
     @Override

@@ -4,7 +4,7 @@ import co.bitsquared.btceparser.core.data.TradingPair;
 import co.bitsquared.btceparser.core.data.DepthType;
 import org.json.JSONObject;
 
-public class AccountTrade {
+public final class AccountTrade {
 
     public static final String PAIR = "pair";
     public static final String SELL = "sell";
@@ -16,25 +16,17 @@ public class AccountTrade {
     public static final String TYPE = "type";
     public static final String TRADE_ID = "tradeID";
 
-    private int tradeID;
-    private TradingPair tradingPair;
-    private DepthType depthType;
-    private double amount;
-    private double rate;
-    private long orderID;
-    private boolean isUserOrder;
-    private long timeStamp;
-
-    public AccountTrade(JSONObject objectWithTradeID) {
-        tradeID = objectWithTradeID.getInt(TRADE_ID);
-    }
+    private final int tradeID;
+    private final TradingPair tradingPair;
+    private final DepthType depthType;
+    private final double amount;
+    private final double rate;
+    private final long orderID;
+    private final boolean isUserOrder;
+    private final long timeStamp;
 
     public AccountTrade(int tradeID, JSONObject object) {
         this.tradeID = tradeID;
-        extractJSON(object);
-    }
-
-    private void extractJSON(JSONObject object) {
         tradingPair = TradingPair.extract(object.getString(PAIR));
         depthType = object.getString(TYPE).equals(SELL) ? DepthType.ASK : DepthType.BID;
         amount = object.getDouble(AMOUNT);

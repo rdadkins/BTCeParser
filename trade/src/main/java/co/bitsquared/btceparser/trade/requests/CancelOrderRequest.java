@@ -1,5 +1,6 @@
 package co.bitsquared.btceparser.trade.requests;
 
+import co.bitsquared.btceparser.core.callbacks.BaseRequestCallback;
 import co.bitsquared.btceparser.trade.Constant;
 import co.bitsquared.btceparser.trade.TAPI;
 import co.bitsquared.btceparser.trade.authentication.Authenticator;
@@ -41,11 +42,18 @@ public class CancelOrderRequest extends AccountRequest {
 
     @Override
     protected void processReturn(JSONObject returnObject) {
-        int orderId = returnObject.getInt(Constant.FUNDS.asAPIFriendlyValue());
-        Funds[] funds = extractFunds(returnObject.getJSONObject(Constant.FUNDS.asAPIFriendlyValue()));
-        listeners.stream().filter(callback -> callback instanceof CancelOrderCallback).forEach(callback ->
-                execute(() -> ((CancelOrderCallback) callback).onSuccess(orderId, funds))
-        );
+        final int orderId = returnObject.getInt(Constant.FUNDS.asAPIFriendlyValue());
+        final Funds[] funds = extractFunds(returnObject.getJSONObject(Constant.FUNDS.asAPIFriendlyValue()));
+        for (final BaseRequestCallback callback: listeners) {
+            if (callback instanceof CancelOrderCallback) {
+                execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        ((CancelOrderCallback) callback).onSuccess(orderId, funds);
+                    }
+                });
+            }
+        }
     }
 
     @Override

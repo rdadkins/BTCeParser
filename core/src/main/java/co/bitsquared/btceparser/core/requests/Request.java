@@ -90,11 +90,25 @@ public abstract class Request implements Callback<JsonNode> {
         }
     }
 
-    public final void completed(HttpResponse<JsonNode> response) {
+    public final void completed(final HttpResponse<JsonNode> response) {
         if (response.getStatus() == 200) {
-            listeners.forEach(listener -> execute(listener::onSuccess));
+            for (final BaseRequestCallback callback: listeners) {
+                execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        callback.onSuccess();
+                    }
+                });
+            }
         } else {
-            listeners.forEach(listener -> execute(() -> listener.error("Return status: " + response.getStatus())));
+            for (final BaseRequestCallback callback: listeners) {
+                execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        callback.error("Return status: " + response.getStatus());
+                    }
+                });
+            }
             return;
         }
         processResponseBody(response.getBody().getObject());
@@ -107,15 +121,29 @@ public abstract class Request implements Callback<JsonNode> {
         new Thread(runnable).start();
     }
 
-    public final void failed(UnirestException exception) {
+    public final void failed(final UnirestException exception) {
         if (listenersExist()) {
-            listeners.forEach(listener -> listener.error(exception.getMessage()));
+            for (final BaseRequestCallback callback: listeners) {
+                execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        callback.error(exception.getMessage());
+                    }
+                });
+            }
         }
     }
 
     public final void cancelled() {
         if (listenersExist()) {
-            listeners.forEach(BaseRequestCallback::cancelled);
+            for (final BaseRequestCallback callback: listeners) {
+                execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        callback.cancelled();
+                    }
+                });
+            }
         }
     }
 
