@@ -1,6 +1,7 @@
 package co.bitsquared.btceparser.core.requests;
 
 import co.bitsquared.btceparser.core.API;
+import co.bitsquared.btceparser.core.callbacks.BaseRequestCallback;
 import co.bitsquared.btceparser.core.callbacks.CoinTradeCallback;
 import co.bitsquared.btceparser.core.data.OrderBook;
 import co.bitsquared.btceparser.core.data.Trade;
@@ -52,16 +53,29 @@ public class CoinTradeRequest extends PublicRequest {
 
     @Override
     protected void processResponseBody(JSONObject body) {
-        listeners.stream().filter(callback -> callback instanceof CoinTradeCallback).forEach(callback -> {
-            CoinTradeCallback listener = (CoinTradeCallback) callback;
-            OrderBook existingOrderBook = listener.getExistingOrderBook();
-            ArrayList<Trade> trades = Utils.extractTrades(body, tradingPair);
+        for (BaseRequestCallback callback: listeners) {
+            if (!(callback instanceof CoinTradeCallback)) {
+                continue;
+            }
+            final CoinTradeCallback tradeCallback = (CoinTradeCallback) callback;
+            OrderBook existingOrderBook = tradeCallback.getExistingOrderBook();
+            final ArrayList<Trade> trades = Utils.extractTrades(body, tradingPair);
             if (existingOrderBook != null) {
                 existingOrderBook.addTrades(trades);
-                execute(listener::orderBookUpdated);
+                execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        tradeCallback.orderBookUpdated();
+                    }
+                });
             }
-            execute(() -> listener.onSuccess(trades));
-        });
+            execute(new Runnable() {
+                @Override
+                public void run() {
+                    tradeCallback.onSuccess(trades);
+                }
+            });
+        }
     }
 
     @Override

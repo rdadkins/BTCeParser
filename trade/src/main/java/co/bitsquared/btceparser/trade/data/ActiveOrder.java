@@ -7,7 +7,7 @@ import org.json.JSONObject;
 
 import java.math.BigDecimal;
 
-public class ActiveOrder {
+public final class ActiveOrder {
 
     private static final String PAIR = "pair";
     private static final String TYPE = "type";
@@ -16,20 +16,16 @@ public class ActiveOrder {
     private static final String RATE = "rate";
     private static final String TIMESTAMP_CREATED = "timestamp_created";
 
-    private int orderID;
-    private TradingPair tradingPair;
-    private DepthType depthType;
-    private BaseCurrency<?> amount;
-    private BaseCurrency<?> rate;
-    private long timestampCreated;
+    private final int orderID;
+    private final TradingPair tradingPair;
+    private final DepthType depthType;
+    private final BaseCurrency<?> amount;
+    private final BaseCurrency<?> rate;
+    private final long timestampCreated;
     private static final int STATUS = 0;
 
     public ActiveOrder(int orderID, JSONObject orderAsJSON) {
         this.orderID = orderID;
-        extractJSON(orderAsJSON);
-    }
-
-    private void extractJSON(JSONObject orderAsJSON) {
         tradingPair = TradingPair.extract(orderAsJSON.getString(PAIR));
         depthType = orderAsJSON.getString(TYPE).equals(SELL) ? DepthType.BID : DepthType.ASK;
         double rawAmount = orderAsJSON.getDouble(AMOUNT);

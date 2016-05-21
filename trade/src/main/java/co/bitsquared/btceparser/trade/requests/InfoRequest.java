@@ -1,5 +1,6 @@
 package co.bitsquared.btceparser.trade.requests;
 
+import co.bitsquared.btceparser.core.callbacks.BaseRequestCallback;
 import co.bitsquared.btceparser.trade.TAPI;
 import co.bitsquared.btceparser.trade.authentication.Authenticator;
 import co.bitsquared.btceparser.trade.callbacks.InfoCallback;
@@ -44,17 +45,24 @@ public class InfoRequest extends AccountRequest {
 
     @Override
     protected void processReturn(JSONObject returnObject) {
-        JSONObject funds = returnObject.getJSONObject(FUNDS.asAPIFriendlyValue());
-        Funds[] accountFunds = extractFunds(funds);
+        final JSONObject funds = returnObject.getJSONObject(FUNDS.asAPIFriendlyValue());
+        final Funds[] accountFunds = extractFunds(funds);
         JSONObject rights = returnObject.getJSONObject(RIGHTS.asAPIFriendlyValue());
-        boolean accessInfo = rights.getInt(INFO.asAPIFriendlyValue()) == 1;
-        boolean canTrade = rights.getInt(TRADE.asAPIFriendlyValue()) == 1;
-        boolean canWithdraw = rights.getInt(WITHDRAW.asAPIFriendlyValue()) == 1;
-        int openOrders = returnObject.getInt(OPEN_ORDERS.asAPIFriendlyValue());
-        long serverTime = returnObject.getLong(SERVER_TIME.asAPIFriendlyValue());
-        listeners.stream().filter(callback -> callback instanceof InfoCallback).forEach(callback ->
-                execute(() -> ((InfoCallback) callback).onSuccess(accountFunds, accessInfo, canTrade, canWithdraw, TRANSACTION_COUNT, openOrders, serverTime))
-        );
+        final boolean accessInfo = rights.getInt(INFO.asAPIFriendlyValue()) == 1;
+        final boolean canTrade = rights.getInt(TRADE.asAPIFriendlyValue()) == 1;
+        final boolean canWithdraw = rights.getInt(WITHDRAW.asAPIFriendlyValue()) == 1;
+        final int openOrders = returnObject.getInt(OPEN_ORDERS.asAPIFriendlyValue());
+        final long serverTime = returnObject.getLong(SERVER_TIME.asAPIFriendlyValue());
+        for (final BaseRequestCallback callback: listeners) {
+            if (callback instanceof InfoCallback) {
+                execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        ((InfoCallback) callback).onSuccess(accountFunds, accessInfo, canTrade, canWithdraw, TRANSACTION_COUNT, openOrders, serverTime);
+                    }
+                });
+            }
+        }
     }
 
     @Override

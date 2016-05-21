@@ -1,9 +1,10 @@
 package co.bitsquared.btceparser.core.requests;
 
 import co.bitsquared.btceparser.core.API;
-import co.bitsquared.btceparser.core.data.TradingPair;
+import co.bitsquared.btceparser.core.callbacks.BaseRequestCallback;
 import co.bitsquared.btceparser.core.callbacks.CoinTickerCallback;
 import co.bitsquared.btceparser.core.data.CoinTicker;
+import co.bitsquared.btceparser.core.data.TradingPair;
 import co.bitsquared.btceparser.core.exceptions.NullTradingPairException;
 import co.bitsquared.btceparser.core.utils.Utils;
 import org.json.JSONObject;
@@ -31,12 +32,19 @@ public class CoinTickerRequest extends PublicRequest {
     }
 
     @Override
-    protected void processResponseBody(JSONObject body) {
-        listeners.stream().filter(callback -> callback instanceof CoinTickerCallback).forEach(callback -> {
-            CoinTickerCallback listener = (CoinTickerCallback) callback;
-            CoinTicker ticker = Utils.extractCoinTicker(body, tradingPair);
-            execute(() -> listener.onSuccess(ticker));
-        });
+    protected void processResponseBody(final JSONObject body) {
+        for (BaseRequestCallback callback: listeners) {
+            if (!(callback instanceof CoinTickerRequest)) {
+                continue;
+            }
+            final CoinTickerCallback tickerCallback = (CoinTickerCallback) callback;
+            execute(new Runnable() {
+                @Override
+                public void run() {
+                    tickerCallback.onSuccess(Utils.extractCoinTicker(body, tradingPair));
+                }
+            });
+        }
     }
 
     @Override

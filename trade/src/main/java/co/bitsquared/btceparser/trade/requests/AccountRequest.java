@@ -1,5 +1,6 @@
 package co.bitsquared.btceparser.trade.requests;
 
+import co.bitsquared.btceparser.core.callbacks.BaseRequestCallback;
 import co.bitsquared.btceparser.core.data.TradableCurrency;
 import co.bitsquared.btceparser.core.requests.Request;
 import co.bitsquared.btceparser.trade.TAPI;
@@ -96,14 +97,28 @@ public abstract class AccountRequest extends Request {
     @Override
     protected final void processResponseBody(JSONObject body) {
         if (body.getInt("success") == 0) {
-            listeners.stream().filter(callback -> callback instanceof AccountCallback).forEach(callback -> {
-                AccountCallback accountCallback = (AccountCallback) callback;
-                execute(() -> accountCallback.onUnsuccessfulReturn(body.getString("error")));
-            });
+            final String errorMessage = body.getString("error");
+            for (final BaseRequestCallback callback: listeners) {
+                if (callback instanceof AccountCallback) {
+                    execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            ((AccountCallback) callback).onUnsuccessfulReturn(errorMessage);
+                        }
+                    });
+                }
+            }
         } else {
-            listeners.stream().filter(callback -> callback instanceof AccountCallback).forEach(callback ->
-                    execute(((AccountCallback) callback)::onSuccessReturn)
-            );
+            for (final BaseRequestCallback callback: listeners) {
+                if (callback instanceof AccountCallback) {
+                    execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            ((AccountCallback) callback).onSuccessReturn();
+                        }
+                    });
+                }
+            }
             processReturn(body.getJSONObject("return"));
         }
     }
