@@ -1,5 +1,6 @@
 package co.bitsquared.btceparser.trade.requests;
 
+import co.bitsquared.btceparser.core.callbacks.BaseRequestCallback;
 import co.bitsquared.btceparser.core.data.DepthType;
 import co.bitsquared.btceparser.core.data.TradingPair;
 import co.bitsquared.btceparser.trade.TAPI;
@@ -49,18 +50,25 @@ public class OrderInfoRequest extends AccountRequest {
         if (set.size() == 0) {
             return;
         }
-        int orderID = Integer.parseInt(set.iterator().next().toString());
+        final int orderID = Integer.parseInt(set.iterator().next().toString());
         JSONObject orderObject = returnObject.getJSONObject(orderID + "");
-        TradingPair tradingPair = TradingPair.extract(orderObject.getString(PAIR.asAPIFriendlyValue()));
-        DepthType type = orderObject.getString(TYPE.asAPIFriendlyValue()).equals(SELL.asAPIFriendlyValue()) ? DepthType.ASK : DepthType.BID;
-        double startAmount = orderObject.getDouble(START_AMOUNT.asAPIFriendlyValue());
-        double amount = orderObject.getDouble(AMOUNT.asAPIFriendlyValue());
-        double rate = orderObject.getDouble(RATE.asAPIFriendlyValue());
-        long timeStamp = orderObject.getLong(TIMESTAMP_CREATED.asAPIFriendlyValue());
-        int status = orderObject.getInt(STATUS.asAPIFriendlyValue());
-        listeners.stream().filter(callback -> callback instanceof OrderInfoCallback).forEach(callback ->
-                execute(() -> ((OrderInfoCallback) callback).onSuccess(orderID, tradingPair, type, startAmount, amount, rate, timeStamp, status))
-        );
+        final TradingPair tradingPair = TradingPair.extract(orderObject.getString(PAIR.asAPIFriendlyValue()));
+        final DepthType type = orderObject.getString(TYPE.asAPIFriendlyValue()).equals(SELL.asAPIFriendlyValue()) ? DepthType.ASK : DepthType.BID;
+        final double startAmount = orderObject.getDouble(START_AMOUNT.asAPIFriendlyValue());
+        final double amount = orderObject.getDouble(AMOUNT.asAPIFriendlyValue());
+        final double rate = orderObject.getDouble(RATE.asAPIFriendlyValue());
+        final long timeStamp = orderObject.getLong(TIMESTAMP_CREATED.asAPIFriendlyValue());
+        final int status = orderObject.getInt(STATUS.asAPIFriendlyValue());
+        for (final BaseRequestCallback callback: listeners) {
+            if (callback instanceof OrderInfoCallback) {
+                execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        ((OrderInfoCallback) callback).onSuccess(orderID, tradingPair, type, startAmount, amount, rate, timeStamp, status);
+                    }
+                });
+            }
+        }
     }
 
     @Override
