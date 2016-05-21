@@ -6,7 +6,7 @@
 
     <groupId>co.bitsquared.btceparser</groupId>
     <artifactId>btceparser-parent</artifactId>
-    <version>v2.4.0</version>
+    <version>v3.0.0</version>
     <packaging>pom</packaging>
 
     <name>BTCeParser</name>
@@ -21,11 +21,6 @@
     </modules>
 
     <dependencies>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.12</version>
-        </dependency>
         <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
