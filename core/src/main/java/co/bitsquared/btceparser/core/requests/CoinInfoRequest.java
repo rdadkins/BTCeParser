@@ -1,6 +1,7 @@
 package co.bitsquared.btceparser.core.requests;
 
 import co.bitsquared.btceparser.core.API;
+import co.bitsquared.btceparser.core.callbacks.BaseRequestCallback;
 import co.bitsquared.btceparser.core.callbacks.CoinInfoCallback;
 import co.bitsquared.btceparser.core.data.CoinInfo;
 import co.bitsquared.btceparser.core.data.TradingPair;
@@ -49,12 +50,20 @@ public class CoinInfoRequest extends PublicRequest {
     protected void processResponseBody(JSONObject body) {
         JSONObject pairs = body.getJSONObject("pairs");
         CoinInfo[] coinInfoPairs = Utils.extractCoinInfo(pairs, tradingPairs);
-        listeners.stream().filter(callback -> callback instanceof CoinInfoCallback).forEach(callback -> {
-            CoinInfoCallback listener = (CoinInfoCallback) callback;
-            for (CoinInfo coinInfo: coinInfoPairs) {
-                execute(() -> listener.onSuccess(coinInfo));
+        for (BaseRequestCallback callback: listeners) {
+            if (!(callback instanceof CoinInfoCallback)) {
+                continue;
             }
-        });
+            final CoinInfoCallback infoCallback = (CoinInfoCallback) callback;
+            for (final CoinInfo coinInfo: coinInfoPairs) {
+                execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        infoCallback.onSuccess(coinInfo);
+                    }
+                });
+            }
+        }
     }
 
     @Override
