@@ -2,7 +2,7 @@
 BTCeParser is an API wrapper for <a href="https://btc-e.com">btc-e.com</a> built with Unirest
 
 # Requirements
-* Java 8
+* Java 7
 
 # What it does
 * Parses information about all coins currently listed on the exchange.
