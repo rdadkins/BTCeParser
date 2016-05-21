@@ -1,6 +1,7 @@
 package co.bitsquared.btceparser.core.requests;
 
 import co.bitsquared.btceparser.core.API;
+import co.bitsquared.btceparser.core.callbacks.BaseRequestCallback;
 import co.bitsquared.btceparser.core.data.TradingPair;
 import co.bitsquared.btceparser.core.callbacks.CoinDepthCallback;
 import co.bitsquared.btceparser.core.data.OrderBook;
@@ -45,17 +46,30 @@ public class CoinDepthRequest extends PublicRequest {
 
     @Override
     protected void processResponseBody(JSONObject body) {
-        listeners.stream().filter(callback -> callback instanceof CoinDepthCallback).forEach(callback -> {
-            CoinDepthCallback listener = (CoinDepthCallback) callback;
-            OrderBook existingOrderBook = listener.getExistingOrderBook();
-            OrderBook newOrderBook = Utils.extractOrderBook(body, tradingPair);
+        for (BaseRequestCallback callback: listeners) {
+            if (!(callback instanceof CoinDepthCallback)) {
+                continue;
+            }
+            final CoinDepthCallback depthCallback = (CoinDepthCallback) callback;
+            OrderBook existingOrderBook = depthCallback.getExistingOrderBook();
+            final OrderBook newOrderBook = Utils.extractOrderBook(body, tradingPair);
             if (existingOrderBook == null) {
-                execute(() -> listener.onSuccess(newOrderBook));
+                execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        depthCallback.onSuccess(newOrderBook);
+                    }
+                });
             } else {
                 existingOrderBook.combineBooks(newOrderBook);
-                execute(listener::orderBookUpdated);
+                execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        depthCallback.orderBookUpdated();
+                    }
+                });
             }
-        });
+        }
     }
 
     @Override
