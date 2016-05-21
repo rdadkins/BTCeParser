@@ -1,5 +1,6 @@
 package co.bitsquared.btceparser.trade.requests;
 
+import co.bitsquared.btceparser.core.callbacks.BaseRequestCallback;
 import co.bitsquared.btceparser.trade.TAPI;
 import co.bitsquared.btceparser.trade.authentication.Authenticator;
 import co.bitsquared.btceparser.trade.callbacks.WithdrawCoinCallback;
@@ -42,12 +43,19 @@ public class WithdrawCoinRequest extends AccountRequest {
 
     @Override
     protected void processReturn(JSONObject returnObject) {
-        int transactionID = returnObject.getInt(T_ID.asAPIFriendlyValue());
-        double amountSent = returnObject.getDouble(AMOUNT_SENT.asAPIFriendlyValue());
-        Funds[] funds = extractFunds(returnObject.getJSONObject(FUNDS.asAPIFriendlyValue()));
-        listeners.stream().filter(callback -> callback instanceof WithdrawCoinCallback).forEach(callback ->
-                execute(() -> ((WithdrawCoinCallback) callback).onSuccess(transactionID, amountSent, funds))
-        );
+        final int transactionID = returnObject.getInt(T_ID.asAPIFriendlyValue());
+        final double amountSent = returnObject.getDouble(AMOUNT_SENT.asAPIFriendlyValue());
+        final Funds[] funds = extractFunds(returnObject.getJSONObject(FUNDS.asAPIFriendlyValue()));
+        for (final BaseRequestCallback callback: listeners) {
+            if (callback instanceof WithdrawCoinCallback) {
+                execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        ((WithdrawCoinCallback) callback).onSuccess(transactionID, amountSent, funds);
+                    }
+                });
+            }
+        }
     }
 
     @Override
