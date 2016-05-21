@@ -6,10 +6,10 @@ import co.bitsquared.btceparser.core.data.TradableCurrency;
  * Funds is a data class that wraps a Currency and an amount. This is created from certain AccountRequests which is passed
  * back in the form of a Funds[].
  */
-public class Funds {
+public final class Funds {
 
-    private TradableCurrency currency;
-    private double amount;
+    private final TradableCurrency currency;
+    private final double amount;
 
     public Funds(TradableCurrency currency, double amount) {
         this.currency = currency;
