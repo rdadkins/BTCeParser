@@ -1,5 +1,6 @@
 package co.bitsquared.btceparser.trade.requests;
 
+import co.bitsquared.btceparser.core.callbacks.BaseRequestCallback;
 import co.bitsquared.btceparser.trade.TAPI;
 import co.bitsquared.btceparser.trade.authentication.Authenticator;
 import co.bitsquared.btceparser.trade.callbacks.TradeHistoryCallback;
@@ -37,17 +38,22 @@ public class TradeHistoryRequest extends AccountRequest {
 
     @Override
     protected void processReturn(JSONObject returnObject) {
-        AccountTrade[] accountTrades = new AccountTrade[returnObject.keySet().size()];
+        final AccountTrade[] accountTrades = new AccountTrade[returnObject.keySet().size()];
         int position = 0;
         for (Object object: returnObject.keySet()) {
             int transactionID = Integer.valueOf(object.toString());
             accountTrades[position++] = new AccountTrade(transactionID, returnObject.getJSONObject(transactionID + ""));
         }
-        listeners.stream().filter(callback -> callback instanceof TradeHistoryCallback).
-                forEach(callback -> execute(
-                        () -> ((TradeHistoryCallback) callback).onSuccess(accountTrades)
-                )
-        );
+        for (final BaseRequestCallback callback: listeners) {
+            if (callback instanceof TradeHistoryCallback) {
+                execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        ((TradeHistoryCallback) callback).onSuccess(accountTrades);
+                    }
+                });
+            }
+        }
     }
 
     @Override
