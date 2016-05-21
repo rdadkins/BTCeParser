@@ -1,5 +1,6 @@
 package co.bitsquared.btceparser.trade.requests;
 
+import co.bitsquared.btceparser.core.callbacks.BaseRequestCallback;
 import co.bitsquared.btceparser.core.data.TradableCurrency;
 import co.bitsquared.btceparser.trade.TAPI;
 import co.bitsquared.btceparser.trade.authentication.Authenticator;
@@ -43,13 +44,20 @@ public class RedeemCouponRequest extends AccountRequest {
 
     @Override
     protected void processReturn(JSONObject returnObject) {
-        double couponAmount = returnObject.getDouble(COUPON_AMOUNT.asAPIFriendlyValue());
-        TradableCurrency couponCurrency = TradableCurrency.toCurrency(returnObject.getString(COUPON_CURRENCY.asAPIFriendlyValue()).toLowerCase());
-        long transactionID = returnObject.getLong(TRANS_ID.asAPIFriendlyValue());
-        Funds[] funds = extractFunds(returnObject.getJSONObject(FUNDS.asAPIFriendlyValue()));
-        listeners.stream().filter(callback -> callback instanceof RedeemCouponCallback).forEach(callback ->
-                execute(() -> ((RedeemCouponCallback) callback).onSuccess(couponAmount, couponCurrency, transactionID, funds))
-        );
+        final double couponAmount = returnObject.getDouble(COUPON_AMOUNT.asAPIFriendlyValue());
+        final TradableCurrency couponCurrency = TradableCurrency.toCurrency(returnObject.getString(COUPON_CURRENCY.asAPIFriendlyValue()).toLowerCase());
+        final long transactionID = returnObject.getLong(TRANS_ID.asAPIFriendlyValue());
+        final Funds[] funds = extractFunds(returnObject.getJSONObject(FUNDS.asAPIFriendlyValue()));
+        for (final BaseRequestCallback callback: listeners) {
+            if (callback instanceof RedeemCouponCallback) {
+                execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        ((RedeemCouponCallback) callback).onSuccess(couponAmount, couponCurrency, transactionID, funds);
+                    }
+                });
+            }
+        }
     }
 
     @Override
