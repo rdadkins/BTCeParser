@@ -9,7 +9,7 @@ import co.bitsquared.btceparser.core.data.CoinTicker;
  *
  * Ex: Base rate = 500, Comparison = GREATER_THAN, Percent change = 2%
  *      The price needs to reach around 510.21 for this condition to be satisfied
- *          (510.21 - 500) / 500 = 2.042%. Compare 2.042 >= 2% = true.
+ *          (510.21 - 500) / 500 = 2.042%. Compare 2.042 is greater than / equal to 2% = true.
  *
  *
  * @see co.bitsquared.btceparser.bot.algorithms.MarketChangeAlgorithm

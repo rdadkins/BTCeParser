@@ -31,6 +31,7 @@ public class PreOrder {
 
     /**
      * Determines if this PreOrder is an actual order by checking if the TradeType provided is TradeType.HOLD.
+     * @return whether or not this is an active trade
      */
     public boolean isActiveTrade() {
         return tradeType != TradeType.HOLD;
