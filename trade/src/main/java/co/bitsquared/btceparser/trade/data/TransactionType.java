@@ -16,6 +16,7 @@ public enum TransactionType {
     /**
      * Converts an integer to a TransactionType.
      * @param type an integer representing a TransactionType
+     * @return an extracted TransactionType if type is a valid value
      */
     public static TransactionType extract(int type) {
         for (TransactionType transactionType: values()) {
