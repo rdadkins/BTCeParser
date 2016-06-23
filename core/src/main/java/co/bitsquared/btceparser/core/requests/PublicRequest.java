@@ -1,6 +1,5 @@
 package co.bitsquared.btceparser.core.requests;
 
-import co.bitsquared.btceparser.core.callbacks.BaseRequestCallback;
 import com.mashape.unirest.http.Unirest;
 
 import java.util.HashMap;
@@ -21,22 +20,6 @@ public abstract class PublicRequest extends Request {
     protected PublicRequest(Builder builder) {
         super(builder);
     }
-
-    /**
-     * @deprecated use subclass Builder class to create requests
-     */
-    @Deprecated
-    public PublicRequest(String url, BaseRequestCallback listener) {
-        this(url, listener, DEFAULT_TIMEOUT);
-    }
-
-    /**
-     * @deprecated use subclass Builder class to create requests
-     */
-    @Deprecated
-	public PublicRequest(String url, BaseRequestCallback listener, long timeout) {
-		super(url, listener, timeout);
-	}
 
     @Override
 	public final void processRequest() {

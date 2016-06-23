@@ -3,7 +3,6 @@ package co.bitsquared.btceparser.core.requests;
 import co.bitsquared.btceparser.core.API;
 import co.bitsquared.btceparser.core.callbacks.BaseRequestCallback;
 import co.bitsquared.btceparser.core.callbacks.CoinTickerCallback;
-import co.bitsquared.btceparser.core.data.CoinTicker;
 import co.bitsquared.btceparser.core.data.TradingPair;
 import co.bitsquared.btceparser.core.exceptions.NullTradingPairException;
 import co.bitsquared.btceparser.core.utils.Utils;
@@ -20,15 +19,6 @@ public class CoinTickerRequest extends PublicRequest {
     private CoinTickerRequest(Builder builder) {
         super(builder);
         tradingPair = builder.tradingPair;
-    }
-
-    /**
-     * @deprecated use CoinTickerRequest.Builder
-     */
-    @Deprecated
-    public CoinTickerRequest(TradingPair tradingPair, CoinTickerCallback listener) {
-        super(METHOD.getUrl(tradingPair), listener);
-        this.tradingPair = tradingPair;
     }
 
     @Override

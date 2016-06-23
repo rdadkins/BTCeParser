@@ -48,7 +48,7 @@ public class MarketChangeExample implements BaseExample, CoinTickerCallback, Tra
     }
 
     public void startExample() {
-        CoinTickerRequest request = new CoinTickerRequest(tradingPair, this);
+        CoinTickerRequest request = new CoinTickerRequest.Builder(tradingPair).callback(this).build();
         PublicUpdatingRequest updatingRequest = request.asUpdatingRequest();
         updatingRequest.registerBaseRequestCallback(algorithm);
         updatingRequest.processRequest();

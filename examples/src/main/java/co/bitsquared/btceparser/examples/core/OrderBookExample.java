@@ -34,7 +34,7 @@ public class OrderBookExample implements BaseExample, CoinTradeCallback, CoinDep
     }
 
     private void startUpdatingDepthRequest() {
-        CoinDepthRequest depthRequest = new CoinDepthRequest(tradingPair, 100, this);
+        CoinDepthRequest depthRequest = new CoinDepthRequest.Builder(tradingPair).callback(this).build();
         PublicUpdatingRequest depthUpdatingRequest = depthRequest.asUpdatingRequest();
         depthUpdatingRequest.updateInterval(13, false);
         depthUpdatingRequest.processRequest();
