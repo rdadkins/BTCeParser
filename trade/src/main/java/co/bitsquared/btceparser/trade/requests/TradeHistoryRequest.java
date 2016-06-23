@@ -15,22 +15,6 @@ public class TradeHistoryRequest extends AccountRequest {
         super(builder);
     }
 
-    /**
-     * @deprecated since v2.2.0 - use TradeHistoryRequest.Builder
-     */
-    @Deprecated
-    public TradeHistoryRequest(Authenticator authenticator, TradeHistoryCallback callback) {
-        this(authenticator, callback, DEFAULT_TIMEOUT);
-    }
-
-    /**
-     * @deprecated since v2.2.0 - use TradeHistoryRequest.Builder
-     */
-    @Deprecated
-    public TradeHistoryRequest(Authenticator authenticator, TradeHistoryCallback callback, long timeout) {
-        super(authenticator, callback, timeout);
-    }
-
     @Override
     public void assignMethod(ParameterBuilder parameters) {
         parameters.method(METHOD);

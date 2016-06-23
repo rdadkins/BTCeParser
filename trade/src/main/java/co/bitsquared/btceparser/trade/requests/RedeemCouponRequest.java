@@ -21,22 +21,6 @@ public class RedeemCouponRequest extends AccountRequest {
         super(builder);
     }
 
-    /**
-     * @deprecated since v2.2.0 - use RedeemCouponRequest.Builder
-     */
-    @Deprecated
-    public RedeemCouponRequest(Authenticator authenticator, RedeemCouponCallback callback) {
-        this(authenticator, callback, DEFAULT_TIMEOUT);
-    }
-
-    /**
-     * @deprecated since v2.2.0 - use RedeemCouponRequest.Builder
-     */
-    @Deprecated
-    public RedeemCouponRequest(Authenticator authenticator, RedeemCouponCallback callback, long timeout) {
-        super(authenticator, callback, timeout);
-    }
-
     @Override
     public void assignMethod(ParameterBuilder parameters) {
         parameters.method(METHOD);

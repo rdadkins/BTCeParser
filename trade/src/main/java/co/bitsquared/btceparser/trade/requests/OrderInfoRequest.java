@@ -23,22 +23,6 @@ public class OrderInfoRequest extends AccountRequest {
         super(builder);
     }
 
-    /**
-     * @deprecated since v2.2.0 - use OrderInfoRequest.Builder
-     */
-    @Deprecated
-    public OrderInfoRequest(Authenticator authenticator, OrderInfoCallback callback) {
-        this(authenticator, callback, DEFAULT_TIMEOUT);
-    }
-
-    /**
-     * @deprecated since v2.2.0 - use OrderInfoRequest.Builder
-     */
-    @Deprecated
-    public OrderInfoRequest(Authenticator authenticator, OrderInfoCallback callback, long timeout) {
-        super(authenticator, callback, timeout);
-    }
-
     @Override
     public void assignMethod(ParameterBuilder parameters) {
         parameters.method(METHOD);

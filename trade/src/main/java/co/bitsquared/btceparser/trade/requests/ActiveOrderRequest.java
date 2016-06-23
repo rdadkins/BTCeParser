@@ -15,22 +15,6 @@ public class ActiveOrderRequest extends AccountRequest {
         super(builder);
     }
 
-    /**
-     * @deprecated since v2.2.0 - use ActiveOrderRequest.Builder
-     */
-    @Deprecated
-    public ActiveOrderRequest(Authenticator authenticator, ActiveOrderCallback callback) {
-        this(authenticator, callback, DEFAULT_TIMEOUT);
-    }
-
-    /**
-     * @deprecated since v2.2.0 - use ActiveOrderRequest.Builder
-     */
-    @Deprecated
-    public ActiveOrderRequest(Authenticator authenticator, ActiveOrderCallback callback, long timeout) {
-        super(authenticator, callback, timeout);
-    }
-
     @Override
     protected void assignMethod(ParameterBuilder parameterBuilder) {
         parameterBuilder.method(METHOD);

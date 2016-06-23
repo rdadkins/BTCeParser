@@ -36,25 +36,6 @@ public abstract class AccountRequest extends Request {
     }
 
     /**
-     * Creates an AccountRequest from an Authenticator and an AccountCallback and sets timeout to {@code DEFAULT_TIMEOUT}
-     * @deprecated since v2.2.0 - Use AccountRequest.Builder
-     */
-    @Deprecated
-    public AccountRequest(Authenticator authenticator, AccountCallback listener) {
-        this(authenticator, listener, DEFAULT_TIMEOUT);
-    }
-
-    /**
-     * Creates an AccountRequest from an Authenticator, an AccountCallback, and a timeout
-     * @deprecated since v2.2.0 - Use AccountRequest.Builder
-     */
-    @Deprecated
-    public AccountRequest(Authenticator authenticator, AccountCallback listener, long timeout) {
-        super(URL, listener, timeout);
-        this.authenticator = authenticator;
-    }
-
-    /**
      * This is allowed to be called when one of two conditions are met.
      * <br />1) The implementing class doesn't have any required parameters.
      * <br />2) The implementing class does require parameters but they were supplied from either assignParameters() or processRequest() beforehand.

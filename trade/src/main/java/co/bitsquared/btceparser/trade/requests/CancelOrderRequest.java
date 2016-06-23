@@ -19,22 +19,6 @@ public class CancelOrderRequest extends AccountRequest {
         super(builder);
     }
 
-    /**
-     * @deprecated since v2.2.0 - use CancelOrderRequest.Builder
-     */
-    @Deprecated
-    public CancelOrderRequest(Authenticator authenticator, CancelOrderCallback callback) {
-        this(authenticator, callback, DEFAULT_TIMEOUT);
-    }
-
-    /**
-     * @deprecated since v2.2.0 - use CancelOrderRequest.Builder
-     */
-    @Deprecated
-    public CancelOrderRequest(Authenticator authenticator, CancelOrderCallback callback, long timeout) {
-        super(authenticator, callback, timeout);
-    }
-
     @Override
     public void assignMethod(ParameterBuilder parameters) {
         parameters.method(METHOD);
