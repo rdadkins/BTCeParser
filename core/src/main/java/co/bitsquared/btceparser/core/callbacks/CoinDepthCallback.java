@@ -6,6 +6,7 @@ public interface CoinDepthCallback extends BaseRequestCallback {
 
     /**
      * Returns a new OrderBook when a request has completed.
+     * @param orderBook the parsed OrderBook from this request
      */
     void onSuccess(OrderBook orderBook);
 
@@ -15,6 +16,7 @@ public interface CoinDepthCallback extends BaseRequestCallback {
      * If the return value is null, a new book will be returned via onSuccess(OrderBook).
      * If there is a book supplied, then after a successful parse onSuccess(OrderBook) will not be called. Instead,
      * orderBookUpdated() will be called.
+     * @return a pre existing OrderBook to merge new orders with
      */
     OrderBook getExistingOrderBook();
 

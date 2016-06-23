@@ -9,6 +9,7 @@ public interface BaseRequestCallback {
 
     /**
      * Called when there is an error due to Unirest.
+     * @param reason the reason this request failed. Can return a status code or an exception message
      */
     void error(String reason);
 
