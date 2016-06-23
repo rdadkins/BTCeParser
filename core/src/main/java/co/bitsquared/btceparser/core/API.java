@@ -58,6 +58,8 @@ public enum API {
 
     /**
      * Returns a formatted URL based on a TradingPair. If the method is INFO, a TradingPair is not required.
+     * @param pair the {@link TradingPair} to get a URL for. This can be null if it is known that URL being used is {@link #INFO}
+     * @return a url to match this pair
      */
     public String getUrl(TradingPair pair) {
         if (this == INFO) {
