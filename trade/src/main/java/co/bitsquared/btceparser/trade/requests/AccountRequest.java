@@ -56,8 +56,8 @@ public abstract class AccountRequest extends Request {
 
     /**
      * This is allowed to be called when one of two conditions are met.
-     * <br />1) The implementing class doesn't have any required parameters.
-     * <br />2) The implementing class does require parameters but they were supplied from either assignParameters() or processRequest() beforehand.
+     * <p>1) The implementing class doesn't have any required parameters.
+     * <p>2) The implementing class does require parameters but they were supplied from either assignParameters() or processRequest() beforehand.
      */
     @Override
     public final void processRequest() {
@@ -74,7 +74,7 @@ public abstract class AccountRequest extends Request {
     }
 
     /**
-     * Supply a Callback<JsonNode> for this request. Should only be used when a class does not directly extend AccountRequest.
+     * Supply a {@link Callback} for this request. Should only be used when a class does not directly extend AccountRequest.
      * @param parameters the parameters to use with this request.
      * @param callback the Callback to use instead of this.
      */
@@ -125,6 +125,7 @@ public abstract class AccountRequest extends Request {
 
     /**
      * Assign a ParameterBuilder to this Request. Parameters that are required can be found through {@code getRequiredParams()}
+     * @param builder the parameters to assign to this request
      */
     public final void assignParameters(ParameterBuilder builder) {
         parameterBuilder = builder;
@@ -133,6 +134,7 @@ public abstract class AccountRequest extends Request {
     /**
      * Extracts all information from a JSONObject and turns it into a Funds array.
      * @param funds the JSONObject which should be 'funds'.
+     * @return an array of {@link Funds} from the funds
      */
     protected final Funds[] extractFunds(JSONObject funds) {
         Funds[] accountFunds = new Funds[TradableCurrency.values().length];
@@ -167,16 +169,19 @@ public abstract class AccountRequest extends Request {
 
     /**
      * Assigns this implementors TAPI method through {@code ParameterBuilder.method()}
+     * @param parameterBuilder the {@link ParameterBuilder} to assign this method to
      */
     protected abstract void assignMethod(ParameterBuilder parameterBuilder);
 
     /**
      * Processes the return body of the response. This is only called when success == 1.
+     * @param returnObject the return object that was parsed from the call
      */
     protected abstract void processReturn(JSONObject returnObject);
 
     /**
      * @deprecated use getRequiredParameters()
+     * @return an array of strings that represent the required parameters for this request
      */
     @Deprecated
     public final String[] getRequiredParams() {
@@ -186,11 +191,13 @@ public abstract class AccountRequest extends Request {
 
     /**
      * Gets the required parameters for this request. This should return an empty Constant[] if there are no required parameters.
+     * @return an array of {@link ParameterBuilder.Parameter} that represent the required parameters for this request
      */
     public abstract ParameterBuilder.Parameter[] getRequiredParameters();
 
     /**
      * Turns this request into an UpdatingAccountRequest. Auto incrementing of the nonce will be handled.
+     * @return this request as an {@link UpdatingAccountRequest}
      */
     public abstract UpdatingAccountRequest asUpdatingRequest();
 
