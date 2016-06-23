@@ -27,6 +27,7 @@ public class AES {
      * Encrypt the data with the password provided.
      * @param data the plain text data to encrypt.
      * @param password the password to encrypt the data with.
+     * @param keySize the key size to encrypt this data with. Generally, {@link AESKeySize#SIZE_128} is safe to use globally
      * @throws NoSuchAlgorithmException thrown when the algorithm does not exist.
      * @throws InvalidKeySpecException thrown when the supplied KeySpec does not work.
      * @throws NoSuchPaddingException thrown when the padding method does not exist.
@@ -57,6 +58,7 @@ public class AES {
      * Decrypt the data with the password provided.
      * @param data the formatted string from encrypt().
      * @param password the password to encrypt the data with.
+     * @param keySize the key size to encrypt this data with. Generally, {@link AESKeySize#SIZE_128} is safe to use globally
      * @throws BadPaddingException this is typically thrown when the password provided isn't correct.
      * @throws IllegalBlockSizeException thrown when the input being decrypted is not a multiple of the block size.
      * @throws InvalidAlgorithmParameterException thrown when the version of Java does not contain the algorithm being used.

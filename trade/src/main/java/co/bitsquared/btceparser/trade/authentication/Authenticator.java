@@ -97,6 +97,15 @@ public final class Authenticator {
      * problem with the encryption method.
      * @param file the output file
      * @param password the password used to encrypt this data.
+     * @throws IOException if the file does not exist
+     * @throws NoSuchPaddingException if the padding method does not exist
+     * @throws InvalidAlgorithmParameterException if the algorithm parameters do not make sense
+     * @throws IllegalBlockSizeException if the block size is illegal
+     * @throws BadPaddingException if the padding is bad
+     * @throws NoSuchAlgorithmException if the algorithm doesn't exist
+     * @throws InvalidKeyException if encoding is wrong
+     * @throws InvalidKeySpecException if the key spec is wrong
+     *
      */
     public void writeToFile(File file, String password) throws IOException, NoSuchPaddingException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException, NoSuchAlgorithmException, InvalidKeyException, InvalidKeySpecException {
         StoredInfo.write(file, this, password);
@@ -105,6 +114,7 @@ public final class Authenticator {
     /**
      * Attempts to write the nonce to a file without overwriting the encrypted key / secret.
      * @param file the output file
+     * @throws IOException if the file does not exist
      */
     public void writeNonceToFile(File file) throws IOException {
         StoredInfo.writeNonce(file, this);

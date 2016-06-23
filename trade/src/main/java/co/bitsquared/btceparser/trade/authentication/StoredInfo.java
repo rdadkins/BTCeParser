@@ -20,8 +20,14 @@ public final class StoredInfo {
      * Reads an Authenticator from a file and a password.
      * @param file the associated file with the encrypted Key / Secret.
      * @param password the password used to encrypt the file's content.
-     * @throws IOException if there is a problem reading the input file.
-     * @throws BadPaddingException
+     * @throws IOException if the file does not exist
+     * @throws NoSuchPaddingException if the padding method does not exist
+     * @throws InvalidAlgorithmParameterException if the algorithm parameters do not make sense
+     * @throws IllegalBlockSizeException if the block size is illegal
+     * @throws BadPaddingException if the padding is bad
+     * @throws NoSuchAlgorithmException if the algorithm doesn't exist
+     * @throws InvalidKeyException if encoding is wrong
+     * @throws InvalidKeySpecException if the key spec is wrong
      * @return an Authenticator from the file, null if there is an error.
      */
     public static Authenticator read(File file, String password) throws IOException, BadPaddingException, InvalidKeyException, NoSuchAlgorithmException, IllegalBlockSizeException, NoSuchPaddingException, InvalidAlgorithmParameterException, InvalidKeySpecException {
@@ -47,6 +53,9 @@ public final class StoredInfo {
         return authenticator;
     }
 
+    /**
+     * @throws IOException if an I/O error occurs
+     */
     private static String readLine(BufferedReader reader) throws IOException {
         return reader.readLine();
     }
@@ -57,6 +66,14 @@ public final class StoredInfo {
      * @param file the target file to write the information.
      * @param authenticator the authenticator with the Key / Secret.
      * @param password the password used to encrypt the information.
+     * @throws IOException for file related issues
+     * @throws NoSuchPaddingException if the padding does not exist
+     * @throws InvalidKeyException if the key is invalid
+     * @throws NoSuchAlgorithmException if the algorithm provided does not exist
+     * @throws IllegalBlockSizeException if the block size is not of valid length
+     * @throws BadPaddingException if the padding is bad
+     * @throws InvalidAlgorithmParameterException if the algorithm was provided with bad parameters
+     * @throws InvalidKeySpecException if there was an invalid key spec
      */
     public static void write(File file, Authenticator authenticator, String password) throws IOException, NoSuchPaddingException, InvalidKeyException, NoSuchAlgorithmException, IllegalBlockSizeException, BadPaddingException, InvalidAlgorithmParameterException, InvalidKeySpecException {
         if (!file.canWrite()) return;

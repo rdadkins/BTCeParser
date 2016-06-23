@@ -14,7 +14,7 @@ import java.util.Map;
 
 public class ParameterBuilder {
 
-    public static enum Parameter {
+    public enum Parameter {
 
         NONCE("nonce"),
         METHOD("method"),
@@ -63,7 +63,7 @@ public class ParameterBuilder {
     }
 
     /**
-     * @return the map of parameters as a Map<String, String>.
+     * @return the map of parameters as a {@link Map}.
      */
     public Map<String, String> build() {
         return parameters;
