@@ -26,26 +26,6 @@ public class CoinInfoRequest extends PublicRequest {
         this.tradingPairs = builder.tradingPairs;
     }
 
-    /**
-     * @deprecated use CoinInfoRequest.Builder
-     */
-    @Deprecated
-    public CoinInfoRequest(CoinInfoCallback listener, TradingPair... tradingPairs) {
-        this(listener, DEFAULT_TIMEOUT, tradingPairs);
-    }
-
-    /**
-     * @deprecated use CoinInfoRequest.Builder
-     */
-    @Deprecated
-    public CoinInfoRequest(CoinInfoCallback listener, long timeout, TradingPair... tradingPairs) {
-        super(METHOD.getUrl(null), listener, timeout);
-        if (tradingPairs.length == 0) {
-            throw new RuntimeException("You must supply at least one TradingPair to make a CoinInfoRequest");
-        }
-        this.tradingPairs = tradingPairs;
-    }
-
     @Override
     protected void processResponseBody(JSONObject body) {
         JSONObject pairs = body.getJSONObject("pairs");

@@ -43,34 +43,6 @@ public abstract class Request implements Callback<JsonNode> {
         task = request.task;
     }
 
-    /**
-     * @deprecated use subclass Builder class
-     */
-    @Deprecated
-    public Request(String url, BaseRequestCallback listener) {
-        this(url, listener, DEFAULT_TIMEOUT);
-    }
-
-    /**
-     * @deprecated use subclass Builder class
-     */
-    @Deprecated
-    public Request(String url, BaseRequestCallback listener, long timeout) {
-        Unirest.setTimeouts(timeout, timeout);
-        this.url = url;
-        listeners.add(listener);
-    }
-
-    /**
-     * @deprecated use subclass Builder class
-     */
-    @Deprecated
-    protected Request(String url, ArrayList<BaseRequestCallback> listeners, long timeout) {
-        Unirest.setTimeouts(timeout, timeout);
-        this.url = url;
-        this.listeners = listeners;
-    }
-
     public final boolean isDone() {
         checkNotNull();
         return task.isDone();

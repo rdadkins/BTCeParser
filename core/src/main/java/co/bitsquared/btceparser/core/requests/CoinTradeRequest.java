@@ -31,16 +31,6 @@ public class CoinTradeRequest extends PublicRequest {
         setTradeLimit(builder.tradeLimit);
     }
 
-    /**
-     * @deprecated use CoinTradeRequest.Builder
-     */
-    @Deprecated
-    public CoinTradeRequest(TradingPair tradingPair, int limit, CoinTradeCallback listener) {
-        super(METHOD.getUrl(tradingPair), listener);
-        this.tradingPair = tradingPair;
-        setTradeLimit(limit);
-    }
-
     public void setTradeLimit(int tradeLimit) {
         int limit;
         if (tradeLimit > 0 && tradeLimit <= API.MAX_TRADE_LIMIT) {
