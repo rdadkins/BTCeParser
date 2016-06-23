@@ -5,12 +5,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>co.bitsquared.btceparser</groupId>
-    <artifactId>btceparser-parent</artifactId>
-    <version>v3.0.0</version>
+    <artifactId>btceparser-java</artifactId>
+    <version>v3.1.0</version>
     <packaging>pom</packaging>
 
-    <name>BTCeParser</name>
-    <description>Everything related to BTCeParser including core, trading, and bot.</description>
+    <name>BTCeParser Project</name>
+    <description>BTCeParser is an API wrapper for btc-e.com</description>
 
     <modules>
         <module>core</module>
