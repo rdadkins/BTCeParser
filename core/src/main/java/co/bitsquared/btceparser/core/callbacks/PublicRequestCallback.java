@@ -10,6 +10,8 @@ import java.util.ArrayList;
 /**
  * PublicRequestCallback is a collection of all callbacks with the core module that relate to public requests.
  * Implementation follows from overriding the methods you need.
+ *
+ * @see BaseRequestCallback for a base callback for all public requests
  */
 public class PublicRequestCallback implements CoinDepthCallback, CoinInfoCallback, CoinTickerCallback, CoinTradeCallback {
 
