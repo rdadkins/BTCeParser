@@ -20,22 +20,6 @@ public class TradeRequest extends AccountRequest {
         super(builder);
     }
 
-    /**
-     * @deprecated since v2.2.0 - use TradeRequest.Builder
-     */
-    @Deprecated
-    public TradeRequest(Authenticator authenticator, TradeRequestCallback callback) {
-        this(authenticator, callback, DEFAULT_TIMEOUT);
-    }
-
-    /**
-     * @deprecated since v2.2.0 - use TradeRequest.Builder
-     */
-    @Deprecated
-    public TradeRequest(Authenticator authenticator, TradeRequestCallback callback, long timeout) {
-        super(authenticator, callback, timeout);
-    }
-
     @Override
     public void assignMethod(ParameterBuilder parameters) {
         parameters.method(METHOD);

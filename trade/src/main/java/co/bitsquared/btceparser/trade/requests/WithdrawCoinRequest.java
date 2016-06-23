@@ -20,22 +20,6 @@ public class WithdrawCoinRequest extends AccountRequest {
         super(builder);
     }
 
-    /**
-     * @deprecated since v2.2.0 - use WithdrawCoinRequest.Builder
-     */
-    @Deprecated
-    public WithdrawCoinRequest(Authenticator authenticator, WithdrawCoinCallback callback) {
-        this(authenticator, callback, DEFAULT_TIMEOUT);
-    }
-
-    /**
-     * @deprecated since v2.2.0 - use WithdrawCoinRequest.Builder
-     */
-    @Deprecated
-    public WithdrawCoinRequest(Authenticator authenticator, WithdrawCoinCallback callback, long timeout) {
-        super(authenticator, callback, timeout);
-    }
-
     @Override
     public void assignMethod(ParameterBuilder parameters) {
         parameters.method(METHOD);

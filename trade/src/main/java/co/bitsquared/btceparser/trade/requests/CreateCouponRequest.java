@@ -19,22 +19,6 @@ public class CreateCouponRequest extends AccountRequest {
         super(builder);
     }
 
-    /**
-     * @deprecated since v2.2.0 - use CreateCouponRequest.Builder
-     */
-    @Deprecated
-    public CreateCouponRequest(Authenticator authenticator, CreateCouponCallback callback) {
-        this(authenticator, callback, DEFAULT_TIMEOUT);
-    }
-
-    /**
-     * @deprecated since v2.2.0 - use CreateCouponRequest.Builder
-     */
-    @Deprecated
-    public CreateCouponRequest(Authenticator authenticator, CreateCouponCallback callback, long timeout) {
-        super(authenticator, callback, timeout);
-    }
-
     @Override
     public void assignMethod(ParameterBuilder parameters) {
         parameters.method(METHOD);

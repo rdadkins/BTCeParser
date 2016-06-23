@@ -21,23 +21,6 @@ public class InfoRequest extends AccountRequest {
         super(builder);
     }
 
-    /**
-     * @deprecated since v2.2.0 - use InfoRequest.Builder
-     */
-    @Deprecated
-    public InfoRequest(Authenticator authenticator, InfoCallback callback) {
-        this(authenticator, callback, DEFAULT_TIMEOUT);
-    }
-
-    /**
-     * @deprecated since v2.2.0 - use InfoRequest.Builder
-     */
-    @Deprecated
-    public InfoRequest(Authenticator authenticator, InfoCallback callback, long timeout) {
-        super(authenticator, callback, timeout);
-        this.callback = callback;
-    }
-
     @Override
     public void assignMethod(ParameterBuilder parameters) {
         parameters.method(METHOD);
