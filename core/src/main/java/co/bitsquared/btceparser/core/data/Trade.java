@@ -90,6 +90,7 @@ public class Trade extends LoggableData {
     /**
      * Use toJSONObject() instead.
      * @since v2.2.0
+     * @return a JSON string that represents this trade
      */
     @Deprecated
     public String asJSONString() {

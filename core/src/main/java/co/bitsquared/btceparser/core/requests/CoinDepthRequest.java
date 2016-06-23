@@ -87,6 +87,7 @@ public class CoinDepthRequest extends PublicRequest {
         /**
          * Sets the depth limit for this request. Default is set to {@code API.DEFAULT_ORDER_LIMIT} if this value is not set or
          * the value passed is out of range.
+         * @param depthLimit the limit of orders for this request
          */
         public Builder depthLimit(int depthLimit) {
             this.depthLimit = depthLimit;

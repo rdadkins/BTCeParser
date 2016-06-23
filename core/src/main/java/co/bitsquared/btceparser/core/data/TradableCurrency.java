@@ -28,7 +28,7 @@ public enum TradableCurrency {
     }
 
     /**
-     * Returns the Currency as string used in the API. Currently it is just name() but implementation may change in the future.
+     * @return this currency as string used in the API. Currently it is just name() but implementation may change in the future.
      */
     public String asAPIString() {
         return name();

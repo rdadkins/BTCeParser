@@ -93,6 +93,8 @@ public class CoinTradeRequest extends PublicRequest {
         /**
          * Sets the trade limit for this request. Default is set to {@code API.DEFAULT_TRADE_LIMIT} if this value is not set or
          * the value passed is out of range.
+         * @param tradeLimit the limit of orders for this request
+         * @return this builder
          */
         public Builder tradeLimit(int tradeLimit) {
             this.tradeLimit = tradeLimit;

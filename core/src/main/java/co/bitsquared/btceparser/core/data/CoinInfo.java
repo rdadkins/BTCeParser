@@ -30,54 +30,57 @@ public class CoinInfo extends LoggableData {
     }
 
     /**
-     * Returns the amount of decimal places allowed for trading.
+     * @return the amount of decimal places allowed for trading.
      */
     public int getDecimalPlaces() {
         return (int) dataMap.get(DECIMAL_PLACES);
     }
 
     /**
-     * Returns the minimum price allowed for a valid trade.
+     * @return the minimum price allowed for a valid trade.
      */
     public double getMinPrice() {
         return (double) dataMap.get(MIN_PRICE);
     }
 
     /**
-     * Returns the maximum price allowed for a valid trade.
+     * @return the maximum price allowed for a valid trade.
      */
     public double getMaxPrice() {
         return (double) dataMap.get(MAX_PRICE);
     }
 
     /**
-     * Returns the minimum amount allowed for a valid trade.
+     * @return the minimum amount allowed for a valid trade.
      */
     public double getMinAmount() {
         return (double) dataMap.get(MIN_AMOUNT);
     }
 
     /**
-     * Returns the fee associated with this TradingPair
+     * @return the fee associated with this TradingPair
      */
     public double getFee() {
         return (double) dataMap.get(FEE);
     }
 
     /**
-     * Determines whether this pair is hidden from the public.
+     * @return whether this pair is hidden from the public.
      */
     public boolean isHidden() {
         return (int) dataMap.get(HIDDEN) == 1;
     }
 
     /**
-     * Returns the TradingPair associated with this information
+     * @return the TradingPair associated with this information
      */
     public TradingPair getTradingPair() {
         return TRADING_PAIR;
     }
 
+    /**
+     * @return this object as a {@link Map}
+     */
     @Override
     public Map<String, Object> getDataAsMap() {
         return dataMap;

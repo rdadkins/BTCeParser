@@ -52,6 +52,7 @@ public enum TradingPair {
 
     /**
      * Creates a unit BaseCurrency object from the target currency of this TradingPair, i.e., second part of TradingPair.
+     * @return a {@link BaseCurrency} that is targeted for this trading pair
      */
     public BaseCurrency<?> getTargetCurrency() {
         return getCurrencyType(TARGET_CURRENCY);
@@ -59,6 +60,7 @@ public enum TradingPair {
 
     /**
      * Creates a unit BaseCurrency object from the price currency of this TradingPair, i.e.m first part of TradingPair.
+     * @return a {@link BaseCurrency} that is targeted for this trading pair
      */
     public BaseCurrency<?> getPriceCurrency() {
         return getCurrencyType(PRICE_CURRENCY);

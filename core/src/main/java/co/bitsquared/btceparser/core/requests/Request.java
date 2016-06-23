@@ -34,7 +34,7 @@ public abstract class Request implements Callback<JsonNode> {
 
     /**
      * Create a Request from a previously created Request.
-     *
+     * @param request the request to create this request from. Should only be used internally.
      * @see co.bitsquared.btceparser.core.requests.UpdatingRequest
      */
     protected Request(Request request) {
@@ -88,6 +88,7 @@ public abstract class Request implements Callback<JsonNode> {
 
     /**
      * Execute a runnable (from lambda) task in a separate thread.
+     * @param runnable a runnable to run on a separate thread
      */
     protected final void execute(Runnable runnable) {
         new Thread(runnable).start();

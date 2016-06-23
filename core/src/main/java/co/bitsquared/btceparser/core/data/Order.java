@@ -49,6 +49,7 @@ public class Order implements Comparable<Order> {
 	}
 
 	/**
+	 * @param fee a number under 1 that represents a fee.
 	 * @return the product of the rate and amount with a fee applied.
      */
 	public BaseCurrency<?> getOrderTotal(double fee) {

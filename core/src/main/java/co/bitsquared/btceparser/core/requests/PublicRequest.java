@@ -27,7 +27,7 @@ public abstract class PublicRequest extends Request {
 	}
 
     /**
-     * Returns optional headers to pass for this request. If there are no headers, {@code DEFAULT_PARAMETERS} should be returned.
+     * @return optional headers to pass for this request. If there are no headers, {@code DEFAULT_PARAMETERS} should be returned.
      */
     protected abstract Map<String, Object> getHeaders();
 
