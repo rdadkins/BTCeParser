@@ -39,4 +39,10 @@ public class CoinTickerExample implements BaseExample, CoinTickerCallback {
     public void onSuccess() {
 
     }
+
+    @Override
+    public void onFailure() {
+
+    }
+
 }

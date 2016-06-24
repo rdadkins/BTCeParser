@@ -50,6 +50,11 @@ public abstract class TradeAlgorithm implements TradeRequestCallback {
 
     }
 
+    @Override
+    public final void onFailure() {
+
+    }
+
     public final void cancelled() {
 
     }

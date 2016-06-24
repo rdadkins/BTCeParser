@@ -69,4 +69,8 @@ public class TradeExample implements BaseExample, TradeRequestCallback {
         System.out.println("Successful connection");
     }
 
+    @Override
+    public void onFailure() {
+
+    }
 }

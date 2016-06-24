@@ -70,6 +70,12 @@ public class OrderBookExample implements BaseExample, CoinTradeCallback, CoinDep
     }
 
     public void onSuccess() {
+
+    }
+
+    @Override
+    public void onFailure() {
+
     }
 
 }

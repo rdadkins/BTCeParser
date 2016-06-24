@@ -17,7 +17,7 @@ public interface CoinTradeCallback extends BaseRequestCallback {
     void onSuccess(ArrayList<Trade> executedTrades);
 
     /**
-     * This can be called when you want a Request to reuse an existing OrderBook. If there is an OrderBook supplied (i.e.
+     * This can be called when you want a OkRequest to reuse an existing OrderBook. If there is an OrderBook supplied (i.e.
      * the return from this method != null) then all Trades that have been parsed will be automatically
      * applied to the OrderBook.
      * @return a pre existing OrderBook to merge new orders with

@@ -97,4 +97,10 @@ public class AccountRequestCallback implements ActiveOrderCallback, CancelOrderC
     public void nonceRemaining(long amount) {
 
     }
+
+    @Override
+    public void onFailure() {
+
+    }
+
 }

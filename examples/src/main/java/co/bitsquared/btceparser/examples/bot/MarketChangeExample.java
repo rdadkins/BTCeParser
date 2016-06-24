@@ -82,4 +82,10 @@ public class MarketChangeExample implements BaseExample, CoinTickerCallback, Tra
     public void onUnsuccessfulReturn(String reason) {
 
     }
+
+    @Override
+    public void onFailure() {
+
+    }
+
 }
