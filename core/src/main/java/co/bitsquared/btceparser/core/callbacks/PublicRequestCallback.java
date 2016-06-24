@@ -60,4 +60,8 @@ public class PublicRequestCallback implements CoinDepthCallback, CoinInfoCallbac
 
     }
 
+    @Override
+    public void onFailure() {
+
+    }
 }

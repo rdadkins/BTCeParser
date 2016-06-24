@@ -11,7 +11,7 @@ public interface CoinDepthCallback extends BaseRequestCallback {
     void onSuccess(OrderBook orderBook);
 
     /**
-     * This can be called when you want a Request to reuse an existing OrderBook.
+     * This can be called when you want a OkRequest to reuse an existing OrderBook.
      *
      * If the return value is null, a new book will be returned via onSuccess(OrderBook).
      * If there is a book supplied, then after a successful parse onSuccess(OrderBook) will not be called. Instead,

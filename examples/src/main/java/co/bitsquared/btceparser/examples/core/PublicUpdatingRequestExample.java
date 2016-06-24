@@ -36,4 +36,9 @@ public class PublicUpdatingRequestExample implements BaseExample, CoinTickerCall
         System.out.println("Successful response.");
     }
 
+    @Override
+    public void onFailure() {
+
+    }
+
 }

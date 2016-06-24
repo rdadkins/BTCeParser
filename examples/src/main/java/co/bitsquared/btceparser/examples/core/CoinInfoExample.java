@@ -32,4 +32,10 @@ public class CoinInfoExample implements BaseExample, CoinInfoCallback {
     public void onSuccess() {
         System.out.println("Successful response");
     }
+
+    @Override
+    public void onFailure() {
+
+    }
+
 }
