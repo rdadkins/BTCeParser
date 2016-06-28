@@ -94,7 +94,7 @@ public abstract class OkRequest implements Callback {
      * Handle the following response that came from the server.
      * @param responseBody the response from the server. It may or may not be a successful response
      */
-    protected abstract void handleResponse(ResponseBody responseBody);
+    protected abstract void handleResponse(ResponseBody responseBody) throws IOException;
 
     private void sendSuccessfulResponseToListeners() {
         for (RequestListener requestListener: requestListeners) {
